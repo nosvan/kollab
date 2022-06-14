@@ -7,7 +7,7 @@ import { UserSafe, UserSession } from '../lib/types/user';
 export default function Groups({ user }: { user: UserSafe }) {
   return (
     <>
-      <Layout userFromSSR={user}>
+      <Layout>
         <div>Groups page</div>
       </Layout>
     </>

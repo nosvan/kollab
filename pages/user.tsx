@@ -7,7 +7,7 @@ import { UserSafe, UserSession } from '../lib/types/user';
 export default function User({ user }: { user: UserSafe }) {
   return (
     <>
-      <Layout userFromSSR={user}>
+      <Layout>
         <h1>User Page</h1>
       </Layout>
     </>
