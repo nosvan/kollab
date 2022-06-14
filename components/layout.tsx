@@ -16,15 +16,9 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../state/redux/store';
 import { setCurrentTab, setUserState } from '../state/redux/userSlice';
-import { UserSafe, UserCredentials, UserRegister } from '../lib/types/user';
+import { UserCredentials, UserRegister } from '../lib/types/user';
 
-export default function Layout({
-  children,
-  userFromSSR,
-}: {
-  children: React.ReactNode;
-  userFromSSR: UserSafe;
-}) {
+export default function Layout({ children }: { children: React.ReactNode }) {
   const user = useSelector((state: RootState) => state.user_store.user);
   const dispatch = useDispatch();
   const [selection, setSelection] = useState('');
@@ -388,7 +382,7 @@ export default function Layout({
     try {
       await axios({
         method: 'post',
-        url: 'http://localhost:3000/api/login',
+        url: '/api/login',
         data: JSON.stringify(userCreds),
         headers: {
           'Content-Type': 'application/json',
@@ -405,7 +399,7 @@ export default function Layout({
     try {
       await axios({
         method: 'get',
-        url: 'http://localhost:3000/api/logout',
+        url: '/api/logout',
       }).then((res) => {
         dispatch(setUserState(res.data));
       });
@@ -427,7 +421,7 @@ export default function Layout({
     try {
       await axios({
         method: 'post',
-        url: 'http://localhost:3000/api/register',
+        url: '/api/register',
         data: JSON.stringify(userRegister),
         headers: { 'Content-Type': 'application/json' },
       }).then((res) => {

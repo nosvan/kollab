@@ -14,7 +14,7 @@ export default function Index({ user }: { user: UserSafe }) {
   }, [dispatch, user]);
   return (
     <>
-      <Layout userFromSSR={user}>
+      <Layout>
         <div>Main page</div>
       </Layout>
     </>
