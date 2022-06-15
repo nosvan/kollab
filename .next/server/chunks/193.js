@@ -461,7 +461,7 @@ function Layout({ children  }) {
                                 }),
                                 /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx(react_icons_tb__WEBPACK_IMPORTED_MODULE_2__.TbHome2, {
                                     onClick: ()=>{
-                                        handleActiveTab("/");
+                                        handleActiveTab("");
                                     },
                                     size: 32,
                                     strokeWidth: 1

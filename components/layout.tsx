@@ -346,7 +346,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               />
               <TbHome2
                 onClick={() => {
-                  handleActiveTab('/');
+                  handleActiveTab('');
                 }}
                 size={32}
                 strokeWidth={1}
