@@ -10,7 +10,7 @@ import { setUserState } from '../state/redux/userSlice';
 export default function Groups({ user }: { user: UserSafe }) {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(setUserState(user));
+    dispatch(setUserState({ ...user, currentTab: 'groups' }));
   }, [dispatch, user]);
   return (
     <>

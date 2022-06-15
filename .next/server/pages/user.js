@@ -36,7 +36,10 @@ iron_session_next__WEBPACK_IMPORTED_MODULE_1__ = (__webpack_async_dependencies__
 function User({ user  }) {
     const dispatch = (0,react_redux__WEBPACK_IMPORTED_MODULE_5__.useDispatch)();
     (0,react__WEBPACK_IMPORTED_MODULE_4__.useEffect)(()=>{
-        dispatch((0,_state_redux_userSlice__WEBPACK_IMPORTED_MODULE_6__/* .setUserState */ .Q_)(user));
+        dispatch((0,_state_redux_userSlice__WEBPACK_IMPORTED_MODULE_6__/* .setUserState */ .Q_)({
+            ...user,
+            currentTab: "user"
+        }));
     }, [
         dispatch,
         user

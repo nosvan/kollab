@@ -10,7 +10,7 @@ import { UserSafe, UserSession } from '../lib/types/user';
 export default function Index({ user }: { user: UserSafe }) {
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(setUserState(user));
+    dispatch(setUserState({ ...user, currentTab: '' }));
   }, [dispatch, user]);
   return (
     <>
