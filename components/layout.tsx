@@ -344,6 +344,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 className="text-blue-700"
                 size={32}
               />
+              <TbHome2
+                onClick={() => {
+                  handleActiveTab('/');
+                }}
+                size={32}
+                strokeWidth={1}
+              />
               <TbUser
                 onClick={() => {
                   handleActiveTab('user');
