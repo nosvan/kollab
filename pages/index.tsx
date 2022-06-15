@@ -34,7 +34,13 @@ export const getServerSideProps = withIronSessionSsr(
       isLoggedIn: false,
     };
     if (Object.keys(session).length > 0) {
-      user = session.user;
+      user = {
+        id: session.user.id,
+        first_name: session.user.first_name,
+        last_name: session.user.last_name,
+        email: session.user.email,
+        isLoggedIn: true,
+      };
     }
     return {
       props: {
