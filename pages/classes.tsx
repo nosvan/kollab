@@ -17,44 +17,17 @@ export default function Groups({ user }: { user: UserSafe }) {
 export const getServerSideProps = withIronSessionSsr(
   async function getServerSideProps(context) {
     console.log('index.tsx getServerSideProps');
-    const { cookies, session } = context.req;
-    const t0k3n = cookies['iron-session-token'];
-    const user: UserSafe = {
+    console.log('session: ', context.req.session);
+    const session = context.req.session;
+    let user: UserSafe = {
       id: -999,
       first_name: '',
       last_name: '',
       email: '',
       isLoggedIn: false,
     };
-    if (!t0k3n) {
-      console.log('index.tsx getServerSideProps no token');
-    }
-    if (t0k3n) {
-      try {
-        const userFromSession: UserSession = await session.user;
-        const result = await prisma.user.findUnique({
-          select: {
-            id: true,
-            first_name: true,
-            last_name: true,
-            email: true,
-            password: true,
-          },
-          where: {
-            email: userFromSession.email,
-          },
-        });
-        if (userFromSession.password === result?.password) {
-          user.id = result.id;
-          user.first_name = result.first_name;
-          user.last_name = result.last_name;
-          user.email = result.email;
-          user.isLoggedIn = true;
-        }
-      } catch (error) {
-        console.log('error verifying session token');
-        console.log(error);
-      }
+    if (Object.keys(session).length > 0) {
+      user = session.user;
     }
     return {
       props: {
