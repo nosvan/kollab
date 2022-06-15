@@ -3,8 +3,15 @@ import { withIronSessionSsr } from 'iron-session/next';
 import Layout from '../components/layout';
 import { sessionOptions } from '../lib/iron_session';
 import { UserSafe, UserSession } from '../lib/types/user';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { setUserState } from '../state/redux/userSlice';
 
 export default function Groups({ user }: { user: UserSafe }) {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setUserState(user));
+  }, [dispatch, user]);
   return (
     <>
       <Layout>
