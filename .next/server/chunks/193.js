@@ -399,7 +399,7 @@ function Layout({ children  }) {
                                     className: "flex items-center justify-between p-5 bg-black rounded-xl text-white text-2xl font-bold",
                                     children: [
                                         /*#__PURE__*/ react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsx("div", {
-                                            children: user.currentTab
+                                            children: user.currentTab === "" ? "home" : user.currentTab
                                         }),
                                         /*#__PURE__*/ (0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_0__.jsxs)("div", {
                                             className: "flex flex-row items-center space-x-2 font-medium text-base",
