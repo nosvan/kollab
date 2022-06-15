@@ -289,7 +289,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 className="flex items-center justify-between p-5  bg-black rounded-xl
               text-white text-2xl font-bold"
               >
-                <div>{user.currentTab}</div>
+                <div>{user.currentTab === '' ? 'home' : user.currentTab}</div>
                 {/* Login / Create Account Buttons */}
                 <div
                   className="flex flex-row items-center space-x-2 font-medium 
