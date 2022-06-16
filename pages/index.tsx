@@ -5,7 +5,7 @@ import { sessionOptions } from '../lib/iron_session';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { setUserState } from '../state/redux/userSlice';
-import { UserSafe, UserSession } from '../lib/types/user';
+import { UserSafe } from '../lib/types/user';
 
 export default function Index({ user }: { user: UserSafe }) {
   const dispatch = useDispatch();

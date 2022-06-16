@@ -30,5 +30,40 @@ model user {
   last_name String
   email String @unique
   password String
-  createdAt DateTime @default(now())
+  created_at DateTime @default(now())
+}
+
+model classroom {
+  id   Int                   @id @default(autoincrement())
+  name String
+  school_name String
+  owner_id Int 
+  created_at DateTime @default(now())
+}
+
+model group {
+  id   Int                   @id @default(autoincrement())
+  name String
+  owner_id Int 
+  created_at DateTime @default(now())
+}
+
+model item {
+  id   Int                   @id @default(autoincrement())
+  name String
+  item_type String
+  item_type_id Int
+  created_by_id Int
+  last_modified_by Int
+  date DateTime @default(now())
+  created_at DateTime @default(now())
+}
+
+model permission {
+  id   Int                   @id @default(autoincrement())
+  item_type String
+  item_type_id Int
+  access_level String
+  user_id Int
+  created_at DateTime @default(now())
 }

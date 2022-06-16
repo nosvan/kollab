@@ -5,7 +5,7 @@ export const sessionOptions: IronSessionOptions = {
   password: process.env.JWT_SECRET as string,
   cookieName: "iron-session-token",
   cookieOptions: {
-    maxAge: 60*60,
+    maxAge: 60*60*24,
     httpOnly: true,
     sameSite: "strict",
     secure: process.env.NODE_ENV === "production",

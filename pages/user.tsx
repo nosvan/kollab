@@ -15,7 +15,81 @@ export default function User({ user }: { user: UserSafe }) {
   return (
     <>
       <Layout>
-        <h1>User Page</h1>
+        <div>
+          <div className="mb-5">Your Overview</div>
+          <div className="flex flex-row flex-wrap break-words">
+            <div className="py-1 w-full sm:w-1/2 md:w-1/3 space-y-1 px-1">
+              <div className="bg-stone-800 text-center text-sm rounded-xl">
+                Monday
+              </div>
+              <div className="text-xs rounded text-black text-center bg-emerald-400 mx-1">
+                Assignment 1
+              </div>
+              <div className="text-xs rounded text-center text-black bg-emerald-400 mx-1">
+                Assignment 2
+              </div>
+              <div className="text-xs rounded text-center text-black bg-emerald-400 mx-1">
+                Assignment 3
+              </div>
+            </div>
+            <div className="py-1 w-full sm:w-1/2 md:w-1/3 space-y-1 px-1">
+              <div className="bg-stone-800 text-center text-sm rounded-xl">
+                Tuesday
+              </div>
+              <div className="text-xs rounded text-center text-black bg-rose-400 mx-1">
+                Assignment 1
+              </div>
+              <div className="text-xs rounded text-center text-black bg-rose-400 mx-1">
+                Assignment 2
+              </div>
+              <div className="text-xs rounded text-center text-black bg-rose-400 mx-1">
+                Assignment 3
+              </div>
+            </div>
+            <div className="py-1 w-full sm:w-1/2 md:w-1/3 space-y-1 px-1">
+              <div className="bg-stone-800 text-center text-sm rounded-xl">
+                Wednesday
+              </div>
+              <div className="text-xs rounded text-center text-black bg-cyan-400 mx-1">
+                Assignment 1
+              </div>
+              <div className="text-xs rounded text-center text-black bg-cyan-400 mx-1">
+                Assignment 2
+              </div>
+              <div className="text-xs rounded text-center text-black bg-cyan-400 mx-1">
+                Assignment 3
+              </div>
+            </div>
+            <div className="py-1 w-full sm:w-1/2 md:w-1/3 space-y-1 px-1">
+              <div className="bg-stone-800 text-center text-sm rounded-xl">
+                Thursday
+              </div>
+              <div className="text-xs rounded text-center text-black bg-fuchsia-400 mx-1">
+                Assignment 1
+              </div>
+              <div className="text-xs rounded text-center text-black bg-fuchsia-400 mx-1">
+                Assignment 2
+              </div>
+              <div className="text-xs rounded text-center text-black bg-fuchsia-400 mx-1">
+                Assignment 3
+              </div>
+            </div>
+            <div className="py-1 w-full sm:w-1/2 md:w-1/3 space-y-1 px-1">
+              <div className="bg-stone-800 text-center text-sm rounded-xl">
+                Friday
+              </div>
+              <div className="text-xs rounded text-center text-black bg-yellow-400 mx-1">
+                Assignment 1
+              </div>
+              <div className="text-xs rounded text-center text-black bg-yellow-400 mx-1">
+                Assignment 2
+              </div>
+              <div className="text-xs rounded text-center text-black bg-yellow-400 mx-1">
+                Assignment 3
+              </div>
+            </div>
+          </div>
+        </div>
       </Layout>
     </>
   );
