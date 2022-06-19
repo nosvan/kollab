@@ -80,7 +80,6 @@ async function handle(req, res) {
                 select: {
                     id: true,
                     name: true,
-                    description: true,
                     owner_id: true,
                     passcode: true,
                     created_at: true
@@ -96,7 +95,6 @@ async function handle(req, res) {
             const safeResult = {
                 id: result.id,
                 name: result.name,
-                description: result.description,
                 owner_id: result.owner_id,
                 created_at: result.created_at
             };
