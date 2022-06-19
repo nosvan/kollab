@@ -1,15 +1,15 @@
 {
   "/_app": "pages/_app.js",
-  "/api/auth/user": "pages/api/auth/user.js",
+  "/api/group/new": "pages/api/group/new.js",
   "/api/login": "pages/api/login.js",
   "/api/logout": "pages/api/logout.js",
-  "/api/group/new": "pages/api/group/new.js",
-  "/api/register": "pages/api/register.js",
-  "/groups": "pages/groups.js",
   "/_error": "pages/_error.js",
-  "/classes": "pages/classes.js",
+  "/api/auth/user": "pages/api/auth/user.js",
+  "/api/register": "pages/api/register.js",
   "/": "pages/index.js",
+  "/classes": "pages/classes.js",
   "/user": "pages/user.js",
+  "/groups": "pages/groups.js",
   "/_document": "pages/_document.js",
   "/404": "pages/404.html"
 }
