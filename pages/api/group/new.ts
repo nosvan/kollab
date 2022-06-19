@@ -27,7 +27,8 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
           owner_id: req.session.user.id,
           passcode: newGroupData.passcode
       }})
-      const safeResult: GroupSafe = {
+      console.log(result)
+      const safeResult = {
         id: result.id,
         name: result.name,
         description: result.description,

@@ -92,6 +92,7 @@ async function handle(req, res) {
                     passcode: newGroupData.passcode
                 }
             });
+            console.log(result);
             const safeResult = {
                 id: result.id,
                 name: result.name,
