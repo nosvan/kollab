@@ -15,14 +15,17 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../state/redux/store';
-import { setCurrentTab, setUserState } from '../state/redux/userSlice';
-import { UserCredentials, UserRegister } from '../lib/types/user';
+import { RootState } from 'state/redux/store';
+import { setCurrentTab, setUserState } from 'state/redux/userSlice';
+import { UserCredentials, UserRegister, UserState } from 'lib/types/user';
 import NewClass from './create_class';
 import NewGroup from './create_group';
+import { TabName } from 'lib/types/ui';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const user = useSelector((state: RootState) => state.user_store.user);
+  const user: UserState = useSelector(
+    (state: RootState) => state.user_store.user
+  );
   const dispatch = useDispatch();
   const [selection, setSelection] = useState('');
   const [createNewTypeMode, setCreateNewTypeMode] = useState(false);
@@ -231,58 +234,58 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 {/* home */}
                 <div
                   onClick={() => {
-                    handleActiveTab('');
+                    handleActiveTab(TabName.HOME);
                   }}
                   className={`${
-                    user.currentTab === ''
+                    user.currentTab == TabName.HOME
                       ? 'text-white font-light'
                       : 'text-gray-400 font-extralight'
                   } flex flex-row items-center text-lg cursor-pointer hover:text-white`}
                 >
                   <TbHome2 size={32} strokeWidth={'1'} />
-                  <div className="hidden md:block">Home</div>
+                  <div className="hidden md:block">home</div>
                 </div>
                 {/* user */}
                 <div
                   onClick={() => {
-                    handleActiveTab('user');
+                    handleActiveTab(TabName.USER);
                   }}
                   className={`${
-                    user.currentTab === 'user'
+                    user.currentTab == TabName.USER
                       ? 'text-white font-light'
                       : 'text-gray-400 font-extralight'
                   } flex flex-row items-center text-lg cursor-pointer hover:text-white`}
                 >
                   <TbUser size={32} strokeWidth={'1'} />
-                  <div className="hidden md:block">User</div>
+                  <div className="hidden md:block">{TabName.USER}</div>
                 </div>
                 {/* classes */}
                 <div
                   onClick={() => {
-                    handleActiveTab('classes');
+                    handleActiveTab(TabName.CLASS);
                   }}
                   className={`${
-                    user.currentTab === 'classes'
+                    user.currentTab == TabName.CLASS
                       ? 'text-white font-light'
                       : 'text-gray-400 font-extralight'
                   } flex flex-row items-center text-lg cursor-pointer hover:text-white`}
                 >
                   <TbBook2 size={32} strokeWidth={'1'} />
-                  <div className="hidden md:block">Classes</div>
+                  <div className="hidden md:block">{TabName.CLASS}</div>
                 </div>
                 {/* groups */}
                 <div
                   onClick={() => {
-                    handleActiveTab('groups');
+                    handleActiveTab(TabName.GROUP);
                   }}
                   className={`${
-                    user.currentTab === 'groups'
+                    user.currentTab == TabName.GROUP
                       ? 'text-white font-light'
                       : 'text-gray-400 font-extralight'
                   } flex flex-row items-center text-lg cursor-pointer hover:text-white`}
                 >
                   <TbUsers size={32} strokeWidth={'1'} />
-                  <div className="hidden md:block">Groups</div>
+                  <div className="hidden md:block">{TabName.GROUP}</div>
                 </div>
               </div>
             </div>
@@ -293,7 +296,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 className="flex items-center justify-between p-5  bg-black rounded-xl
               text-white text-2xl font-bold"
               >
-                <div>{user.currentTab === '' ? 'home' : user.currentTab}</div>
+                <div>
+                  {user.currentTab == TabName.HOME ? 'Home' : user.currentTab}
+                </div>
                 {/* Login / Create Account Buttons */}
                 <div
                   className="flex flex-row items-center space-x-2 font-medium 
@@ -321,8 +326,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   )}
                   {user.isLoggedIn && (
                     <>
-                      {(user.currentTab === 'classes' ||
-                        user.currentTab === 'groups') && (
+                      {(user.currentTab == TabName.CLASS ||
+                        user.currentTab == TabName.GROUP) && (
                         <div
                           onClick={() => setCreateNewTypeMode(true)}
                           className="flex flex-row items-center
@@ -349,10 +354,18 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   className="flex flex-col justify-center p-5  
                 bg-black rounded-xl text-white text-2xl font-bold"
                 >
-                  {user.currentTab === 'classes' && (
-                    <NewClass setCreateNewTypeMode={setCreateNewTypeMode} />
+                  {user.currentTab == TabName.CLASS && (
+                    <NewClass
+                      setCreateNewTypeMode={setCreateNewTypeMode}
+                      user={user}
+                    />
                   )}
-                  {user.currentTab === 'groups' && <NewGroup />}
+                  {user.currentTab == TabName.GROUP && (
+                    <NewGroup
+                      setCreateNewTypeMode={setCreateNewTypeMode}
+                      user={user}
+                    />
+                  )}
                 </div>
               )}
               {/* Children */}
@@ -367,55 +380,55 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             >
               <FaStackExchange
                 onClick={() => {
-                  handleActiveTab('');
+                  handleActiveTab(TabName.HOME);
                 }}
                 className="text-blue-700"
                 size={32}
               />
               <TbHome2
                 onClick={() => {
-                  handleActiveTab('');
+                  handleActiveTab(TabName.HOME);
                 }}
                 size={32}
                 strokeWidth={1}
                 className={
-                  user.currentTab === ''
+                  user.currentTab == TabName.HOME
                     ? 'text-white font-light'
                     : 'text-gray-400 font-extralight'
                 }
               />
               <TbUser
                 onClick={() => {
-                  handleActiveTab('user');
+                  handleActiveTab(TabName.USER);
                 }}
                 size={32}
                 strokeWidth={1}
                 className={
-                  user.currentTab === 'user'
+                  user.currentTab == TabName.USER
                     ? 'text-white font-light'
                     : 'text-gray-400 font-extralight'
                 }
               />
               <TbBook2
                 onClick={() => {
-                  handleActiveTab('classes');
+                  handleActiveTab(TabName.CLASS);
                 }}
                 size={32}
                 strokeWidth={1}
                 className={
-                  user.currentTab === 'classes'
+                  user.currentTab == TabName.CLASS
                     ? 'text-white font-light'
                     : 'text-gray-400 font-extralight'
                 }
               />
               <TbUsers
                 onClick={() => {
-                  handleActiveTab('groups');
+                  handleActiveTab(TabName.GROUP);
                 }}
                 size={32}
                 strokeWidth={1}
                 className={
-                  user.currentTab === 'groups'
+                  user.currentTab == TabName.GROUP
                     ? 'text-white font-light'
                     : 'text-gray-400 font-extralight'
                 }
@@ -499,8 +512,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   }
 
   function handleActiveTab(tab: string) {
-    if (user.currentTab.toLowerCase() !== tab.toLowerCase()) {
-      dispatch(setCurrentTab(tab.toLowerCase()));
+    if (user.currentTab.toLowerCase() != tab.toLowerCase()) {
+      dispatch(setCurrentTab(tab));
       setCreateNewTypeMode(false);
       router.push('/' + tab.toLowerCase());
     }

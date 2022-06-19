@@ -1,6 +1,6 @@
-import prisma from '../../lib/prisma'
+import prisma from 'lib/prisma'
 import bcrypt from 'bcryptjs';
-import { sessionOptions } from '../../lib/iron_session';
+import { sessionOptions } from 'lib/iron_session';
 import { withIronSessionApiRoute } from 'iron-session/next'
 import { NextApiRequest, NextApiResponse } from 'next';
 

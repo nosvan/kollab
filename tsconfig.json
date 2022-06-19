@@ -15,7 +15,8 @@
     "jsx": "preserve",
     "incremental": true,
     "sourceMap": true,
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "baseUrl": "."
   },
   "include": [
     "next-env.d.ts",

@@ -1,11 +1,11 @@
 import { withIronSessionSsr } from 'iron-session/next';
-import Layout from '../components/layout';
-import prisma from '../lib/prisma';
-import { sessionOptions } from '../lib/iron_session';
-import { UserSafe, UserSession } from '../lib/types/user';
+import Layout from 'components/layout';
+import prisma from 'lib/prisma';
+import { sessionOptions } from 'lib/iron_session';
+import { UserSafe, UserSession } from 'lib/types/user';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { setUserState } from '../state/redux/userSlice';
+import { setUserState } from 'state/redux/userSlice';
 
 export default function User({ user }: { user: UserSafe }) {
   const dispatch = useDispatch();

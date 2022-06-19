@@ -1,11 +1,11 @@
-import prisma from '../lib/prisma';
+import prisma from 'lib/prisma';
 import { withIronSessionSsr } from 'iron-session/next';
-import Layout from '../components/layout';
-import { sessionOptions } from '../lib/iron_session';
-import { UserSafe, UserSession } from '../lib/types/user';
+import Layout from 'components/layout';
+import { sessionOptions } from 'lib/iron_session';
+import { UserSafe, UserSession } from 'lib/types/user';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { setUserState } from '../state/redux/userSlice';
+import { setUserState } from 'state/redux/userSlice';
 import { TbPlus } from 'react-icons/tb';
 
 export default function Groups({ user }: { user: UserSafe }) {

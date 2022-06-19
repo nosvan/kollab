@@ -34,3 +34,12 @@ export type User = {
   email: string;
   password: string;
 };
+
+export type UserState = {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  isLoggedIn: boolean;
+  currentTab: string;
+}

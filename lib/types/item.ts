@@ -1,5 +1,5 @@
-export enum ItemType {
-  CLASSROOM = 'classitem',
-  GROUP = 'groupitem',
-  PERSONAL = 'personalitem',
+export enum Category {
+  CLASSROOM = 'classroom',
+  GROUP = 'group',
+  PERSONAL = 'personal',
 }

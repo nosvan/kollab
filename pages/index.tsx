@@ -1,11 +1,11 @@
-import prisma from '../lib/prisma';
-import Layout from '../components/layout';
+import prisma from 'lib/prisma';
+import Layout from 'components/layout';
 import { withIronSessionSsr } from 'iron-session/next';
-import { sessionOptions } from '../lib/iron_session';
+import { sessionOptions } from 'lib/iron_session';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
-import { setUserState } from '../state/redux/userSlice';
-import { UserSafe } from '../lib/types/user';
+import { setUserState } from 'state/redux/userSlice';
+import { UserSafe } from 'lib/types/user';
 
 export default function Index({ user }: { user: UserSafe }) {
   const dispatch = useDispatch();

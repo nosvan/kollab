@@ -1,7 +1,7 @@
 import { serialize } from 'cookie';
 import { withIronSessionApiRoute } from 'iron-session/next';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { sessionOptions } from '../../lib/iron_session';
+import { sessionOptions } from 'lib/iron_session';
 
 export default withIronSessionApiRoute(handle, sessionOptions)
 

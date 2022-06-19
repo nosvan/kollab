@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { UserState } from 'lib/types/user';
 
 const initialState = {
-  user: {
+  user:  {
     id: -999,
     first_name: '',
     last_name: '',

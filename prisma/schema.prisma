@@ -1,69 +1,81 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
-// datasource db {
-//   provider = "mongodb"
-//   url      = env("DATABASE_URL")
-// }
-
-// model user {
-//   id  String  @id @default(auto()) @map("_id")  @db.ObjectId
-//   first_name String
-//   last_name String
-//   email String @unique
-//   password String
-//   createdAt DateTime @default(now())
-// }
-
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_POSGRESQL_URL")
+  url      = env("DATABASE_POSGRESQL_LOCAL_URL")
 }
 
 model user {
-  id   Int                   @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   first_name String
-  last_name String
-  email String @unique
-  password String
+  last_name  String
+  email      String   @unique
+  password   String
   created_at DateTime @default(now())
 }
 
 model classroom {
-  id   Int                   @id @default(autoincrement())
-  name String
+  id          Int      @id @default(autoincrement())
+  name        String
   school_name String
-  owner_id Int 
-  created_at DateTime @default(now())
+  semester    Semester
+  description String
+  passcode    String
+  owner_id    Int
+  created_at  DateTime @default(now())
 }
 
 model group {
-  id   Int                   @id @default(autoincrement())
-  name String
-  owner_id Int 
+  id         Int      @id @default(autoincrement())
+  name       String
+  description String
+  owner_id   Int
+  passcode   String
   created_at DateTime @default(now())
 }
 
 model item {
-  id   Int                   @id @default(autoincrement())
-  name String
-  item_type String
-  item_type_id Int
-  created_by_id Int
-  last_modified_by Int
-  date DateTime @default(now())
-  created_at DateTime @default(now())
+  id               Int      @id @default(autoincrement())
+  name             String
+  category         Category
+  category_id      Int
+  created_by_id    Int
+  last_modified_by_id Int
+  date             DateTime @default(now())
+  created_at       DateTime @default(now())
 }
 
 model permission {
-  id   Int                   @id @default(autoincrement())
-  item_type String
+  id           Int      @id @default(autoincrement())
+  item_type    String
   item_type_id Int
   access_level String
-  user_id Int
+  user_id      Int
+  created_at   DateTime @default(now())
+}
+
+enum Category {
+  classrom
+  group
+  personal
+}
+
+enum Semester {
+  fall
+  spring
+  summer
+  winter
+}
+
+model school {
+  id         Int      @id @default(autoincrement())
+  name       String
+  zipcode    Int
+  town       String
+  county     String
+  state      String
+  country    String
   created_at DateTime @default(now())
 }

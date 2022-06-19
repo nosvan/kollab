@@ -1,17 +1,10 @@
-import prisma from '../../lib/prisma';
+import prisma from 'lib/prisma';
 import bcrypt from 'bcryptjs';
-import { sessionOptions } from '../../lib/iron_session';
+import { sessionOptions } from 'lib/iron_session';
 import { withIronSessionApiRoute } from 'iron-session/next';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
-import { UserSafe } from '../../lib/types/user';
-
-export type UserRegister = {
-  first_name: string;
-  last_name: string;
-  email: string;
-  password: string;
-};
+import { UserSafe } from 'lib/types/user';
 
 export default withIronSessionApiRoute(handle, sessionOptions)
 

@@ -1,18 +1,22 @@
 import { Dispatch, SetStateAction } from 'react';
+import { UserState } from 'lib/types/user';
 
 export default function NewClass({
   setCreateNewTypeMode,
+  user,
 }: {
   setCreateNewTypeMode: Dispatch<SetStateAction<boolean>>;
+  user: UserState;
 }) {
+  const { id } = user;
   return (
     <>
-      <div>Create a new Class</div>
-      <form>
-        <div className="flex flex-col first:text-sm">
+      <div className="text-base px-1">Create a new Class</div>
+      <form onSubmit={handleCreateClassFormSubmit}>
+        <div className="flex flex-col text-sm">
           <label className="text-white px-1">name</label>
           <input
-            className="text-black w-1/4 px-2 rounded-lg"
+            className="text-white bg-stone-800 w-2/3 md:w-1/3 px-2 rounded-lg"
             type="text"
             required
             id="name"
@@ -20,15 +24,31 @@ export default function NewClass({
           />
           <label className="text-white px-1">school</label>
           <input
-            className="text-black w-1/4 px-2 rounded-lg"
+            className="text-white bg-stone-800 w-2/3 md:w-1/3 px-2 rounded-lg"
             type="text"
             required
             id="school"
             name="school"
           />
+          <label className="text-white px-1">semester</label>
+          <input
+            className="text-white bg-stone-800 w-2/3 md:w-1/3 px-2 rounded-lg"
+            type="text"
+            required
+            id="semester"
+            name="semester"
+          />
+          <label className="text-white px-1">year</label>
+          <input
+            className="text-white bg-stone-800 w-2/3 md:w-1/3 px-2 rounded-lg"
+            type="text"
+            required
+            id="year"
+            name="year"
+          />
           <label className="text-white px-1">passcode</label>
           <input
-            className="text-black w-1/4 px-2 rounded-lg"
+            className="text-white bg-stone-800 w-2/3 md:w-1/3 px-2 rounded-lg"
             type="password"
             required
             id="password"
@@ -36,7 +56,7 @@ export default function NewClass({
           />
           <label className="text-white px-1">confirm passcode</label>
           <input
-            className="text-black w-1/4 px-2 rounded-lg"
+            className="text-white bg-stone-800 w-2/3 md:w-1/3 px-2 rounded-lg"
             type="password"
             required
             id="confirm_password"
@@ -60,4 +80,11 @@ export default function NewClass({
       </form>
     </>
   );
+
+  function handleCreateClassFormSubmit(
+    event: React.FormEvent<HTMLFormElement>
+  ) {
+    event.preventDefault();
+    const formData = event.currentTarget;
+  }
 }
