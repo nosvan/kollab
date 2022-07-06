@@ -41,7 +41,7 @@ async function handle(req: NextApiRequest, res: NextApiResponse) {
         isLoggedIn: user.isLoggedIn
       }
       try{
-        req.session.user = user;
+        req.session.userSession = user;
         await req.session.save();
         res.json(safeUser);
       } catch (error) {

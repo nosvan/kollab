@@ -1,0 +1,23 @@
+@media only screen and (min-width: 1025px){
+  .day-container {
+    width: 14.284%;
+  }
+}
+
+@media only screen and (max-width: 1024px) {
+  .day-container {
+    width: 33.33%;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .day-container {
+    width: 50%;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .day-container {
+    width: 100%;
+  }
+}

@@ -1,37 +1,31 @@
 import { FaStackExchange } from 'react-icons/fa';
-import {
-  TbBook2,
-  TbUsers,
-  TbUser,
-  TbUserPlus,
-  TbLogin,
-  TbLogout,
-  TbHome2,
-  TbPlus,
-} from 'react-icons/tb';
 import { BsGithub } from 'react-icons/bs';
 import { FcGoogle } from 'react-icons/fc';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from 'state/redux/store';
-import { setCurrentTab, setUserState } from 'state/redux/userSlice';
-import { UserCredentials, UserRegister, UserState } from 'lib/types/user';
 import NewClass from './create_class';
 import NewGroup from './create_group';
 import { TabName } from 'lib/types/ui';
+import ModalPopup from './modal';
+import Login from './login';
+import Register from './register';
+import SideBar from './sidebar';
+import Header from './header';
+import Footer from './footer';
+import { setCreateNewTypeMode } from 'state/redux/userSlice';
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-  const user: UserState = useSelector(
-    (state: RootState) => state.user_store.user
+export function Layout({ children }: { children: React.ReactNode }) {
+  const user = useSelector((state: RootState) => state.user_store.user);
+  const createNewTypeMode = useSelector(
+    (state: RootState) => state.user_store.createNewTypeMode
   );
-  const dispatch = useDispatch();
-  const [selection, setSelection] = useState('');
-  const [createNewTypeMode, setCreateNewTypeMode] = useState(false);
   const router = useRouter();
+  const [selection, setSelection] = useState('');
+
   return (
-    <>
+    <div>
       {!user.isLoggedIn && (
         <div className="flex justify-center items-center h-screen">
           <div
@@ -68,7 +62,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   <div
                     className="flex justify-center py-1 my-2 text-sm 
                   cursor-pointer bg-blue-700 hover:bg-blue-800 rounded-xl"
-                    onClick={() => handleSignupModalSelection('register')}
+                    onClick={() => setSelection('register')}
                   >
                     <div className="text-white">Sign up with Email</div>
                   </div>
@@ -78,12 +72,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                   <div
                     className="flex justify-center py-1 text-sm cursor-pointer
                      bg-blue-700 hover:bg-blue-800 rounded-xl"
-                    onClick={() => handleSignupModalSelection('login')}
+                    onClick={() => setSelection('login')}
                   >
                     <div className="text-white">Log in</div>
                   </div>
                   <div className="text-center text-white text-sm">
-                    forgot password?{' '}
+                    forgot password?
                     <span
                       className="underline cursor-pointer"
                       onClick={() => router.push('/reset')}
@@ -94,124 +88,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 </>
               )}
               {selection === 'login' && (
-                <div className="flex flex-col">
-                  <div className="text-white text-center text-2xl mb-5">
-                    Log in to <span className="text-blue-700">kollab</span>
-                  </div>
-                  <div className="px-1">
-                    <form onSubmit={handleLogin}>
-                      <div className="flex flex-col">
-                        <label className="text-white">email</label>
-                        <input
-                          className="text-black rounded-xl px-2"
-                          type="text"
-                          required
-                          id="email"
-                          name="email"
-                        />
-                        <label className="text-white">password</label>
-                        <input
-                          className="text-black rounded-xl px-2"
-                          type="password"
-                          required
-                          id="password"
-                          name="password"
-                        />
-                        <div className="flex flex-row py-5 text-center space-x-1">
-                          <div
-                            onClick={() => handleBackClick()}
-                            className="basis-2/5 bg-black border-2 border-white 
-                            hover:bg-gray-800 text-white rounded-xl px-1 cursor-pointer"
-                          >
-                            <span>{'back'}</span>
-                          </div>
-                          <button
-                            type="submit"
-                            className="basis-3/5 bg-blue-700 hover:bg-blue-600 
-                            w-full rounded-xl text-white"
-                          >
-                            Log in
-                          </button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
+                <Login setSelection={setSelection}></Login>
               )}
               {selection === 'register' && (
-                <div className="flex flex-col">
-                  <div className="text-white text-center text-2xl mb-5">
-                    Log in to <span className="text-blue-700">kollab</span>
-                  </div>
-                  <div className="px-1">
-                    <form onSubmit={handleRegisterFormSubmit}>
-                      <div className="flex flex-col">
-                        <div className="flex flex-row space-x-2">
-                          <div className="flex flex-col">
-                            <label className="text-white">first name</label>
-                            <input
-                              className="text-black rounded-xl px-2"
-                              type="text"
-                              required
-                              id="first_name"
-                              name="first_name"
-                            />
-                          </div>
-                          <div className="flex flex-col">
-                            <label className="text-white">last name</label>
-                            <input
-                              className="text-black rounded-xl px-2"
-                              type="text"
-                              required
-                              id="last_name"
-                              name="last_name"
-                            />
-                          </div>
-                        </div>
-                        <label className="text-white">email</label>
-                        <input
-                          className="text-black rounded-xl px-2"
-                          type="text"
-                          required
-                          id="email"
-                          name="email"
-                        />
-                        <label className="text-white">password</label>
-                        <input
-                          className="text-black rounded-xl px-2"
-                          type="password"
-                          required
-                          id="password"
-                          name="password"
-                        />
-                        <label className="text-white">confirm password</label>
-                        <input
-                          className="text-black rounded-xl px-2"
-                          type="password"
-                          required
-                          id="confirm_password"
-                          name="confirm_password"
-                        />
-                        <div className="flex flex-row py-5 text-center space-x-1">
-                          <div
-                            onClick={() => handleSignupModalSelection('')}
-                            className="basis-2/5 bg-black border-2 border-white 
-                            hover:bg-gray-800 text-white rounded-xl px-1 cursor-pointer"
-                          >
-                            <span>{'back'}</span>
-                          </div>
-                          <button
-                            type="submit"
-                            className="basis-3/5 bg-blue-700 hover:bg-blue-600 
-                            w-full rounded-xl text-white"
-                          >
-                            Create Account
-                          </button>
-                        </div>
-                      </div>
-                    </form>
-                  </div>
-                </div>
+                <Register setSelection={setSelection}></Register>
               )}
             </div>
           </div>
@@ -222,300 +102,38 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <div className="flex container mx-auto">
             {/* Side bar */}
             <div className="hidden sm:block sm:w-1/12 md:w-2/12 md:px-5 lg:px-10 pt-5">
-              <div className="flex flex-col py-5 space-y-5">
-                {/* logo */}
-                <div
-                  className="flex flex-row items-center font-semibold
-                text-blue-700 text-2xl cursor-pointer"
-                >
-                  <FaStackExchange size={32} />
-                  <div className="hidden md:block">kollab</div>
-                </div>
-                {/* home */}
-                <div
-                  onClick={() => {
-                    handleActiveTab(TabName.HOME);
-                  }}
-                  className={`${
-                    user.currentTab == TabName.HOME
-                      ? 'text-white font-light'
-                      : 'text-gray-400 font-extralight'
-                  } flex flex-row items-center text-lg cursor-pointer hover:text-white`}
-                >
-                  <TbHome2 size={32} strokeWidth={'1'} />
-                  <div className="hidden md:block">home</div>
-                </div>
-                {/* user */}
-                <div
-                  onClick={() => {
-                    handleActiveTab(TabName.USER);
-                  }}
-                  className={`${
-                    user.currentTab == TabName.USER
-                      ? 'text-white font-light'
-                      : 'text-gray-400 font-extralight'
-                  } flex flex-row items-center text-lg cursor-pointer hover:text-white`}
-                >
-                  <TbUser size={32} strokeWidth={'1'} />
-                  <div className="hidden md:block">{TabName.USER}</div>
-                </div>
-                {/* classes */}
-                <div
-                  onClick={() => {
-                    handleActiveTab(TabName.CLASS);
-                  }}
-                  className={`${
-                    user.currentTab == TabName.CLASS
-                      ? 'text-white font-light'
-                      : 'text-gray-400 font-extralight'
-                  } flex flex-row items-center text-lg cursor-pointer hover:text-white`}
-                >
-                  <TbBook2 size={32} strokeWidth={'1'} />
-                  <div className="hidden md:block">{TabName.CLASS}</div>
-                </div>
-                {/* groups */}
-                <div
-                  onClick={() => {
-                    handleActiveTab(TabName.GROUP);
-                  }}
-                  className={`${
-                    user.currentTab == TabName.GROUP
-                      ? 'text-white font-light'
-                      : 'text-gray-400 font-extralight'
-                  } flex flex-row items-center text-lg cursor-pointer hover:text-white`}
-                >
-                  <TbUsers size={32} strokeWidth={'1'} />
-                  <div className="hidden md:block">{TabName.GROUP}</div>
-                </div>
-              </div>
+              <SideBar></SideBar>
             </div>
             {/* Main Page with header */}
             <div className="w-full sm:w-11/12 md:w-10/12 pt-5 space-y-2">
               {/* Header Text */}
-              <div
-                className="flex items-center justify-between p-5  bg-black rounded-xl
-              text-white text-2xl font-bold"
-              >
-                <div>
-                  {user.currentTab == TabName.HOME ? 'Home' : user.currentTab}
-                </div>
-                {/* Login / Create Account Buttons */}
-                <div
-                  className="flex flex-row items-center space-x-2 font-medium 
-                text-sm"
-                >
-                  {!user.isLoggedIn && (
-                    <div
-                      onClick={() => router.push('/login')}
-                      className="flex flex-row items-center
-                  bg-stone-800 p-1 space-x-1 rounded cursor-pointer"
-                    >
-                      <TbLogin />
-                      <div>Login</div>
-                    </div>
-                  )}
-                  {!user.isLoggedIn && (
-                    <div
-                      onClick={() => router.push('/register')}
-                      className="flex flex-row items-center
-                  bg-stone-800 p-1 space-x-1 rounded cursor-pointer"
-                    >
-                      <TbUserPlus />
-                      <div>Register</div>
-                    </div>
-                  )}
-                  {user.isLoggedIn && (
-                    <>
-                      {(user.currentTab == TabName.CLASS ||
-                        user.currentTab == TabName.GROUP) && (
-                        <div
-                          onClick={() => setCreateNewTypeMode(true)}
-                          className="flex flex-row items-center
-                        bg-stone-800 hover:bg-stone-900 space-x-1 p-1 rounded cursor-pointer"
-                        >
-                          <TbPlus />
-                          <div>New</div>
-                        </div>
-                      )}
-                      <div
-                        onClick={() => handleLogout()}
-                        className="flex flex-row items-center
-                    bg-stone-800 hover:bg-stone-900 space-x-1 p-1 rounded cursor-pointer"
-                      >
-                        <TbLogout />
-                        <div>Logout</div>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-              {createNewTypeMode && (
-                <div
-                  className="flex flex-col justify-center p-5  
-                bg-black rounded-xl text-white text-2xl font-bold"
-                >
-                  {user.currentTab == TabName.CLASS && (
-                    <NewClass
-                      setCreateNewTypeMode={setCreateNewTypeMode}
-                      user={user}
-                    />
-                  )}
-                  {user.currentTab == TabName.GROUP && (
-                    <NewGroup
-                      setCreateNewTypeMode={setCreateNewTypeMode}
-                      user={user}
-                    />
-                  )}
-                </div>
-              )}
+              <Header></Header>
               {/* Children */}
-              <div className="bg-black rounded-xl p-5 text-white text-2xl font-bold mt-2">
+              <div className="bg-black rounded-3xl p-5 text-white text-2xl font-bold mt-2">
                 <main>{children}</main>
               </div>
             </div>
             {/* footer on small screens */}
-            <div
-              className="flex flex-row justify-between fixed bottom-0
-            px-20 w-full sm:hidden text-white bg-black py-2"
-            >
-              <FaStackExchange
-                onClick={() => {
-                  handleActiveTab(TabName.HOME);
-                }}
-                className="text-blue-700"
-                size={32}
-              />
-              <TbHome2
-                onClick={() => {
-                  handleActiveTab(TabName.HOME);
-                }}
-                size={32}
-                strokeWidth={1}
-                className={
-                  user.currentTab == TabName.HOME
-                    ? 'text-white font-light'
-                    : 'text-gray-400 font-extralight'
-                }
-              />
-              <TbUser
-                onClick={() => {
-                  handleActiveTab(TabName.USER);
-                }}
-                size={32}
-                strokeWidth={1}
-                className={
-                  user.currentTab == TabName.USER
-                    ? 'text-white font-light'
-                    : 'text-gray-400 font-extralight'
-                }
-              />
-              <TbBook2
-                onClick={() => {
-                  handleActiveTab(TabName.CLASS);
-                }}
-                size={32}
-                strokeWidth={1}
-                className={
-                  user.currentTab == TabName.CLASS
-                    ? 'text-white font-light'
-                    : 'text-gray-400 font-extralight'
-                }
-              />
-              <TbUsers
-                onClick={() => {
-                  handleActiveTab(TabName.GROUP);
-                }}
-                size={32}
-                strokeWidth={1}
-                className={
-                  user.currentTab == TabName.GROUP
-                    ? 'text-white font-light'
-                    : 'text-gray-400 font-extralight'
-                }
-              />
-            </div>
+            <Footer></Footer>
+            {user.currentTab == TabName.CLASS && createNewTypeMode && (
+              <ModalPopup
+                modalId="create_class_modal"
+                modalOpen={setCreateNewTypeMode}
+              >
+                <NewClass />
+              </ModalPopup>
+            )}
+            {user.currentTab == TabName.GROUP && createNewTypeMode && (
+              <ModalPopup
+                modalId="create_group_modal"
+                modalOpen={setCreateNewTypeMode}
+              >
+                <NewGroup />
+              </ModalPopup>
+            )}
           </div>
         </div>
       )}
-    </>
+    </div>
   );
-
-  async function handleLogin(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const userCreds: UserCredentials = {
-      email: event.currentTarget.email.value,
-      password: event.currentTarget.password.value,
-    };
-
-    try {
-      await axios({
-        method: 'post',
-        url: '/api/login',
-        data: JSON.stringify(userCreds),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }).then((res) => {
-        dispatch(setUserState(res.data));
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async function handleLogout() {
-    try {
-      await axios({
-        method: 'get',
-        url: '/api/logout',
-      }).then((res) => {
-        dispatch(setUserState(res.data));
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async function handleRegisterFormSubmit(
-    event: React.FormEvent<HTMLFormElement>
-  ) {
-    event.preventDefault();
-    const userRegister: UserRegister = {
-      first_name: event.currentTarget.first_name.value,
-      last_name: event.currentTarget.last_name.value,
-      email: event.currentTarget.email.value,
-      password: event.currentTarget.password.value,
-    };
-    try {
-      await axios({
-        method: 'post',
-        url: '/api/register',
-        data: JSON.stringify(userRegister),
-        headers: { 'Content-Type': 'application/json' },
-      }).then((res) => {
-        if (res.data.message === 'Email already exists') {
-          return;
-        }
-        dispatch(setUserState(res.data));
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  function handleSignupModalSelection(selection: string) {
-    setSelection(selection);
-  }
-
-  function handleBackClick() {
-    handleSignupModalSelection('');
-  }
-
-  function handleActiveTab(tab: string) {
-    if (user.currentTab.toLowerCase() != tab.toLowerCase()) {
-      dispatch(setCurrentTab(tab));
-      setCreateNewTypeMode(false);
-      router.push('/' + tab.toLowerCase());
-    }
-  }
 }

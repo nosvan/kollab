@@ -39,12 +39,22 @@ model group {
 model item {
   id               Int      @id @default(autoincrement())
   name             String
+  description      String
   category         Category
   category_id      Int
+  item_type        ItemType
+  due_date         DateTime
   created_by_id    Int
   last_modified_by_id Int
   date             DateTime @default(now())
   created_at       DateTime @default(now())
+}
+
+enum ItemType {
+  assignment
+  note
+  project
+  reminder
 }
 
 model permission {
@@ -57,7 +67,7 @@ model permission {
 }
 
 enum Category {
-  classrom
+  classroom
   group
   personal
 }
@@ -67,6 +77,7 @@ enum Semester {
   spring
   summer
   winter
+  na
 }
 
 model school {

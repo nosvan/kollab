@@ -11,11 +11,11 @@ export default function MyApp({
   Component: React.ComponentType<AppProps>;
   pageProps: AppProps;
 }) {
+  console.log('in apps.tsx');
   return (
     <>
       <Head>
-        <title>Kollab</title>
-        <link rel="icon" href="/favicon.ico" />
+        <title>kollab</title>
       </Head>
       <Provider store={store}>
         <Component {...pageProps} />

@@ -1,8 +1,12 @@
+import { ItemSafe } from "./item";
+
+// login
 export type UserCredentials = {
   email: string;
   password: string;
 };
 
+// user register
 export type UserRegister = {
   first_name: string;
   last_name: string;
@@ -10,6 +14,7 @@ export type UserRegister = {
   password: string;
 };
 
+// return type from server
 export type UserSafe = {
   id: number;
   first_name: string;
@@ -18,6 +23,7 @@ export type UserSafe = {
   isLoggedIn: boolean;
 }
 
+// iron session user
 export type UserSession = {
   id: number;
   first_name: string;
@@ -34,6 +40,14 @@ export type User = {
   email: string;
   password: string;
 };
+
+// redux state
+export type UserSliceState = {
+  user: UserState,
+  items: ItemSafe[],
+  createNewTypeMode: boolean,
+  createNewItemMode: boolean,
+}
 
 export type UserState = {
   id: number;

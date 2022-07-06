@@ -36,7 +36,7 @@ async function handle(req: NextApiRequest,res: NextApiResponse)
             isLoggedIn: true
           }
           const user = {...result, isLoggedIn: true}
-          req.session.user = user;
+          req.session.userSession = user;
           await req.session.save();
           res.status(200).json(safeUser);
         } catch (error) {

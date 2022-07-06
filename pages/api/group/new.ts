@@ -23,13 +23,14 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
         data: {
           name: newGroupData.name,
           description: newGroupData.description,
-          owner_id: req.session.user.id,
+          owner_id: req.session.userSession.id,
           passcode: newGroupData.passcode
       }})
       console.log(result)
       const safeResult = {
         id: result.id,
         name: result.name,
+        description: result.description,
         owner_id: result.owner_id,
         created_at: result.created_at
       }
@@ -39,9 +40,3 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
     }
   } 
 }
-
-// id         Int      @id @default(autoincrement())
-// name       String
-// description String
-// owner_id   Int
-// passcode   String

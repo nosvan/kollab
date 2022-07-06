@@ -1,15 +1,9 @@
 {
   "/_app": "pages/_app.js",
-  "/api/auth/user": "pages/api/auth/user.js",
-  "/api/logout": "pages/api/logout.js",
   "/_error": "pages/_error.js",
-  "/api/group/new": "pages/api/group/new.js",
-  "/api/login": "pages/api/login.js",
-  "/api/register": "pages/api/register.js",
-  "/": "pages/index.js",
-  "/classes": "pages/classes.js",
   "/_document": "pages/_document.js",
-  "/groups": "pages/groups.js",
   "/user": "pages/user.js",
-  "/404": "pages/404.html"
+  "/groups": "pages/groups.js",
+  "/api/item/item": "pages/api/item/item.js",
+  "/api/group/group": "pages/api/group/group.js"
 }
