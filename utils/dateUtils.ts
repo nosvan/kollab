@@ -1,5 +1,5 @@
 export function dateToMonthName(date: Date): string {
-  return date.toLocaleString('default', { month: 'long' });
+  return date.toLocaleString('default', { month: 'short' });
 }
 
 export function dateToDayName(date: Date): string {

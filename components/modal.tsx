@@ -16,7 +16,7 @@ function ModalPopup(props: ModalPopupProps) {
   const modalSpring = useSpring({
     from: { opacity: 0 },
     to: { opacity: 1 },
-    config: { duration: 100 },
+    config: { duration: 250 },
   });
   return (
     <animated.div

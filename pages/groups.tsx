@@ -34,7 +34,7 @@ export default function Groups({ user }: { user: UserSafe }) {
         method: 'get',
         url: '/api/group/group',
       }).then((res) => {
-        dispatch(setCurrentGroupAndGroups(res.data));
+        if (res.data.length > 0) dispatch(setCurrentGroupAndGroups(res.data));
       });
     }
     getUserGroups();
@@ -62,6 +62,7 @@ export default function Groups({ user }: { user: UserSafe }) {
         dispatch(setGroupItems(res.data));
       });
     }
+    console.log('current group:', currentGroup);
     if (currentGroup.id !== -999) getGroupItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentGroup]);
@@ -94,6 +95,9 @@ export default function Groups({ user }: { user: UserSafe }) {
                 ))}
               </select>
             )}
+            {/* <div className="flex items-center">
+              {selectedDate.toDateString()}
+            </div> */}
             <div className="flex flex-row items-center space-x-1 bg-stone-800 rounded-lg p-1 mx-1">
               <div
                 onClick={() => handleDecrementDate()}

@@ -24,14 +24,18 @@ export const groupSlice = createSlice({
       state.groups = action.payload
     },
     setCurrentGroupAndGroups: (state, action) => {
-      state.groups = action.payload
-      // if current group is empty, set to first group in groups
-      if(state.group.id === -999){
-        state.group = state.groups[0]
-      }
-      // check if current group is in groups, if not set to first group
-      if(!state.groups?.find(group => group.id === state.group.id)){
-        state.group = state.groups[0]
+      if(action.payload.length > 0) {
+        state.groups = action.payload
+        // if current group is empty, set to first group in groups
+        if(state.group.id === -999){
+          state.group = state.groups[0]
+        }
+        // check if current group is in groups, if not set to first group
+        if(!state.groups?.find(group => group.id === state.group.id)){
+          state.group = state.groups[0]
+        }
+      } else {
+        state.group = initialState.group
       }
     },
     setGroupItems: (state, action) => {

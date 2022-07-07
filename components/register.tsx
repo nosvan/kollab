@@ -1,3 +1,4 @@
+import { useSpring, animated } from '@react-spring/web';
 import axios from 'axios';
 import { UserRegister } from 'lib/types/user';
 import { Dispatch, SetStateAction } from 'react';
@@ -10,9 +11,13 @@ interface RegisterProps {
 
 export default function Register(props: RegisterProps) {
   const dispatch = useDispatch();
-
+  const modalSpring = useSpring({
+    from: { opacity: 0 },
+    to: { opacity: 1 },
+    config: { duration: 250 },
+  });
   return (
-    <div className="flex flex-col">
+    <animated.div style={modalSpring} className="flex flex-col">
       <div className="text-white text-center text-2xl mb-5">
         Create a <span className="text-blue-700">kollab</span> account
       </div>
@@ -84,7 +89,7 @@ export default function Register(props: RegisterProps) {
           </div>
         </form>
       </div>
-    </div>
+    </animated.div>
   );
 
   async function handleRegisterFormSubmit(

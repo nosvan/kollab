@@ -65,9 +65,7 @@ export default function TaskView(props: TaskViewProps) {
               className={`pb-1 space-y-1 px-1 ${styles['day-container']}`}
             >
               <div
-                className={`flex flex-row space-x-1 justify-center items-center ${
-                  currentDateString == day.toDateString() ? 'border-2' : ''
-                } bg-stone-800 text-center text-sm rounded-lg`}
+                className={`flex flex-row space-x-1 justify-center items-center bg-stone-800 text-center text-sm rounded-lg`}
               >
                 <div>
                   {dateToDayName(day)} {dateToMonthName(day)} {day.getDate()}
