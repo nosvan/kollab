@@ -44,7 +44,6 @@ export type User = {
 // redux state
 export type UserSliceState = {
   user: UserState,
-  items: ItemSafe[],
   createNewTypeMode: boolean,
   createNewItemMode: boolean,
 }

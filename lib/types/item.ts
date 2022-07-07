@@ -14,9 +14,9 @@ export enum ItemType {
 export type Item = {
   id: number
   name: string
-  description: string
+  description: string | null
   category: Category
-  category_id: number
+  category_id: number | null
   item_type: ItemType
   due_date: string
   created_by_id: number
@@ -27,9 +27,9 @@ export type Item = {
 
 export type CreateItem = {
   name: string
-  description: string
+  description: string | null
   category: Category
-  category_id: number
+  category_id: number | null
   item_type: ItemType
   due_date: string
   date: string
@@ -38,9 +38,9 @@ export type CreateItem = {
 export type ItemSafe = {
   id: number
   name: string
-  description: string
+  description: string | null
   category: Category
-  category_id: number
+  category_id: number | null
   item_type: ItemType
   due_date: string
   date: string

@@ -1,6 +1,6 @@
 export enum TabName {
   CLASS = 'classes',
   GROUP = 'groups',
-  USER = 'user',
+  USER = 'personal',
   HOME = ''
 }

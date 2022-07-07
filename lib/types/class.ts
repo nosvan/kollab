@@ -31,5 +31,7 @@ export type ClassSafe = {
 export type ClassSliceState = {
   class: ClassSafe,
   classes: ClassSafe[],
+  item: ItemSafe | null,
   items: ItemSafe[]
+  viewClassItemMode: boolean
 }

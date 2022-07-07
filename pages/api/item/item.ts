@@ -11,7 +11,6 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
   if(req.method === 'GET'){
     console.log(req.query)
     try {
-      const reqBody: CreateItem = req.body;
       const result = await prisma.item.findMany({
         select: {
           id: true,

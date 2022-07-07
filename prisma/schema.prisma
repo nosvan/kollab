@@ -21,7 +21,7 @@ model classroom {
   name        String
   school_name String
   semester    Semester
-  description String
+  description String?
   passcode    String
   owner_id    Int
   created_at  DateTime @default(now())
@@ -30,7 +30,7 @@ model classroom {
 model group {
   id         Int      @id @default(autoincrement())
   name       String
-  description String
+  description String?
   owner_id   Int
   passcode   String
   created_at DateTime @default(now())
@@ -39,9 +39,9 @@ model group {
 model item {
   id               Int      @id @default(autoincrement())
   name             String
-  description      String
+  description      String?
   category         Category
-  category_id      Int
+  category_id      Int? 
   item_type        ItemType
   due_date         DateTime
   created_by_id    Int

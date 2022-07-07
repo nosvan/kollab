@@ -30,5 +30,7 @@ export type GroupSafe = {
 export type GroupSliceState = {
   group: GroupSafe
   groups: GroupSafe[]
+  item: ItemSafe | null
   items: ItemSafe[]
+  viewGroupItemMode: boolean
 }

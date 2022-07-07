@@ -1,5 +1,5 @@
 import { withIronSessionSsr } from 'iron-session/next';
-import { Layout } from 'components/layout';
+import { Layout } from 'components/layout/layout';
 import { sessionOptions } from 'lib/iron_session';
 import { UserSafe } from 'lib/types/user';
 import { useEffect, useState } from 'react';
@@ -14,7 +14,7 @@ import {
   setClassItems,
 } from 'state/redux/classSlice';
 import { useRouter } from 'next/router';
-import TaskView from 'components/task_view';
+import TaskView from 'components/layout/task_view';
 import { getDays } from 'utils/dateUtils';
 import { Category } from 'lib/types/item';
 

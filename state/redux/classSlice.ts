@@ -12,7 +12,9 @@ const initialState: ClassSliceState = {
     created_at: ''
   },
   classes: [],
-  items: []
+  item: null,
+  items: [],
+  viewClassItemMode: false,
 };
 
 export const classSlice = createSlice({
@@ -36,16 +38,22 @@ export const classSlice = createSlice({
         state.class = state.classes[0]
       }
     },
+    setCurrentClassItem: (state, action) => {
+      state.item = action.payload
+    },
     setClassItems: (state, action) => {
       state.items = action.payload
     },
     setAdditionalClassItems: (state, action) => {
       state.items = [...state.items, ...action.payload]
+    },
+    setViewClassItemMode: (state, action) => {
+      state.viewClassItemMode = action.payload
     }
   },
 });
 
-export const { setCurrentClass, setClasses, setCurrentClassAndClasses, setClassItems, setAdditionalClassItems } =
+export const { setCurrentClass, setClasses, setCurrentClassAndClasses, setCurrentClassItem, setClassItems, setAdditionalClassItems, setViewClassItemMode } =
 classSlice.actions;
 
 export default classSlice.reducer;

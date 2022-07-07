@@ -10,7 +10,9 @@ const initialState: GroupSliceState = {
     created_at: ''
   },
   groups: [],
-  items: []
+  item: null,
+  items: [],
+  viewGroupItemMode: false,
 };
 
 export const groupSlice = createSlice({
@@ -31,23 +33,29 @@ export const groupSlice = createSlice({
           state.group = state.groups[0]
         }
         // check if current group is in groups, if not set to first group
-        if(!state.groups?.find(group => group.id === state.group.id)){
+        if(!state.groups.find(group => group.id === state.group.id)){
           state.group = state.groups[0]
         }
       } else {
         state.group = initialState.group
       }
     },
+    setCurrentGroupItem: (state, action) => {
+      state.item = action.payload
+    },
     setGroupItems: (state, action) => {
       state.items = action.payload
     },
     setAdditionalGroupItems: (state, action) => {
       state.items = [...state.items, ...action.payload]
+    },
+    setViewGroupItemMode: (state, action) => {
+      state.viewGroupItemMode = action.payload
     }
   },
 });
 
-export const { setCurrentGroup, setGroups, setCurrentGroupAndGroups, setGroupItems, setAdditionalGroupItems } =
+export const { setCurrentGroup, setGroups, setCurrentGroupAndGroups, setCurrentGroupItem, setGroupItems, setAdditionalGroupItems, setViewGroupItemMode } =
 groupSlice.actions;
 
 export default groupSlice.reducer;

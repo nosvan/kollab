@@ -1,4 +1,4 @@
-import { Layout } from 'components/layout';
+import { Layout } from 'components/layout/layout';
 import { withIronSessionSsr } from 'iron-session/next';
 import { sessionOptions } from 'lib/iron_session';
 import { useDispatch } from 'react-redux';
@@ -20,7 +20,9 @@ export default function Index({ user }: { user: UserSafe }) {
   return (
     <>
       <Layout>
-        <div>Main page</div>
+        <div className="bg-black rounded-3xl p-5 text-white mt-2">
+          Main page
+        </div>
       </Layout>
     </>
   );

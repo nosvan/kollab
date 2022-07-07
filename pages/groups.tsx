@@ -1,5 +1,5 @@
 import { withIronSessionSsr } from 'iron-session/next';
-import { Layout } from 'components/layout';
+import { Layout } from 'components/layout/layout';
 import { sessionOptions } from 'lib/iron_session';
 import { UserSafe } from 'lib/types/user';
 import { useEffect, useState } from 'react';
@@ -12,12 +12,15 @@ import {
   setCurrentGroup,
   setCurrentGroupAndGroups,
   setGroupItems,
+  setViewGroupItemMode,
 } from 'state/redux/groupSlice';
 import { useRouter } from 'next/router';
-import TaskView from 'components/task_view';
+import TaskView from 'components/layout/task_view';
 import { decrementDate, getDays, incrementDate } from 'utils/dateUtils';
 import { Category } from 'lib/types/item';
 import { TbArrowBigLeft, TbArrowBigRight } from 'react-icons/tb';
+import Item from 'components/item/item';
+import ModalPopup from 'components/layout/modal';
 
 export default function Groups({ user }: { user: UserSafe }) {
   const dispatch = useDispatch();
@@ -41,13 +44,7 @@ export default function Groups({ user }: { user: UserSafe }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const currentGroup = useSelector(
-    (state: RootState) => state.group_store.group
-  );
-  const userGroups = useSelector(
-    (state: RootState) => state.group_store.groups
-  );
-  const groupItems = useSelector((state: RootState) => state.group_store.items);
+  const groupState = useSelector((state: RootState) => state.group_store);
 
   useEffect(() => {
     async function getGroupItems() {
@@ -56,16 +53,15 @@ export default function Groups({ user }: { user: UserSafe }) {
         url: `/api/item/item`,
         params: {
           category: Category.GROUP,
-          category_id: currentGroup.id,
+          category_id: groupState.group.id,
         },
       }).then((res) => {
         dispatch(setGroupItems(res.data));
       });
     }
-    console.log('current group:', currentGroup);
-    if (currentGroup.id !== -999) getGroupItems();
+    if (groupState.group.id !== -999) getGroupItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentGroup]);
+  }, [groupState.group]);
 
   const [selectedDate, setSelectedDate] = useState(() => new Date());
   const [dayLayout, setDayLayout] = useState(7);
@@ -78,36 +74,33 @@ export default function Groups({ user }: { user: UserSafe }) {
   return (
     <>
       <Layout>
-        <div>
-          <div className="flex flex-row flex-wrap space-y-1 items-center justify-between text-sm mb-1">
-            {userGroups && userGroups.length > 0 && (
+        <div className="bg-black rounded-3xl p-5 text-white mt-2">
+          <div className="flex flex-row items-center flex-wrap space-y-1 justify-between text-sm mb-1">
+            {groupState.groups && groupState.groups.length > 0 && (
               <select
-                value={currentGroup.id}
+                value={groupState.group.id}
                 onChange={handleDropdownSelect}
                 name="groups"
                 id="groups-select"
-                className="rounded-lg text-white bg-stone-800 hover:bg-stone-700 cursor-pointer text-base p-1 ml-1"
+                className="flex flex-col rounded-lg items-center text-white bg-stone-800 hover:bg-stone-700 cursor-pointer text-sm mx-1"
               >
-                {userGroups.map((group: GroupSafe) => (
-                  <option key={group.id} value={group.id} className="relative">
+                {groupState.groups.map((group: GroupSafe) => (
+                  <option key={group.id} value={group.id}>
                     {group.name} (#{group.id})
                   </option>
                 ))}
               </select>
             )}
-            {/* <div className="flex items-center">
-              {selectedDate.toDateString()}
-            </div> */}
-            <div className="flex flex-row items-center space-x-1 bg-stone-800 rounded-lg p-1 mx-1">
+            <div className="flex flex-row items-center space-x-2 px-1 bg-stone-800 rounded-lg mx-1">
               <div
                 onClick={() => handleDecrementDate()}
-                className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg`}
+                className={`hover:bg-stone-700 cursor-pointer rounded-lg`}
               >
                 <TbArrowBigLeft></TbArrowBigLeft>
               </div>
               <div
                 onClick={() => handleSetDayLayout(1)}
-                className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg ${
+                className={`hover:bg-stone-700 cursor-pointer rounded-lg ${
                   dayLayout === 1 ? 'bg-stone-700' : ''
                 }`}
               >
@@ -115,7 +108,7 @@ export default function Groups({ user }: { user: UserSafe }) {
               </div>
               <div
                 onClick={() => handleSetDayLayout(7)}
-                className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg ${
+                className={`hover:bg-stone-700 cursor-pointer rounded-lg ${
                   dayLayout === 7 ? 'bg-stone-700' : ''
                 }`}
               >
@@ -123,7 +116,7 @@ export default function Groups({ user }: { user: UserSafe }) {
               </div>
               <div
                 onClick={() => handleSetDayLayout(30)}
-                className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg ${
+                className={`hover:bg-stone-700 cursor-pointer rounded-lg ${
                   dayLayout === 30 ? 'bg-stone-700' : ''
                 }`}
               >
@@ -137,14 +130,24 @@ export default function Groups({ user }: { user: UserSafe }) {
               </div>
             </div>
           </div>
-          <TaskView
-            dayLayout={dayLayout}
-            days={days}
-            selectedDate={selectedDate}
-            setSelectedDate={setSelectedDate}
-            category={Category.GROUP}
-            items={groupItems}
-          ></TaskView>
+          {groupState.groups.length > 0 && (
+            <TaskView
+              dayLayout={dayLayout}
+              days={days}
+              selectedDate={selectedDate}
+              setSelectedDate={setSelectedDate}
+              category={Category.GROUP}
+              items={groupState.items}
+            />
+          )}
+          {groupState.viewGroupItemMode && (
+            <ModalPopup
+              modalId="view_group_item_modal"
+              modalOpen={setViewGroupItemMode}
+            >
+              <Item item={groupState.item}></Item>
+            </ModalPopup>
+          )}
         </div>
       </Layout>
     </>
@@ -167,7 +170,9 @@ export default function Groups({ user }: { user: UserSafe }) {
   }) {
     event.preventDefault();
     const groupId = event.currentTarget.value;
-    const group = userGroups.find((group: GroupSafe) => group.id == groupId);
+    const group = groupState.groups.find(
+      (group: GroupSafe) => group.id == groupId
+    );
     dispatch(setCurrentGroup(group));
   }
 }
