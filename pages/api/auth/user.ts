@@ -22,7 +22,7 @@ async function handle(req: NextApiRequest, res: NextApiResponse) {
   }
   try {
     console.log('verifying session token')
-    const userFromSession: UserSession = await req.session.user
+    const userFromSession: UserSession = await req.session.userSession
     const result = await prisma.user.findUnique({
       select: {
         id: true,

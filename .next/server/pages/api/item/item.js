@@ -1,85 +1,93 @@
 "use strict";
-/*
- * ATTENTION: An "eval-source-map" devtool has been used.
- * This devtool is neither made for production nor for readable output files.
- * It uses "eval()" calls to create a separate source file with attached SourceMaps in the browser devtools.
- * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
- * or disable the default devtool with "devtool: false".
- * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
- */
 (() => {
 var exports = {};
-exports.id = "pages/api/item/item";
-exports.ids = ["pages/api/item/item"];
+exports.id = 614;
+exports.ids = [614];
 exports.modules = {
 
-/***/ "@prisma/client":
-/*!*********************************!*\
-  !*** external "@prisma/client" ***!
-  \*********************************/
+/***/ 3524:
 /***/ ((module) => {
 
 module.exports = require("@prisma/client");
 
 /***/ }),
 
-/***/ "iron-session":
-/*!*******************************!*\
-  !*** external "iron-session" ***!
-  \*******************************/
+/***/ 4014:
 /***/ ((module) => {
 
 module.exports = import("iron-session");;
 
 /***/ }),
 
-/***/ "(api)/./lib/iron_session.ts":
-/*!*****************************!*\
-  !*** ./lib/iron_session.ts ***!
-  \*****************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"sessionOptions\": () => (/* binding */ sessionOptions)\n/* harmony export */ });\nconst sessionOptions = {\n    password: process.env.JWT_SECRET,\n    cookieName: \"iron-session-token\",\n    cookieOptions: {\n        maxAge: 60 * 60 * 24 * 30 * 6,\n        httpOnly: true,\n        sameSite: \"strict\",\n        secure: \"development\" === \"production\",\n        path: \"/\"\n    }\n};\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi9saWIvaXJvbl9zZXNzaW9uLnRzLmpzIiwibWFwcGluZ3MiOiI7Ozs7QUFHTyxNQUFNQSxjQUFjLEdBQXVCO0lBQ2hEQyxRQUFRLEVBQUVDLE9BQU8sQ0FBQ0MsR0FBRyxDQUFDQyxVQUFVO0lBQ2hDQyxVQUFVLEVBQUUsb0JBQW9CO0lBQ2hDQyxhQUFhLEVBQUU7UUFDYkMsTUFBTSxFQUFFLEVBQUUsR0FBQyxFQUFFLEdBQUMsRUFBRSxHQUFDLEVBQUUsR0FBQyxDQUFDO1FBQ3JCQyxRQUFRLEVBQUUsSUFBSTtRQUNkQyxRQUFRLEVBQUUsUUFBUTtRQUNsQkMsTUFBTSxFQUFFUixhQVZDLEtBVXdCLFlBQVk7UUFDN0NTLElBQUksRUFBRSxHQUFHO0tBQ1Y7Q0FDRixDQUFDIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8va29sbGFiLy4vbGliL2lyb25fc2Vzc2lvbi50cz9iM2FkIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IElyb25TZXNzaW9uT3B0aW9ucyB9IGZyb20gXCJpcm9uLXNlc3Npb25cIjtcbmltcG9ydCB7IFVzZXJTZXNzaW9uIH0gZnJvbSAnLi90eXBlcy91c2VyJztcblxuZXhwb3J0IGNvbnN0IHNlc3Npb25PcHRpb25zOiBJcm9uU2Vzc2lvbk9wdGlvbnMgPSB7XG4gIHBhc3N3b3JkOiBwcm9jZXNzLmVudi5KV1RfU0VDUkVUIGFzIHN0cmluZyxcbiAgY29va2llTmFtZTogXCJpcm9uLXNlc3Npb24tdG9rZW5cIixcbiAgY29va2llT3B0aW9uczoge1xuICAgIG1heEFnZTogNjAqNjAqMjQqMzAqNixcbiAgICBodHRwT25seTogdHJ1ZSxcbiAgICBzYW1lU2l0ZTogXCJzdHJpY3RcIixcbiAgICBzZWN1cmU6IHByb2Nlc3MuZW52Lk5PREVfRU5WID09PSBcInByb2R1Y3Rpb25cIixcbiAgICBwYXRoOiBcIi9cIixcbiAgfSxcbn07XG5cbmRlY2xhcmUgbW9kdWxlIFwiaXJvbi1zZXNzaW9uXCIge1xuICBpbnRlcmZhY2UgSXJvblNlc3Npb25EYXRhIHtcbiAgICB1c2VyU2Vzc2lvbjogVXNlclNlc3Npb247XG4gIH1cbn0iXSwibmFtZXMiOlsic2Vzc2lvbk9wdGlvbnMiLCJwYXNzd29yZCIsInByb2Nlc3MiLCJlbnYiLCJKV1RfU0VDUkVUIiwiY29va2llTmFtZSIsImNvb2tpZU9wdGlvbnMiLCJtYXhBZ2UiLCJodHRwT25seSIsInNhbWVTaXRlIiwic2VjdXJlIiwicGF0aCJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///(api)/./lib/iron_session.ts\n");
-
-/***/ }),
-
-/***/ "(api)/./lib/prisma.ts":
-/*!***********************!*\
-  !*** ./lib/prisma.ts ***!
-  \***********************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var _prisma_client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @prisma/client */ \"@prisma/client\");\n/* harmony import */ var _prisma_client__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_prisma_client__WEBPACK_IMPORTED_MODULE_0__);\n\nlet prisma;\nif (false) {} else {\n    let globalWithPrisma = global;\n    if (!globalWithPrisma.prisma) {\n        globalWithPrisma.prisma = new _prisma_client__WEBPACK_IMPORTED_MODULE_0__.PrismaClient();\n    }\n    prisma = globalWithPrisma.prisma;\n}\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (prisma);\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi9saWIvcHJpc21hLnRzLmpzIiwibWFwcGluZ3MiOiI7Ozs7OztBQUE4QztBQUU5QyxJQUFJQyxNQUFNO0FBRVYsSUFBSUMsS0FBcUMsRUFBRSxFQUUxQyxNQUFNO0lBQ0wsSUFBSUMsZ0JBQWdCLEdBQUdDLE1BQU07SUFHN0IsSUFBSSxDQUFDRCxnQkFBZ0IsQ0FBQ0YsTUFBTSxFQUFFO1FBQzVCRSxnQkFBZ0IsQ0FBQ0YsTUFBTSxHQUFHLElBQUlELHdEQUFZLEVBQUUsQ0FBQztLQUM5QztJQUNEQyxNQUFNLEdBQUdFLGdCQUFnQixDQUFDRixNQUFNLENBQUM7Q0FDbEM7QUFFRCxpRUFBZUEsTUFBTSxFQUFDIiwic291cmNlcyI6WyJ3ZWJwYWNrOi8va29sbGFiLy4vbGliL3ByaXNtYS50cz85ODIyIl0sInNvdXJjZXNDb250ZW50IjpbImltcG9ydCB7IFByaXNtYUNsaWVudCB9IGZyb20gJ0BwcmlzbWEvY2xpZW50JztcblxubGV0IHByaXNtYTogUHJpc21hQ2xpZW50O1xuXG5pZiAocHJvY2Vzcy5lbnYuTk9ERV9FTlYgPT09ICdwcm9kdWN0aW9uJykge1xuICBwcmlzbWEgPSBuZXcgUHJpc21hQ2xpZW50KCk7XG59IGVsc2Uge1xuICBsZXQgZ2xvYmFsV2l0aFByaXNtYSA9IGdsb2JhbCBhcyB0eXBlb2YgZ2xvYmFsVGhpcyAmIHtcbiAgICBwcmlzbWE6IFByaXNtYUNsaWVudFxuICB9XG4gIGlmICghZ2xvYmFsV2l0aFByaXNtYS5wcmlzbWEpIHtcbiAgICBnbG9iYWxXaXRoUHJpc21hLnByaXNtYSA9IG5ldyBQcmlzbWFDbGllbnQoKTtcbiAgfVxuICBwcmlzbWEgPSBnbG9iYWxXaXRoUHJpc21hLnByaXNtYTtcbn1cblxuZXhwb3J0IGRlZmF1bHQgcHJpc21hO1xuIl0sIm5hbWVzIjpbIlByaXNtYUNsaWVudCIsInByaXNtYSIsInByb2Nlc3MiLCJnbG9iYWxXaXRoUHJpc21hIiwiZ2xvYmFsIl0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///(api)/./lib/prisma.ts\n");
-
-/***/ }),
-
-/***/ "(api)/./lib/types/item.ts":
-/*!***************************!*\
-  !*** ./lib/types/item.ts ***!
-  \***************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"Category\": () => (/* binding */ Category),\n/* harmony export */   \"ItemType\": () => (/* binding */ ItemType)\n/* harmony export */ });\nvar Category;\n(function(Category) {\n    Category[\"CLASSROOM\"] = \"CLASSROOM\";\n    Category[\"GROUP\"] = \"GROUP\";\n    Category[\"PERSONAL\"] = \"PERSONAL\";\n})(Category || (Category = {}));\nvar ItemType;\n(function(ItemType) {\n    ItemType[\"ASSIGNMENT\"] = \"ASSIGNMENT\";\n    ItemType[\"NOTE\"] = \"NOTE\";\n    ItemType[\"PROJECT\"] = \"PROJECT\";\n    ItemType[\"REMINDER\"] = \"REMINDER\";\n})(ItemType || (ItemType = {}));\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi9saWIvdHlwZXMvaXRlbS50cy5qcyIsIm1hcHBpbmdzIjoiOzs7OztBQUFPLFlBSU47VUFKV0EsUUFBUTtJQUFSQSxRQUFRLENBQ2xCQyxXQUFTLElBQVRBLFdBQVM7SUFEQ0QsUUFBUSxDQUVsQkUsT0FBSyxJQUFMQSxPQUFLO0lBRktGLFFBQVEsQ0FHbEJHLFVBQVEsSUFBUkEsVUFBUTtHQUhFSCxRQUFRLEtBQVJBLFFBQVE7SUFNYixRQUtOO1VBTFdJLFFBQVE7SUFBUkEsUUFBUSxDQUNsQkMsWUFBVSxJQUFWQSxZQUFVO0lBREFELFFBQVEsQ0FFbEJFLE1BQUksSUFBSkEsTUFBSTtJQUZNRixRQUFRLENBR2xCRyxTQUFPLElBQVBBLFNBQU87SUFIR0gsUUFBUSxDQUlsQkksVUFBUSxJQUFSQSxVQUFRO0dBSkVKLFFBQVEsS0FBUkEsUUFBUSIsInNvdXJjZXMiOlsid2VicGFjazovL2tvbGxhYi8uL2xpYi90eXBlcy9pdGVtLnRzPzQxM2UiXSwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGVudW0gQ2F0ZWdvcnkge1xuICBDTEFTU1JPT00gPSAnQ0xBU1NST09NJyxcbiAgR1JPVVAgPSAnR1JPVVAnLFxuICBQRVJTT05BTCAgPSAnUEVSU09OQUwnLFxufVxuXG5leHBvcnQgZW51bSBJdGVtVHlwZSB7XG4gIEFTU0lHTk1FTlQgPSAnQVNTSUdOTUVOVCcsXG4gIE5PVEUgPSAnTk9URScsXG4gIFBST0pFQ1QgPSAnUFJPSkVDVCcsXG4gIFJFTUlOREVSID0gJ1JFTUlOREVSJ1xufVxuXG5leHBvcnQgdHlwZSBJdGVtID0ge1xuICBpZDogbnVtYmVyXG4gIG5hbWU6IHN0cmluZ1xuICBkZXNjcmlwdGlvbjogc3RyaW5nXG4gIGNhdGVnb3J5OiBDYXRlZ29yeVxuICBjYXRlZ29yeV9pZDogbnVtYmVyXG4gIGl0ZW1fdHlwZTogSXRlbVR5cGVcbiAgZHVlX2RhdGU6IHN0cmluZ1xuICBjcmVhdGVkX2J5X2lkOiBudW1iZXJcbiAgbGFzdF9tb2RpZmllZF9ieV9pZDogbnVtYmVyXG4gIGRhdGU6IHN0cmluZ1xuICBjcmVhdGVkX2F0OiBzdHJpbmdcbn1cblxuZXhwb3J0IHR5cGUgQ3JlYXRlSXRlbSA9IHtcbiAgbmFtZTogc3RyaW5nXG4gIGRlc2NyaXB0aW9uOiBzdHJpbmdcbiAgY2F0ZWdvcnk6IENhdGVnb3J5XG4gIGNhdGVnb3J5X2lkOiBudW1iZXJcbiAgaXRlbV90eXBlOiBJdGVtVHlwZVxuICBkdWVfZGF0ZTogc3RyaW5nXG4gIGRhdGU6IHN0cmluZ1xufVxuXG5leHBvcnQgdHlwZSBJdGVtU2FmZSA9IHtcbiAgaWQ6IG51bWJlclxuICBuYW1lOiBzdHJpbmdcbiAgZGVzY3JpcHRpb246IHN0cmluZ1xuICBjYXRlZ29yeTogQ2F0ZWdvcnlcbiAgY2F0ZWdvcnlfaWQ6IG51bWJlclxuICBpdGVtX3R5cGU6IEl0ZW1UeXBlXG4gIGR1ZV9kYXRlOiBzdHJpbmdcbiAgZGF0ZTogc3RyaW5nXG59XG4iXSwibmFtZXMiOlsiQ2F0ZWdvcnkiLCJDTEFTU1JPT00iLCJHUk9VUCIsIlBFUlNPTkFMIiwiSXRlbVR5cGUiLCJBU1NJR05NRU5UIiwiTk9URSIsIlBST0pFQ1QiLCJSRU1JTkRFUiJdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///(api)/./lib/types/item.ts\n");
-
-/***/ }),
-
-/***/ "(api)/./pages/api/item/item.ts":
-/*!********************************!*\
-  !*** ./pages/api/item/item.ts ***!
-  \********************************/
+/***/ 5101:
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {\n__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\n/* harmony import */ var iron_session_next__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! iron-session/next */ \"(api)/./node_modules/iron-session/next/dist/index.mjs\");\n/* harmony import */ var lib_iron_session__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lib/iron_session */ \"(api)/./lib/iron_session.ts\");\n/* harmony import */ var lib_prisma__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lib/prisma */ \"(api)/./lib/prisma.ts\");\n/* harmony import */ var lib_types_item__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lib/types/item */ \"(api)/./lib/types/item.ts\");\n/* harmony import */ var _prisma_client__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @prisma/client */ \"@prisma/client\");\n/* harmony import */ var _prisma_client__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_prisma_client__WEBPACK_IMPORTED_MODULE_4__);\nvar __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([iron_session_next__WEBPACK_IMPORTED_MODULE_0__]);\niron_session_next__WEBPACK_IMPORTED_MODULE_0__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];\n\n\n\n\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,iron_session_next__WEBPACK_IMPORTED_MODULE_0__.withIronSessionApiRoute)(handle, lib_iron_session__WEBPACK_IMPORTED_MODULE_1__.sessionOptions));\nasync function handle(req, res) {\n    if (req.method === \"GET\") {\n        console.log(req.query);\n        try {\n            const reqBody = req.body;\n            const result = await lib_prisma__WEBPACK_IMPORTED_MODULE_2__[\"default\"].item.findMany({\n                select: {\n                    id: true,\n                    name: true,\n                    description: true,\n                    category: true,\n                    category_id: true,\n                    item_type: true,\n                    due_date: true,\n                    date: true\n                },\n                where: {\n                    category: _prisma_client__WEBPACK_IMPORTED_MODULE_4__.Category[req.query.category.toString().toLowerCase()],\n                    category_id: parseInt(req.query.category_id.toString())\n                },\n                orderBy: {\n                    item_type: \"asc\"\n                }\n            });\n            const resultSafe = [];\n            result.forEach((row)=>{\n                const itemRow = {\n                    id: row.id,\n                    name: row.name,\n                    description: row.description,\n                    category: lib_types_item__WEBPACK_IMPORTED_MODULE_3__.Category[row.category.toUpperCase()],\n                    category_id: row.category_id,\n                    item_type: lib_types_item__WEBPACK_IMPORTED_MODULE_3__.ItemType[row.item_type.toUpperCase()],\n                    due_date: row.due_date.toString(),\n                    date: row.date.toString()\n                };\n                resultSafe.push(itemRow);\n            });\n            res.json(resultSafe);\n        } catch (error) {\n            res.json(error);\n        }\n    }\n}\n\n__webpack_async_result__();\n} catch(e) { __webpack_async_result__(e); } });//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi9wYWdlcy9hcGkvaXRlbS9pdGVtLnRzLmpzIiwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7QUFBNEQ7QUFFVjtBQUNsQjtBQUMwQztBQUNmO0FBRTNELGlFQUFlQSwwRUFBdUIsQ0FBQ00sTUFBTSxFQUFFTCw0REFBYyxDQUFDO0FBRTlELGVBQWVLLE1BQU0sQ0FBQ0MsR0FBbUIsRUFBQ0MsR0FBb0IsRUFBQztJQUM3RCxJQUFHRCxHQUFHLENBQUNFLE1BQU0sS0FBSyxLQUFLLEVBQUM7UUFDdEJDLE9BQU8sQ0FBQ0MsR0FBRyxDQUFDSixHQUFHLENBQUNLLEtBQUssQ0FBQztRQUN0QixJQUFJO1lBQ0YsTUFBTUMsT0FBTyxHQUFlTixHQUFHLENBQUNPLElBQUk7WUFDcEMsTUFBTUMsTUFBTSxHQUFHLE1BQU1iLGdFQUFvQixDQUFDO2dCQUN4Q2dCLE1BQU0sRUFBRTtvQkFDTkMsRUFBRSxFQUFFLElBQUk7b0JBQ1JDLElBQUksRUFBRSxJQUFJO29CQUNWQyxXQUFXLEVBQUUsSUFBSTtvQkFDakJDLFFBQVEsRUFBRSxJQUFJO29CQUNkQyxXQUFXLEVBQUUsSUFBSTtvQkFDakJDLFNBQVMsRUFBRSxJQUFJO29CQUNmQyxRQUFRLEVBQUUsSUFBSTtvQkFDZEMsSUFBSSxFQUFFLElBQUk7aUJBQ1g7Z0JBQ0RDLEtBQUssRUFBRTtvQkFDTEwsUUFBUSxFQUFFakIsb0RBQWMsQ0FBQ0UsR0FBRyxDQUFDSyxLQUFLLENBQUNVLFFBQVEsQ0FBQ00sUUFBUSxFQUFFLENBQUNDLFdBQVcsRUFBRSxDQUFnQztvQkFDcEdOLFdBQVcsRUFBRU8sUUFBUSxDQUFDdkIsR0FBRyxDQUFDSyxLQUFLLENBQUNXLFdBQVcsQ0FBQ0ssUUFBUSxFQUFFLENBQUM7aUJBQ3hEO2dCQUNERyxPQUFPLEVBQUU7b0JBQ1BQLFNBQVMsRUFBRSxLQUFLO2lCQUNqQjthQUNGLENBQUM7WUFDRixNQUFNUSxVQUFVLEdBQWUsRUFBRTtZQUNqQ2pCLE1BQU0sQ0FBQ2tCLE9BQU8sQ0FBQ0MsQ0FBQUEsR0FBRyxHQUFHO2dCQUNuQixNQUFNQyxPQUFPLEdBQWE7b0JBQ3hCaEIsRUFBRSxFQUFFZSxHQUFHLENBQUNmLEVBQUU7b0JBQ1ZDLElBQUksRUFBRWMsR0FBRyxDQUFDZCxJQUFJO29CQUNkQyxXQUFXLEVBQUVhLEdBQUcsQ0FBQ2IsV0FBVztvQkFDNUJDLFFBQVEsRUFBRW5CLG9EQUFRLENBQUMrQixHQUFHLENBQUNaLFFBQVEsQ0FBQ2MsV0FBVyxFQUFFLENBQTBCO29CQUN2RWIsV0FBVyxFQUFFVyxHQUFHLENBQUNYLFdBQVc7b0JBQzVCQyxTQUFTLEVBQUVwQixvREFBUSxDQUFDOEIsR0FBRyxDQUFDVixTQUFTLENBQUNZLFdBQVcsRUFBRSxDQUEwQjtvQkFDekVYLFFBQVEsRUFBRVMsR0FBRyxDQUFDVCxRQUFRLENBQUNHLFFBQVEsRUFBRTtvQkFDakNGLElBQUksRUFBRVEsR0FBRyxDQUFDUixJQUFJLENBQUNFLFFBQVEsRUFBRTtpQkFDMUI7Z0JBQ0RJLFVBQVUsQ0FBQ0ssSUFBSSxDQUFDRixPQUFPLENBQUM7YUFDekIsQ0FBQztZQUNGM0IsR0FBRyxDQUFDOEIsSUFBSSxDQUFDTixVQUFVLENBQUM7U0FDckIsQ0FBQyxPQUFPTyxLQUFLLEVBQUU7WUFDZC9CLEdBQUcsQ0FBQzhCLElBQUksQ0FBQ0MsS0FBSyxDQUFDO1NBQ2hCO0tBQ0Y7Q0FDRiIsInNvdXJjZXMiOlsid2VicGFjazovL2tvbGxhYi8uL3BhZ2VzL2FwaS9pdGVtL2l0ZW0udHM/NzdhNiJdLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgeyB3aXRoSXJvblNlc3Npb25BcGlSb3V0ZSB9IGZyb20gJ2lyb24tc2Vzc2lvbi9uZXh0JztcbmltcG9ydCB7IE5leHRBcGlSZXF1ZXN0LCBOZXh0QXBpUmVzcG9uc2UgfSBmcm9tICduZXh0JztcbmltcG9ydCB7IHNlc3Npb25PcHRpb25zIH0gZnJvbSAnbGliL2lyb25fc2Vzc2lvbic7XG5pbXBvcnQgcHJpc21hIGZyb20gJ2xpYi9wcmlzbWEnO1xuaW1wb3J0IHsgQ2F0ZWdvcnksIENyZWF0ZUl0ZW0sIEl0ZW1TYWZlLCBJdGVtVHlwZSB9IGZyb20gJ2xpYi90eXBlcy9pdGVtJztcbmltcG9ydCB7IENhdGVnb3J5IGFzIFByaXNtYUNhdGVnb3J5fSBmcm9tICdAcHJpc21hL2NsaWVudCc7XG5cbmV4cG9ydCBkZWZhdWx0IHdpdGhJcm9uU2Vzc2lvbkFwaVJvdXRlKGhhbmRsZSwgc2Vzc2lvbk9wdGlvbnMpXG5cbmFzeW5jIGZ1bmN0aW9uIGhhbmRsZShyZXE6IE5leHRBcGlSZXF1ZXN0LHJlczogTmV4dEFwaVJlc3BvbnNlKXtcbiAgaWYocmVxLm1ldGhvZCA9PT0gJ0dFVCcpe1xuICAgIGNvbnNvbGUubG9nKHJlcS5xdWVyeSlcbiAgICB0cnkge1xuICAgICAgY29uc3QgcmVxQm9keTogQ3JlYXRlSXRlbSA9IHJlcS5ib2R5O1xuICAgICAgY29uc3QgcmVzdWx0ID0gYXdhaXQgcHJpc21hLml0ZW0uZmluZE1hbnkoe1xuICAgICAgICBzZWxlY3Q6IHtcbiAgICAgICAgICBpZDogdHJ1ZSxcbiAgICAgICAgICBuYW1lOiB0cnVlLFxuICAgICAgICAgIGRlc2NyaXB0aW9uOiB0cnVlLFxuICAgICAgICAgIGNhdGVnb3J5OiB0cnVlLFxuICAgICAgICAgIGNhdGVnb3J5X2lkOiB0cnVlLFxuICAgICAgICAgIGl0ZW1fdHlwZTogdHJ1ZSxcbiAgICAgICAgICBkdWVfZGF0ZTogdHJ1ZSxcbiAgICAgICAgICBkYXRlOiB0cnVlLFxuICAgICAgICB9LFxuICAgICAgICB3aGVyZToge1xuICAgICAgICAgIGNhdGVnb3J5OiBQcmlzbWFDYXRlZ29yeVtyZXEucXVlcnkuY2F0ZWdvcnkudG9TdHJpbmcoKS50b0xvd2VyQ2FzZSgpIGFzIGtleW9mIHR5cGVvZiBQcmlzbWFDYXRlZ29yeV0sXG4gICAgICAgICAgY2F0ZWdvcnlfaWQ6IHBhcnNlSW50KHJlcS5xdWVyeS5jYXRlZ29yeV9pZC50b1N0cmluZygpKSxcbiAgICAgICAgfSxcbiAgICAgICAgb3JkZXJCeToge1xuICAgICAgICAgIGl0ZW1fdHlwZTogJ2FzYycsXG4gICAgICAgIH1cbiAgICAgIH0pXG4gICAgICBjb25zdCByZXN1bHRTYWZlOiBJdGVtU2FmZVtdID0gW11cbiAgICAgIHJlc3VsdC5mb3JFYWNoKHJvdz0+IHtcbiAgICAgICAgY29uc3QgaXRlbVJvdzogSXRlbVNhZmUgPSB7XG4gICAgICAgICAgaWQ6IHJvdy5pZCxcbiAgICAgICAgICBuYW1lOiByb3cubmFtZSxcbiAgICAgICAgICBkZXNjcmlwdGlvbjogcm93LmRlc2NyaXB0aW9uLFxuICAgICAgICAgIGNhdGVnb3J5OiBDYXRlZ29yeVtyb3cuY2F0ZWdvcnkudG9VcHBlckNhc2UoKSBhcyBrZXlvZiB0eXBlb2YgQ2F0ZWdvcnldLFxuICAgICAgICAgIGNhdGVnb3J5X2lkOiByb3cuY2F0ZWdvcnlfaWQsXG4gICAgICAgICAgaXRlbV90eXBlOiBJdGVtVHlwZVtyb3cuaXRlbV90eXBlLnRvVXBwZXJDYXNlKCkgYXMga2V5b2YgdHlwZW9mIEl0ZW1UeXBlXSxcbiAgICAgICAgICBkdWVfZGF0ZTogcm93LmR1ZV9kYXRlLnRvU3RyaW5nKCksXG4gICAgICAgICAgZGF0ZTogcm93LmRhdGUudG9TdHJpbmcoKVxuICAgICAgICB9XG4gICAgICAgIHJlc3VsdFNhZmUucHVzaChpdGVtUm93KVxuICAgICAgfSlcbiAgICAgIHJlcy5qc29uKHJlc3VsdFNhZmUpXG4gICAgfSBjYXRjaCAoZXJyb3IpIHtcbiAgICAgIHJlcy5qc29uKGVycm9yKVxuICAgIH1cbiAgfSBcbn0iXSwibmFtZXMiOlsid2l0aElyb25TZXNzaW9uQXBpUm91dGUiLCJzZXNzaW9uT3B0aW9ucyIsInByaXNtYSIsIkNhdGVnb3J5IiwiSXRlbVR5cGUiLCJQcmlzbWFDYXRlZ29yeSIsImhhbmRsZSIsInJlcSIsInJlcyIsIm1ldGhvZCIsImNvbnNvbGUiLCJsb2ciLCJxdWVyeSIsInJlcUJvZHkiLCJib2R5IiwicmVzdWx0IiwiaXRlbSIsImZpbmRNYW55Iiwic2VsZWN0IiwiaWQiLCJuYW1lIiwiZGVzY3JpcHRpb24iLCJjYXRlZ29yeSIsImNhdGVnb3J5X2lkIiwiaXRlbV90eXBlIiwiZHVlX2RhdGUiLCJkYXRlIiwid2hlcmUiLCJ0b1N0cmluZyIsInRvTG93ZXJDYXNlIiwicGFyc2VJbnQiLCJvcmRlckJ5IiwicmVzdWx0U2FmZSIsImZvckVhY2giLCJyb3ciLCJpdGVtUm93IiwidG9VcHBlckNhc2UiLCJwdXNoIiwianNvbiIsImVycm9yIl0sInNvdXJjZVJvb3QiOiIifQ==\n//# sourceURL=webpack-internal:///(api)/./pages/api/item/item.ts\n");
+__webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var iron_session_next__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8534);
+/* harmony import */ var lib_iron_session__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6527);
+/* harmony import */ var lib_prisma__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3388);
+/* harmony import */ var lib_types_item__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(8906);
+/* harmony import */ var _prisma_client__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(3524);
+/* harmony import */ var _prisma_client__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_prisma_client__WEBPACK_IMPORTED_MODULE_4__);
+var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([iron_session_next__WEBPACK_IMPORTED_MODULE_0__]);
+iron_session_next__WEBPACK_IMPORTED_MODULE_0__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];
 
-/***/ }),
 
-/***/ "(api)/./node_modules/iron-session/next/dist/index.mjs":
-/*!*******************************************************!*\
-  !*** ./node_modules/iron-session/next/dist/index.mjs ***!
-  \*******************************************************/
-/***/ ((__webpack_module__, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.a(__webpack_module__, async (__webpack_handle_async_dependencies__, __webpack_async_result__) => { try {\n__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"withIronSessionApiRoute\": () => (/* binding */ withIronSessionApiRoute),\n/* harmony export */   \"withIronSessionSsr\": () => (/* binding */ withIronSessionSsr)\n/* harmony export */ });\n/* harmony import */ var iron_session__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! iron-session */ \"iron-session\");\nvar __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([iron_session__WEBPACK_IMPORTED_MODULE_0__]);\niron_session__WEBPACK_IMPORTED_MODULE_0__ = (__webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__)[0];\n// next/index.ts\n\n\n// src/getPropertyDescriptorForReqSession.ts\nfunction getPropertyDescriptorForReqSession(session) {\n  return {\n    enumerable: true,\n    get() {\n      return session;\n    },\n    set(value) {\n      const keys = Object.keys(value);\n      const currentKeys = Object.keys(session);\n      currentKeys.forEach((key) => {\n        if (!keys.includes(key)) {\n          delete session[key];\n        }\n      });\n      keys.forEach((key) => {\n        session[key] = value[key];\n      });\n    }\n  };\n}\n\n// next/index.ts\nfunction withIronSessionApiRoute(handler, options) {\n  return async function nextApiHandlerWrappedWithIronSession(req, res) {\n    let sessionOptions;\n    if (options instanceof Function) {\n      sessionOptions = await options(req, res);\n    } else {\n      sessionOptions = options;\n    }\n    const session = await (0,iron_session__WEBPACK_IMPORTED_MODULE_0__.getIronSession)(req, res, sessionOptions);\n    Object.defineProperty(req, \"session\", getPropertyDescriptorForReqSession(session));\n    return handler(req, res);\n  };\n}\nfunction withIronSessionSsr(handler, options) {\n  return async function nextGetServerSidePropsHandlerWrappedWithIronSession(context) {\n    let sessionOptions;\n    if (options instanceof Function) {\n      sessionOptions = await options(context.req, context.res);\n    } else {\n      sessionOptions = options;\n    }\n    const session = await (0,iron_session__WEBPACK_IMPORTED_MODULE_0__.getIronSession)(context.req, context.res, sessionOptions);\n    Object.defineProperty(context.req, \"session\", getPropertyDescriptorForReqSession(session));\n    return handler(context);\n  };\n}\n\n//# sourceMappingURL=index.mjs.map\n\n__webpack_async_result__();\n} catch(e) { __webpack_async_result__(e); } });//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKGFwaSkvLi9ub2RlX21vZHVsZXMvaXJvbi1zZXNzaW9uL25leHQvZGlzdC9pbmRleC5tanMuanMiLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7O0FBQUE7QUFDOEM7O0FBRTlDO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLEtBQUs7QUFDTDtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBLE9BQU87QUFDUDtBQUNBO0FBQ0EsT0FBTztBQUNQO0FBQ0E7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxNQUFNO0FBQ047QUFDQTtBQUNBLDBCQUEwQiw0REFBYztBQUN4QztBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQSxNQUFNO0FBQ047QUFDQTtBQUNBLDBCQUEwQiw0REFBYztBQUN4QztBQUNBO0FBQ0E7QUFDQTtBQUlFO0FBQ0YiLCJzb3VyY2VzIjpbIndlYnBhY2s6Ly9rb2xsYWIvLi9ub2RlX21vZHVsZXMvaXJvbi1zZXNzaW9uL25leHQvZGlzdC9pbmRleC5tanM/YWZhYSJdLCJzb3VyY2VzQ29udGVudCI6WyIvLyBuZXh0L2luZGV4LnRzXG5pbXBvcnQgeyBnZXRJcm9uU2Vzc2lvbiB9IGZyb20gXCJpcm9uLXNlc3Npb25cIjtcblxuLy8gc3JjL2dldFByb3BlcnR5RGVzY3JpcHRvckZvclJlcVNlc3Npb24udHNcbmZ1bmN0aW9uIGdldFByb3BlcnR5RGVzY3JpcHRvckZvclJlcVNlc3Npb24oc2Vzc2lvbikge1xuICByZXR1cm4ge1xuICAgIGVudW1lcmFibGU6IHRydWUsXG4gICAgZ2V0KCkge1xuICAgICAgcmV0dXJuIHNlc3Npb247XG4gICAgfSxcbiAgICBzZXQodmFsdWUpIHtcbiAgICAgIGNvbnN0IGtleXMgPSBPYmplY3Qua2V5cyh2YWx1ZSk7XG4gICAgICBjb25zdCBjdXJyZW50S2V5cyA9IE9iamVjdC5rZXlzKHNlc3Npb24pO1xuICAgICAgY3VycmVudEtleXMuZm9yRWFjaCgoa2V5KSA9PiB7XG4gICAgICAgIGlmICgha2V5cy5pbmNsdWRlcyhrZXkpKSB7XG4gICAgICAgICAgZGVsZXRlIHNlc3Npb25ba2V5XTtcbiAgICAgICAgfVxuICAgICAgfSk7XG4gICAgICBrZXlzLmZvckVhY2goKGtleSkgPT4ge1xuICAgICAgICBzZXNzaW9uW2tleV0gPSB2YWx1ZVtrZXldO1xuICAgICAgfSk7XG4gICAgfVxuICB9O1xufVxuXG4vLyBuZXh0L2luZGV4LnRzXG5mdW5jdGlvbiB3aXRoSXJvblNlc3Npb25BcGlSb3V0ZShoYW5kbGVyLCBvcHRpb25zKSB7XG4gIHJldHVybiBhc3luYyBmdW5jdGlvbiBuZXh0QXBpSGFuZGxlcldyYXBwZWRXaXRoSXJvblNlc3Npb24ocmVxLCByZXMpIHtcbiAgICBsZXQgc2Vzc2lvbk9wdGlvbnM7XG4gICAgaWYgKG9wdGlvbnMgaW5zdGFuY2VvZiBGdW5jdGlvbikge1xuICAgICAgc2Vzc2lvbk9wdGlvbnMgPSBhd2FpdCBvcHRpb25zKHJlcSwgcmVzKTtcbiAgICB9IGVsc2Uge1xuICAgICAgc2Vzc2lvbk9wdGlvbnMgPSBvcHRpb25zO1xuICAgIH1cbiAgICBjb25zdCBzZXNzaW9uID0gYXdhaXQgZ2V0SXJvblNlc3Npb24ocmVxLCByZXMsIHNlc3Npb25PcHRpb25zKTtcbiAgICBPYmplY3QuZGVmaW5lUHJvcGVydHkocmVxLCBcInNlc3Npb25cIiwgZ2V0UHJvcGVydHlEZXNjcmlwdG9yRm9yUmVxU2Vzc2lvbihzZXNzaW9uKSk7XG4gICAgcmV0dXJuIGhhbmRsZXIocmVxLCByZXMpO1xuICB9O1xufVxuZnVuY3Rpb24gd2l0aElyb25TZXNzaW9uU3NyKGhhbmRsZXIsIG9wdGlvbnMpIHtcbiAgcmV0dXJuIGFzeW5jIGZ1bmN0aW9uIG5leHRHZXRTZXJ2ZXJTaWRlUHJvcHNIYW5kbGVyV3JhcHBlZFdpdGhJcm9uU2Vzc2lvbihjb250ZXh0KSB7XG4gICAgbGV0IHNlc3Npb25PcHRpb25zO1xuICAgIGlmIChvcHRpb25zIGluc3RhbmNlb2YgRnVuY3Rpb24pIHtcbiAgICAgIHNlc3Npb25PcHRpb25zID0gYXdhaXQgb3B0aW9ucyhjb250ZXh0LnJlcSwgY29udGV4dC5yZXMpO1xuICAgIH0gZWxzZSB7XG4gICAgICBzZXNzaW9uT3B0aW9ucyA9IG9wdGlvbnM7XG4gICAgfVxuICAgIGNvbnN0IHNlc3Npb24gPSBhd2FpdCBnZXRJcm9uU2Vzc2lvbihjb250ZXh0LnJlcSwgY29udGV4dC5yZXMsIHNlc3Npb25PcHRpb25zKTtcbiAgICBPYmplY3QuZGVmaW5lUHJvcGVydHkoY29udGV4dC5yZXEsIFwic2Vzc2lvblwiLCBnZXRQcm9wZXJ0eURlc2NyaXB0b3JGb3JSZXFTZXNzaW9uKHNlc3Npb24pKTtcbiAgICByZXR1cm4gaGFuZGxlcihjb250ZXh0KTtcbiAgfTtcbn1cbmV4cG9ydCB7XG4gIHdpdGhJcm9uU2Vzc2lvbkFwaVJvdXRlLFxuICB3aXRoSXJvblNlc3Npb25Tc3Jcbn07XG4vLyMgc291cmNlTWFwcGluZ1VSTD1pbmRleC5tanMubWFwXG4iXSwibmFtZXMiOltdLCJzb3VyY2VSb290IjoiIn0=\n//# sourceURL=webpack-internal:///(api)/./node_modules/iron-session/next/dist/index.mjs\n");
+
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((0,iron_session_next__WEBPACK_IMPORTED_MODULE_0__/* .withIronSessionApiRoute */ .n)(handle, lib_iron_session__WEBPACK_IMPORTED_MODULE_1__/* .sessionOptions */ .d));
+async function handle(req, res) {
+    if (req.method === "GET") {
+        console.log(req.query);
+        try {
+            const reqBody = req.body;
+            const result = await lib_prisma__WEBPACK_IMPORTED_MODULE_2__/* ["default"].item.findMany */ .Z.item.findMany({
+                select: {
+                    id: true,
+                    name: true,
+                    description: true,
+                    category: true,
+                    category_id: true,
+                    item_type: true,
+                    due_date: true,
+                    date: true
+                },
+                where: {
+                    category: _prisma_client__WEBPACK_IMPORTED_MODULE_4__.Category[req.query.category.toString().toLowerCase()],
+                    category_id: parseInt(req.query.category_id.toString())
+                },
+                orderBy: {
+                    item_type: "asc"
+                }
+            });
+            const resultSafe = [];
+            result.forEach((row)=>{
+                const itemRow = {
+                    id: row.id,
+                    name: row.name,
+                    description: row.description,
+                    category: lib_types_item__WEBPACK_IMPORTED_MODULE_3__/* .Category */ .W[row.category.toUpperCase()],
+                    category_id: row.category_id,
+                    item_type: lib_types_item__WEBPACK_IMPORTED_MODULE_3__/* .ItemType */ .q[row.item_type.toUpperCase()],
+                    due_date: row.due_date.toString(),
+                    date: row.date.toString()
+                };
+                resultSafe.push(itemRow);
+            });
+            res.json(resultSafe);
+        } catch (error) {
+            res.json(error);
+        }
+    }
+}
+
+__webpack_async_result__();
+} catch(e) { __webpack_async_result__(e); } });
 
 /***/ })
 
@@ -90,7 +98,7 @@ eval("__webpack_require__.a(__webpack_module__, async (__webpack_handle_async_de
 var __webpack_require__ = require("../../../webpack-api-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = (__webpack_exec__("(api)/./pages/api/item/item.ts"));
+var __webpack_exports__ = __webpack_require__.X(0, [534,133], () => (__webpack_exec__(5101)));
 module.exports = __webpack_exports__;
 
 })();
