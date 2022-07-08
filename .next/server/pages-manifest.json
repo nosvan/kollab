@@ -1,10 +1,21 @@
 {
+  "/api/auth/user": "pages/api/auth/user.js",
+  "/api/classroom/class": "pages/api/classroom/class.js",
+  "/api/classroom/new": "pages/api/classroom/new.js",
   "/_app": "pages/_app.js",
-  "/_error": "pages/_error.js",
-  "/_document": "pages/_document.js",
-  "/groups": "pages/groups.js",
-  "/api/item/personal/item": "pages/api/item/personal/item.js",
+  "/api/group/new": "pages/api/group/new.js",
   "/api/item/item": "pages/api/item/item.js",
+  "/api/group/group": "pages/api/group/group.js",
+  "/api/item/new": "pages/api/item/new.js",
+  "/api/item/personal/item": "pages/api/item/personal/item.js",
+  "/api/login": "pages/api/login.js",
+  "/api/logout": "pages/api/logout.js",
+  "/_error": "pages/_error.js",
+  "/api/register": "pages/api/register.js",
+  "/": "pages/index.js",
   "/personal": "pages/personal.js",
-  "/api/group/group": "pages/api/group/group.js"
+  "/groups": "pages/groups.js",
+  "/classes": "pages/classes.js",
+  "/_document": "pages/_document.js",
+  "/404": "pages/404.html"
 }

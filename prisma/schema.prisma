@@ -55,6 +55,7 @@ enum ItemType {
   note
   project
   reminder
+  other
 }
 
 model permission {
