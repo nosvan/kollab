@@ -22,7 +22,7 @@ export type ClassSafe = {
   name: string,
   school_name: string,
   semester: Semester,
-  description: string,
+  description: string | null,
   owner_id: number,
   created_at: string
 }
