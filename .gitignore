@@ -1,6 +1,4 @@
 node_modules
 # Keep environment variables out of version control
 .env
-.next/cache/webpack/client-development
-.next/cache/webpack/client-development-fallback
-.next/cache/webpack/server-development
+.next
