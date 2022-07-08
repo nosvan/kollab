@@ -24,28 +24,22 @@ export default function Register(props: RegisterProps) {
       <div className="px-1">
         <form onSubmit={handleRegisterFormSubmit}>
           <div className="flex flex-col">
-            <div className="flex flex-row space-x-2">
-              <div className="flex flex-col">
-                <label className="text-white">first name</label>
-                <input
-                  className="text-black rounded-xl px-2"
-                  type="text"
-                  required
-                  id="first_name"
-                  name="first_name"
-                />
-              </div>
-              <div className="flex flex-col">
-                <label className="text-white">last name</label>
-                <input
-                  className="text-black rounded-xl px-2"
-                  type="text"
-                  required
-                  id="last_name"
-                  name="last_name"
-                />
-              </div>
-            </div>
+            <label className="text-white">first name</label>
+            <input
+              className="text-black rounded-xl px-2"
+              type="text"
+              required
+              id="first_name"
+              name="first_name"
+            />
+            <label className="text-white">last name</label>
+            <input
+              className="text-black rounded-xl px-2"
+              type="text"
+              required
+              id="last_name"
+              name="last_name"
+            />
             <label className="text-white">email</label>
             <input
               className="text-black rounded-xl px-2"

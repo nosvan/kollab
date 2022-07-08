@@ -15,6 +15,7 @@ import SideBar from './sidebar';
 import Header from './header';
 import Footer from './footer';
 import { setCreateNewTypeMode } from 'state/redux/userSlice';
+import AccountReset from './account_reset';
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const userState = useSelector((state: RootState) => state.user_store);
@@ -38,24 +39,28 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   <div className="text-blue-700 text-3xl text-center mb-5">
                     kollab
                   </div>
-                  <div
-                    className="flex flex-row items-center justify-center
+                  {false && (
+                    <div
+                      className="flex flex-row items-center justify-center
                   cursor-pointer space-x-1 py-1 my-2 text-sm text-black 
                   bg-white hover:bg-gray-200 rounded-xl"
-                  >
-                    {/* too doo */}
-                    <FcGoogle></FcGoogle>
-                    <div>Sign up with Google</div>
-                  </div>
-                  <div
-                    className="flex flex-row items-center justify-center 
+                    >
+                      {/* too doo */}
+                      <FcGoogle></FcGoogle>
+                      <div>Sign up with Google</div>
+                    </div>
+                  )}
+                  {false && (
+                    <div
+                      className="flex flex-row items-center justify-center 
                   cursor-pointer space-x-1 py-1 my-2 text-sm text-black 
                   bg-white hover:bg-gray-200 rounded-xl"
-                  >
-                    {/* too doo */}
-                    <BsGithub></BsGithub>
-                    <div>Sign up with Github</div>
-                  </div>
+                    >
+                      {/* too doo */}
+                      <BsGithub></BsGithub>
+                      <div>Sign up with Github</div>
+                    </div>
+                  )}
                   <div
                     className="flex justify-center py-1 my-2 text-sm 
                   cursor-pointer bg-blue-700 hover:bg-blue-800 rounded-xl"
@@ -77,7 +82,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                     forgot password?
                     <span
                       className="underline cursor-pointer"
-                      onClick={() => router.push('/reset')}
+                      onClick={() => setSelection('reset')}
                     >
                       reset
                     </span>
@@ -89,6 +94,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
               )}
               {selection === 'register' && (
                 <Register setSelection={setSelection}></Register>
+              )}
+              {selection === 'reset' && (
+                <AccountReset setSelection={setSelection}></AccountReset>
               )}
             </div>
           </div>
