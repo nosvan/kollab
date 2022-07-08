@@ -8,7 +8,9 @@ export enum ItemType {
   ASSIGNMENT = 'ASSIGNMENT',
   NOTE = 'NOTE',
   PROJECT = 'PROJECT',
-  REMINDER = 'REMINDER'
+  REMINDER = 'REMINDER',
+  MEETING = 'MEETING',
+  OTHER = 'OTHER',
 }
 
 export type Item = {
