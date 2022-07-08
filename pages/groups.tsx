@@ -75,7 +75,7 @@ export default function Groups({ user }: { user: UserSafe }) {
     <>
       <Layout>
         <div className="bg-black rounded-3xl p-5 text-white mt-2">
-          <div className="flex flex-row items-center flex-wrap space-y-1 justify-between text-sm mb-1">
+          <div className="flex flex-row flex-wrap items-center justify-between text-sm mb-1">
             {groupState.groups && groupState.groups.length > 0 && (
               <select
                 value={groupState.group.id}
@@ -91,7 +91,7 @@ export default function Groups({ user }: { user: UserSafe }) {
                 ))}
               </select>
             )}
-            <div className="flex flex-row items-center space-x-2 px-1 bg-stone-800 rounded-lg mx-1">
+            <div className="flex flex-row items-center space-x-2 bg-stone-800 rounded-lg mx-1">
               <div
                 onClick={() => handleDecrementDate()}
                 className={`hover:bg-stone-700 cursor-pointer rounded-lg`}
