@@ -63,6 +63,7 @@ export default function AccountReset(props: AccountResetProps) {
     event.preventDefault();
     const userRegister = {
       email: event.currentTarget.email.value,
+      locationOrigin: window.location.origin,
     };
     try {
       await axios({
