@@ -13,6 +13,18 @@ export const sessionOptions: IronSessionOptions = {
   },
 };
 
+export const sessionOptionsMagicLink: IronSessionOptions = {
+  password: process.env.JWT_SECRET as string,
+  cookieName: "iron-session-token",
+  cookieOptions: {
+    maxAge: 60*15,
+    httpOnly: true,
+    sameSite: "strict",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+  },
+};
+
 declare module "iron-session" {
   interface IronSessionData {
     userSession: UserSession;

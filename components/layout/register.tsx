@@ -1,5 +1,6 @@
 import { useSpring, animated } from '@react-spring/web';
 import axios from 'axios';
+import { ApiRoutes } from 'lib/api/api_routes';
 import { UserRegister } from 'lib/types/user';
 import { Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
@@ -99,7 +100,7 @@ export default function Register(props: RegisterProps) {
     try {
       await axios({
         method: 'post',
-        url: '/api/register',
+        url: ApiRoutes.REGISTER,
         data: JSON.stringify(userRegister),
         headers: { 'Content-Type': 'application/json' },
       }).then((res) => {

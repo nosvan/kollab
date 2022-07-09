@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { ApiRoutes } from 'lib/api/api_routes';
 import { TabName } from 'lib/types/ui';
 import { useRouter } from 'next/router';
 import { TbLogin, TbLogout, TbPlus, TbUserPlus } from 'react-icons/tb';
@@ -69,7 +70,7 @@ export default function Header() {
     try {
       await axios({
         method: 'get',
-        url: '/api/logout',
+        url: ApiRoutes.LOGOUT,
       }).then((res) => {
         dispatch(setUserState(res.data));
       });

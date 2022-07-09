@@ -1,5 +1,6 @@
 import { useSpring, animated } from '@react-spring/web';
 import axios from 'axios';
+import { ApiRoutes } from 'lib/api/api_routes';
 import { UserCredentials } from 'lib/types/user';
 import { Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
@@ -72,7 +73,7 @@ export default function Login(props: LoginProps) {
     try {
       await axios({
         method: 'post',
-        url: '/api/login',
+        url: ApiRoutes.LOGIN,
         data: JSON.stringify(userCreds),
         headers: {
           'Content-Type': 'application/json',

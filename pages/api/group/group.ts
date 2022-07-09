@@ -9,7 +9,6 @@ export default withIronSessionApiRoute(handle, sessionOptions)
 
 async function handle(req: NextApiRequest,res: NextApiResponse){
   if(req.method === 'GET'){
-    console.log('in groups get')
     try {
       const result = await prisma.group.findMany({
         select: {

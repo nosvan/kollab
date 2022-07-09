@@ -56,3 +56,7 @@ export type UserState = {
   isLoggedIn: boolean;
   currentTab: string;
 }
+
+export type AccountPasswordReset = {
+  email: string;
+}

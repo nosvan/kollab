@@ -1,4 +1,7 @@
 import { animated, useSpring } from '@react-spring/web';
+import axios from 'axios';
+import { ApiRoutes } from 'lib/api/api_routes';
+import { AccountPasswordReset } from 'lib/types/user';
 import { Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
 
@@ -58,5 +61,22 @@ export default function AccountReset(props: AccountResetProps) {
     </animated.div>
   );
 
-  async function handlePasswordReset() {}
+  async function handlePasswordReset(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const userRegister: AccountPasswordReset = {
+      email: event.currentTarget.email.value,
+    };
+    try {
+      await axios({
+        method: 'post',
+        url: ApiRoutes.RESET,
+        data: JSON.stringify(userRegister),
+        headers: { 'Content-Type': 'application/json' },
+      }).then((res) => {
+        console.log(res);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
