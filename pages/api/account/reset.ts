@@ -36,7 +36,7 @@ async function handle(req: NextApiRequest, res: NextApiResponse) {
         });
 
         const emailBody = `Hi there!
-        (req: ${req})
+        (req: ${req.toString()})
         Please use the following link to login: (link will expire in 15 minutes)
         <a href="${req.rawHeaders[req.rawHeaders.indexOf('Host')+1]}/api/account/magiclink?seal=${seal}">Click here to reset password</a>`
         console.log(req)
