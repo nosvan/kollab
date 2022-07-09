@@ -69,7 +69,7 @@ export default function Header() {
   async function handleLogout() {
     try {
       await axios({
-        method: 'get',
+        method: 'POST',
         url: ApiRoutes.LOGOUT,
       }).then((res) => {
         dispatch(setUserState(res.data));

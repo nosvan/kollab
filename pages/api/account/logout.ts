@@ -6,12 +6,10 @@ import { sessionOptions } from 'lib/iron_session';
 export default withIronSessionApiRoute(handle, sessionOptions)
 
 async function handle(req:NextApiRequest, res:NextApiResponse) {
-  const { cookies } = req;
-  const t0k3n = cookies['iron-session-token'];
-  if(!t0k3n){
+  if(!req.session.userSession){
     res.json({message: 'Not logged in'})
   } else {
-    req.session.destroy();
+    req.session.destroy()
     const user = {
       id: '',
       first_name: '',
