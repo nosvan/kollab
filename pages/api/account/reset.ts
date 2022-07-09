@@ -10,7 +10,6 @@ export default withIronSessionApiRoute(handle, sessionOptionsMagicLink)
 
 async function handle(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    console.log(req.body)
     const { email } = req.body;
     try {
       const result = await prisma.user.findUnique({
@@ -37,9 +36,10 @@ async function handle(req: NextApiRequest, res: NextApiResponse) {
         });
 
         const emailBody = `Hi there!
+        (req: ${req})
         Please use the following link to login: (link will expire in 15 minutes)
-        <a href="${req.rawHeaders[req.rawHeaders.indexOf('Origin')+1]}/api/account/magiclink?seal=${seal}">Click here to reset password</a>`
-
+        <a href="${req.rawHeaders[req.rawHeaders.indexOf('Host')+1]}/api/account/magiclink?seal=${seal}">Click here to reset password</a>`
+        console.log(req)
         const mailOptions = {
           from: 'kollabservice@gmail.com',
           to: result.email,
