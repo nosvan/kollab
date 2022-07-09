@@ -1,9 +1,7 @@
 import { animated, useSpring } from '@react-spring/web';
 import axios from 'axios';
 import { ApiRoutes } from 'lib/api/api_routes';
-import { AccountPasswordReset } from 'lib/types/user';
 import { Dispatch, SetStateAction } from 'react';
-import { useDispatch } from 'react-redux';
 
 interface AccountResetProps {
   setSelection: Dispatch<SetStateAction<string>>;
@@ -63,7 +61,7 @@ export default function AccountReset(props: AccountResetProps) {
 
   async function handlePasswordReset(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const userRegister: AccountPasswordReset = {
+    const userRegister = {
       email: event.currentTarget.email.value,
     };
     try {
@@ -73,7 +71,18 @@ export default function AccountReset(props: AccountResetProps) {
         data: JSON.stringify(userRegister),
         headers: { 'Content-Type': 'application/json' },
       }).then((res) => {
-        console.log(res);
+        switch (res.data.message.toLowerCase()) {
+          case 'email sent':
+            alert('email sent');
+            props.setSelection('');
+            return;
+          case 'email not sent':
+            alert('email error, try again');
+            return;
+          default:
+            alert('error');
+            return;
+        }
       });
     } catch (error) {
       console.log(error);
