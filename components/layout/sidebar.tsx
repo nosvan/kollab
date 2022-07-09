@@ -2,7 +2,7 @@ import { TabName } from 'lib/types/ui';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { FaStackExchange } from 'react-icons/fa';
-import { TbBook2, TbHome2, TbUser, TbUsers } from 'react-icons/tb';
+import { TbBook2, TbHome2, TbSettings, TbUser, TbUsers } from 'react-icons/tb';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'state/redux/store';
 import { setCurrentTab } from 'state/redux/userSlice';
@@ -38,22 +38,22 @@ export default function SideBar() {
         } flex flex-row items-center text-lg cursor-pointer p-1 hover:text-white  rounded-3xl hover:bg-stone-800`}
       >
         <TbHome2 size={32} strokeWidth={'1'} />
-        <div className="hidden md:block">home</div>
+        <div className="hidden md:block">{TabName.HOME}</div>
       </div>
       {/* user */}
       {true && (
         <div
           onClick={() => {
-            handleActiveTab(TabName.USER);
+            handleActiveTab(TabName.OWN);
           }}
           className={`${
-            user.currentTab == TabName.USER
+            user.currentTab == TabName.OWN
               ? 'text-white font-light'
               : 'text-gray-400 font-extralight'
           } flex flex-row items-center text-lg cursor-pointer p-1 hover:text-white  rounded-3xl hover:bg-stone-800`}
         >
           <TbUser size={32} strokeWidth={'1'} />
-          <div className="hidden md:block">self</div>
+          <div className="hidden md:block">{TabName.OWN}</div>
         </div>
       )}
       {/* classes */}
@@ -86,13 +86,49 @@ export default function SideBar() {
         <TbUsers size={32} strokeWidth={'1'} />
         <div className="hidden md:block">{TabName.GROUP}</div>
       </div>
+      <div
+        onClick={() => {
+          handleActiveTab(TabName.SETTINGS);
+        }}
+        className={`${
+          user.currentTab == TabName.SETTINGS
+            ? 'text-white font-light'
+            : 'text-gray-400 font-extralight'
+        } flex flex-row items-center text-lg cursor-pointer p-1 hover:text-white  rounded-3xl hover:bg-stone-800`}
+      >
+        <TbSettings size={32} strokeWidth={'1'} />
+        <div className="hidden md:block">{TabName.SETTINGS}</div>
+      </div>
     </div>
   );
 
   function handleActiveTab(tab: string) {
     if (user.currentTab.toLowerCase() != tab.toLowerCase()) {
-      dispatch(setCurrentTab(tab));
-      router.push('/' + tab.toLowerCase());
+      switch (tab) {
+        case TabName.HOME:
+          dispatch(setCurrentTab(tab));
+          router.push('/');
+          break;
+        case TabName.OWN:
+          dispatch(setCurrentTab(tab));
+          router.push('/own');
+          break;
+        case TabName.CLASS:
+          dispatch(setCurrentTab(tab));
+          router.push('/classes');
+          break;
+        case TabName.GROUP:
+          dispatch(setCurrentTab(tab));
+          router.push('/groups');
+          break;
+        case TabName.SETTINGS:
+          dispatch(setCurrentTab(tab));
+          router.push('/settings');
+          break;
+        default:
+          router.push('/');
+          break;
+      }
     }
   }
 }

@@ -1,8 +1,13 @@
 {
   "/_app": "pages/_app.js",
-  "/_document": "pages/_document.js",
   "/_error": "pages/_error.js",
+  "/_document": "pages/_document.js",
   "/": "pages/index.js",
-  "/api/account/logout": "pages/api/account/logout.js",
-  "/api/account/login": "pages/api/account/login.js"
+  "/api/item/own/item": "pages/api/item/own/item.js",
+  "/api/account/magiclink": "pages/api/account/magiclink.js",
+  "/groups": "pages/groups.js",
+  "/own": "pages/own.js",
+  "/api/group/group": "pages/api/group/group.js",
+  "/api/item/item": "pages/api/item/item.js",
+  "/settings": "pages/settings.js"
 }

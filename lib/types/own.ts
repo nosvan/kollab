@@ -1,7 +1,7 @@
 import { ItemSafe } from "./item"
 
-export type PersonalSliceState = {
+export type OwnSliceState = {
   item: ItemSafe | null
   items: ItemSafe[]
-  viewPersonalItemMode: boolean
+  viewOwnItemMode: boolean
 }

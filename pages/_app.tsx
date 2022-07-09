@@ -11,7 +11,6 @@ export default function MyApp({
   Component: React.ComponentType<AppProps>;
   pageProps: AppProps;
 }) {
-  console.log('in apps.tsx');
   return (
     <>
       <Head>

@@ -11,15 +11,13 @@ import ModalPopup from 'components/layout/modal';
 import { getDays, incrementDate, decrementDate } from 'utils/dateUtils';
 import { RootState } from 'state/redux/store';
 import { Category } from 'lib/types/item';
-import {
-  setPersonalItems,
-  setViewPersonalItemMode,
-} from 'state/redux/personalSlice';
+import { setOwnItems, setViewOwnItemMode } from 'state/redux/ownSlice';
 import Item from 'components/item/item';
 import { setUserState } from 'state/redux/userSlice';
 import axios from 'axios';
+import { TabName } from 'lib/types/ui';
 
-export default function User({ user }: { user: UserSafe }) {
+export default function Own({ user }: { user: UserSafe }) {
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -28,25 +26,25 @@ export default function User({ user }: { user: UserSafe }) {
       router.push('/');
       return;
     }
-    dispatch(setUserState({ ...user, currentTab: 'personal' }));
+    dispatch(setUserState({ ...user, currentTab: TabName.OWN }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const personalState = useSelector((state: RootState) => state.personal_store);
+  const ownState = useSelector((state: RootState) => state.own_store);
 
   useEffect(() => {
-    async function getPersonalItems() {
+    async function getOwnItems() {
       await axios({
         method: 'get',
-        url: `/api/item/personal/item`,
+        url: `/api/item/own/item`,
         params: {
-          category: Category.PERSONAL,
+          category: Category.OWN,
         },
       }).then((res) => {
-        dispatch(setPersonalItems(res.data));
+        dispatch(setOwnItems(res.data));
       });
     }
-    getPersonalItems();
+    getOwnItems();
   }, []);
 
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -106,15 +104,15 @@ export default function User({ user }: { user: UserSafe }) {
             days={days}
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}
-            category={Category.PERSONAL}
-            items={personalState.items}
+            category={Category.OWN}
+            items={ownState.items}
           />
-          {personalState.viewPersonalItemMode && (
+          {ownState.viewOwnItemMode && (
             <ModalPopup
               modalId="view_personal_item_modal"
-              modalOpen={setViewPersonalItemMode}
+              modalOpen={setViewOwnItemMode}
             >
-              <Item item={personalState.item}></Item>
+              <Item item={ownState.item}></Item>
             </ModalPopup>
           )}
         </div>
@@ -144,14 +142,8 @@ export const getServerSideProps = withIronSessionSsr(
       email: '',
       isLoggedIn: false,
     };
-    if (Object.keys(session).length > 0) {
-      user = {
-        id: session.userSession.id,
-        first_name: session.userSession.first_name,
-        last_name: session.userSession.last_name,
-        email: session.userSession.email,
-        isLoggedIn: true,
-      };
+    if (session.userSession) {
+      user = session.userSession;
     }
     return {
       props: {

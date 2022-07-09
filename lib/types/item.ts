@@ -1,7 +1,7 @@
 export enum Category {
   CLASSROOM = 'CLASSROOM',
   GROUP = 'GROUP',
-  PERSONAL  = 'PERSONAL',
+  OWN  = 'OWN',
 }
 
 export enum ItemType {

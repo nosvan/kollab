@@ -20,10 +20,7 @@ import {
   setCurrentClassItem,
   setViewClassItemMode,
 } from 'state/redux/classSlice';
-import {
-  setCurrentPersonalItem,
-  setViewPersonalItemMode,
-} from 'state/redux/personalSlice';
+import { setCurrentOwnItem, setViewOwnItemMode } from 'state/redux/ownSlice';
 
 interface TaskViewProps {
   dayLayout: number;
@@ -125,9 +122,9 @@ export default function TaskView(props: TaskViewProps) {
         dispatch(setViewClassItemMode(true));
         dispatch(setCurrentClassItem(item));
         break;
-      case Category.PERSONAL:
-        dispatch(setViewPersonalItemMode(true));
-        dispatch(setCurrentPersonalItem(item));
+      case Category.OWN:
+        dispatch(setViewOwnItemMode(true));
+        dispatch(setCurrentOwnItem(item));
         break;
     }
   }
@@ -142,6 +139,8 @@ export default function TaskView(props: TaskViewProps) {
         return 'bg-fuchsia-400 hover:bg-fuchsia-300';
       case 'REMINDER':
         return 'bg-cyan-400 hover:bg-cyan-300';
+      case 'MEETING':
+        return 'bg-green-400 hover:bg-green-300';
       default:
         return 'bg-white';
     }

@@ -8,7 +8,7 @@ import { RootState } from 'state/redux/store';
 import { setCreateNewTypeMode, setUserState } from 'state/redux/userSlice';
 
 export default function Header() {
-  const user = useSelector((state: RootState) => state.user_store.user);
+  const userState = useSelector((state: RootState) => state.user_store);
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -18,9 +18,9 @@ export default function Header() {
   text-white text-2xl font-bold"
     >
       <div className="flex flex-row items-center space-x-1">
-        <div>{user.currentTab == TabName.HOME ? 'home' : user.currentTab}</div>
-        {(user.currentTab == TabName.CLASS ||
-          user.currentTab == TabName.GROUP) && (
+        <div>{userState.user.currentTab}</div>
+        {(userState.user.currentTab == TabName.CLASS ||
+          userState.user.currentTab == TabName.GROUP) && (
           <TbPlus
             onClick={() => dispatch(setCreateNewTypeMode(true))}
             className="hover:bg-stone-800 rounded-xl cursor-pointer"
@@ -32,7 +32,7 @@ export default function Header() {
         className="flex flex-row items-center space-x-2 font-medium 
     text-sm"
       >
-        {!user.isLoggedIn && (
+        {!userState.user.isLoggedIn && (
           <div
             onClick={() => router.push('/login')}
             className="flex flex-row items-center
@@ -42,7 +42,7 @@ export default function Header() {
             <div>Login</div>
           </div>
         )}
-        {!user.isLoggedIn && (
+        {!userState.user.isLoggedIn && (
           <div
             onClick={() => router.push('/register')}
             className="flex flex-row items-center
@@ -52,7 +52,7 @@ export default function Header() {
             <div>Register</div>
           </div>
         )}
-        {user.isLoggedIn && (
+        {userState.user.isLoggedIn && (
           <>
             <div
               onClick={() => handleLogout()}

@@ -71,7 +71,7 @@ model permission {
 enum Category {
   classroom
   group
-  personal
+  own
 }
 
 enum Semester {

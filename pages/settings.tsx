@@ -1,31 +1,33 @@
 import { Layout } from 'components/layout/layout';
 import { withIronSessionSsr } from 'iron-session/next';
 import { sessionOptions } from 'lib/iron_session';
-import { useDispatch } from 'react-redux';
-import { useEffect } from 'react';
-import { setUserState } from 'state/redux/userSlice';
 import { UserSafe } from 'lib/types/user';
 import { useRouter } from 'next/router';
-import { TabName } from 'lib/types/ui';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { setUserState } from 'state/redux/userSlice';
 
-export default function Index({ user }: { user: UserSafe }) {
+export default function Settings({ user }: { user: UserSafe }) {
   const dispatch = useDispatch();
   const router = useRouter();
+
   useEffect(() => {
     if (!user.isLoggedIn) {
       router.push('/');
       return;
     }
-    dispatch(setUserState({ ...user, currentTab: TabName.HOME }));
+    dispatch(setUserState({ ...user, currentTab: 'settings' }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
-    <>
-      <Layout>
+    <Layout>
+      <div>
         <div className="bg-black rounded-3xl p-5 text-white mt-2">
-          Main page
+          <h1>Settings</h1>
         </div>
-      </Layout>
-    </>
+      </div>
+    </Layout>
   );
 }
 

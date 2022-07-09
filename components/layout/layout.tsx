@@ -19,7 +19,6 @@ import AccountReset from './account_reset';
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const userState = useSelector((state: RootState) => state.user_store);
-  const router = useRouter();
   const [selection, setSelection] = useState('');
 
   return (

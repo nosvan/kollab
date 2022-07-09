@@ -10,7 +10,7 @@ import { RootState } from 'state/redux/store';
 import { setCreateNewItemMode } from 'state/redux/userSlice';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { setAdditionalPersonalItems } from 'state/redux/personalSlice';
+import { setAdditionalOwnItems } from 'state/redux/ownSlice';
 
 interface NewItemProps {
   selectedDate: Date;
@@ -125,8 +125,8 @@ export default function NewItem(props: NewItemProps) {
         if (res.data[0].category === Category.GROUP) {
           dispatch(setAdditionalGroupItems(res.data));
         }
-        if (res.data[0].category === Category.PERSONAL) {
-          dispatch(setAdditionalPersonalItems(res.data));
+        if (res.data[0].category === Category.OWN) {
+          dispatch(setAdditionalOwnItems(res.data));
         }
       });
       formData.reset();
