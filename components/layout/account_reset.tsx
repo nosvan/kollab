@@ -21,7 +21,7 @@ export default function AccountReset(props: AccountResetProps) {
       <div className="px-1">
         <form onSubmit={handlePasswordReset}>
           <div className="flex flex-col">
-            <label className="text-white">email to send reset link</label>
+            <label className="text-white">email to send link</label>
             <input
               className="text-black rounded-xl px-2"
               type="text"

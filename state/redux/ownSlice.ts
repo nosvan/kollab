@@ -1,8 +1,18 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { Category, ItemType } from 'lib/types/item';
 import { OwnSliceState } from 'lib/types/own';
 
 const initialState: OwnSliceState = {
-  item: null,
+  item: {
+    id: -999,
+    name: '',
+    description: null,
+    category: Category.OWN,
+    category_id: null,
+    item_type: ItemType.OTHER,
+    due_date: '',
+    date: ''
+  },
   items: [],
   viewOwnItemMode: false,
 };

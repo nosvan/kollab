@@ -13,6 +13,12 @@ export enum ItemType {
   OTHER = 'OTHER',
 }
 
+export enum AccessLevel {
+  ADMIN = 'ADMIN',
+  PRIVATE = 'PRIVATE',
+  PUBLIC = 'PUBLIC',
+}
+
 export type Item = {
   id: number
   name: string
@@ -47,3 +53,5 @@ export type ItemSafe = {
   due_date: string
   date: string
 }
+
+

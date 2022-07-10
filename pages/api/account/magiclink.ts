@@ -35,7 +35,7 @@ async function magicLoginRoute(req: NextApiRequest, res: NextApiResponse) {
       }
       req.session.userSession = userSession;
       await req.session.save();
-      res.redirect(`/`)
+      res.redirect(`/settings`)
     }
   }
 }

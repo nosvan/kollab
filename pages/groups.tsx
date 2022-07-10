@@ -21,6 +21,7 @@ import { Category } from 'lib/types/item';
 import { TbArrowBigLeft, TbArrowBigRight } from 'react-icons/tb';
 import Item from 'components/item/item';
 import ModalPopup from 'components/layout/modal';
+import { animated, useSpring } from '@react-spring/web';
 
 export default function Groups({ user }: { user: UserSafe }) {
   const dispatch = useDispatch();
@@ -71,10 +72,19 @@ export default function Groups({ user }: { user: UserSafe }) {
     setDays(getDays(dayLayout, selectedDate));
   }, [dayLayout, selectedDate]);
 
+  const groupSpring = useSpring({
+    from: { opacity: 0 },
+    to: { opacity: 1 },
+    config: { duration: 500 },
+  });
+
   return (
     <>
       <Layout>
-        <div className="bg-black rounded-3xl p-5 text-white mt-2">
+        <animated.div
+          style={groupSpring}
+          className="bg-black rounded-3xl p-5 text-white mt-2"
+        >
           <div className="flex flex-row flex-wrap items-center justify-between text-sm mb-1">
             {groupState.groups && groupState.groups.length > 0 && (
               <select
@@ -82,7 +92,7 @@ export default function Groups({ user }: { user: UserSafe }) {
                 onChange={handleDropdownSelect}
                 name="groups"
                 id="groups-select"
-                className="flex flex-col rounded-lg items-center text-white bg-stone-800 hover:bg-stone-700 cursor-pointer text-sm mx-1"
+                className="flex flex-col rounded-lg items-center text-white bg-stone-800 hover:bg-stone-700 cursor-pointer p-1 text-sm mx-1"
               >
                 {groupState.groups.map((group: GroupSafe) => (
                   <option key={group.id} value={group.id}>
@@ -91,42 +101,50 @@ export default function Groups({ user }: { user: UserSafe }) {
                 ))}
               </select>
             )}
-            <div className="flex flex-row items-center space-x-2 bg-stone-800 rounded-lg mx-1">
+            <div className="flex flex-row items-center space-x-1 mx-1">
               <div
-                onClick={() => handleDecrementDate()}
-                className={`hover:bg-stone-700 cursor-pointer rounded-lg`}
+                onClick={() => setSelectedDate(new Date())}
+                className="bg-stone-800 hover:bg-stone-700 p-1 rounded-lg cursor-pointer"
               >
-                <TbArrowBigLeft></TbArrowBigLeft>
+                Today
               </div>
-              <div
-                onClick={() => handleSetDayLayout(1)}
-                className={`hover:bg-stone-700 cursor-pointer rounded-lg ${
-                  dayLayout === 1 ? 'bg-stone-700' : ''
-                }`}
-              >
-                Day
-              </div>
-              <div
-                onClick={() => handleSetDayLayout(7)}
-                className={`hover:bg-stone-700 cursor-pointer rounded-lg ${
-                  dayLayout === 7 ? 'bg-stone-700' : ''
-                }`}
-              >
-                Week
-              </div>
-              <div
-                onClick={() => handleSetDayLayout(30)}
-                className={`hover:bg-stone-700 cursor-pointer rounded-lg ${
-                  dayLayout === 30 ? 'bg-stone-700' : ''
-                }`}
-              >
-                Month
-              </div>
-              <div
-                onClick={() => handleIncrementDate()}
-                className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg`}
-              >
-                <TbArrowBigRight></TbArrowBigRight>
+              <div className="flex flex-row items-center space-x-2 p-1 bg-stone-800 rounded-lg">
+                <div
+                  onClick={() => handleDecrementDate()}
+                  className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg`}
+                >
+                  <TbArrowBigLeft></TbArrowBigLeft>
+                </div>
+                <div
+                  onClick={() => handleSetDayLayout(1)}
+                  className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg ${
+                    dayLayout === 1 ? 'bg-stone-700' : ''
+                  }`}
+                >
+                  Day
+                </div>
+                <div
+                  onClick={() => handleSetDayLayout(7)}
+                  className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg ${
+                    dayLayout === 7 ? 'bg-stone-700' : ''
+                  }`}
+                >
+                  Week
+                </div>
+                <div
+                  onClick={() => handleSetDayLayout(30)}
+                  className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg ${
+                    dayLayout === 30 ? 'bg-stone-700' : ''
+                  }`}
+                >
+                  Month
+                </div>
+                <div
+                  onClick={() => handleIncrementDate()}
+                  className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg`}
+                >
+                  <TbArrowBigRight></TbArrowBigRight>
+                </div>
               </div>
             </div>
           </div>
@@ -148,7 +166,7 @@ export default function Groups({ user }: { user: UserSafe }) {
               <Item item={groupState.item}></Item>
             </ModalPopup>
           )}
-        </div>
+        </animated.div>
       </Layout>
     </>
   );

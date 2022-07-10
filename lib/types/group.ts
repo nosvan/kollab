@@ -17,11 +17,16 @@ export type GroupRegister = {
   passcode: string
 }
 
+export type GroupJoin = {
+  group_id: number
+  passcode: string
+}
+
 // return type from server
 export type GroupSafe = {
   id: number
   name: string
-  description: string
+  description: string | null
   owner_id: number
   created_at: string
 }
@@ -30,7 +35,7 @@ export type GroupSafe = {
 export type GroupSliceState = {
   group: GroupSafe
   groups: GroupSafe[]
-  item: ItemSafe | null
+  item: ItemSafe
   items: ItemSafe[]
   viewGroupItemMode: boolean
 }

@@ -21,6 +21,7 @@ import {
   setViewClassItemMode,
 } from 'state/redux/classSlice';
 import { setCurrentOwnItem, setViewOwnItemMode } from 'state/redux/ownSlice';
+import { animated, useSpring } from '@react-spring/web';
 
 interface TaskViewProps {
   dayLayout: number;
@@ -66,8 +67,14 @@ export default function TaskView(props: TaskViewProps) {
       });
   };
 
+  const taskViewSpring = useSpring({
+    from: { opacity: 0 },
+    to: { opacity: 1 },
+    config: { duration: 500 },
+  });
+
   return (
-    <div>
+    <animated.div style={taskViewSpring}>
       <div className="flex flex-row flex-wrap break-words">
         {props.days.map((day, index) => {
           return (
@@ -76,7 +83,7 @@ export default function TaskView(props: TaskViewProps) {
               className={`pb-1 space-y-1 px-1 ${styles['day-container']}`}
             >
               <div
-                className={`flex flex-row space-x-1 justify-center items-center bg-stone-800 text-center text-sm rounded-lg ${
+                className={`flex flex-row justify-center items-center bg-stone-800 text-center text-sm rounded-lg ${
                   currentDateString == day.toDateString() ? 'underline' : ''
                 }`}
               >
@@ -109,7 +116,7 @@ export default function TaskView(props: TaskViewProps) {
           />
         </ModalPopup>
       )}
-    </div>
+    </animated.div>
   );
 
   function handleItemClick(item: ItemSafe) {

@@ -1,13 +1,7 @@
 {
   "/_app": "pages/_app.js",
-  "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/": "pages/index.js",
-  "/api/item/own/item": "pages/api/item/own/item.js",
-  "/api/account/magiclink": "pages/api/account/magiclink.js",
-  "/groups": "pages/groups.js",
-  "/own": "pages/own.js",
+  "/_error": "pages/_error.js",
   "/api/group/group": "pages/api/group/group.js",
-  "/api/item/item": "pages/api/item/item.js",
-  "/settings": "pages/settings.js"
+  "/api/item/item": "pages/api/item/item.js"
 }

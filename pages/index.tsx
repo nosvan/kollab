@@ -7,6 +7,7 @@ import { setUserState } from 'state/redux/userSlice';
 import { UserSafe } from 'lib/types/user';
 import { useRouter } from 'next/router';
 import { TabName } from 'lib/types/ui';
+import { animated, useSpring } from '@react-spring/web';
 
 export default function Index({ user }: { user: UserSafe }) {
   const dispatch = useDispatch();
@@ -17,13 +18,24 @@ export default function Index({ user }: { user: UserSafe }) {
       return;
     }
     dispatch(setUserState({ ...user, currentTab: TabName.HOME }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const indexSpring = useSpring({
+    from: { opacity: 0 },
+    to: { opacity: 1 },
+    config: { duration: 500 },
+  });
+
   return (
     <>
       <Layout>
-        <div className="bg-black rounded-3xl p-5 text-white mt-2">
+        <animated.div
+          style={indexSpring}
+          className="bg-black rounded-3xl p-5 text-white mt-2"
+        >
           Main page
-        </div>
+        </animated.div>
       </Layout>
     </>
   );

@@ -1,14 +1,14 @@
 import { ItemSafe } from 'lib/types/item';
 
 interface ItemProps {
-  item: ItemSafe | null;
+  item: ItemSafe;
 }
 
 export default function Item(props: ItemProps) {
   return (
     <div>
-      <h1>Item</h1>
-      <div>{props.item?.name}</div>
+      <h1>{props.item.item_type}</h1>
+      <div>{props.item.name}</div>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { ClassSafe } from 'lib/types/class';
 import { GroupSafe } from 'lib/types/group';
-import { Category, CreateItem, ItemType } from 'lib/types/item';
+import { AccessLevel, Category, CreateItem, ItemType } from 'lib/types/item';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAdditionalClassItems } from 'state/redux/classSlice';
@@ -33,13 +33,29 @@ export default function NewItem(props: NewItemProps) {
     <form onSubmit={handleCreateItemFormSubmit}>
       <div className="flex flex-col text-sm space-y-1">
         <select
-          className="text-white bg-stone-800 p-1 rounded-lg"
+          className="text-white bg-stone-800 py-1 rounded-lg"
           required
           name="item_type"
         >
           {Object.keys(ItemType).map((key) => (
             <option key={key} value={key}>
               {key}
+            </option>
+          ))}
+        </select>
+        <label className="text-white px-1">Visibility</label>
+        <select
+          className="text-white bg-stone-800 py-1 rounded-lg"
+          required
+          defaultValue={AccessLevel.PUBLIC}
+          name="item_access_level"
+        >
+          {Object.keys(AccessLevel).map((key) => (
+            <option key={key} value={key}>
+              {key} {key === AccessLevel.PUBLIC ? ' level 0' : ''}
+              {key === AccessLevel.MEMBER ? ' level 1' : ''}
+              {key === AccessLevel.ADMIN ? ' level 2' : ''}
+              {key === AccessLevel.OWNER ? ' level 3' : ''}
             </option>
           ))}
         </select>

@@ -16,6 +16,17 @@ model user {
   created_at DateTime @default(now())
 }
 
+model school {
+  id         Int      @id @default(autoincrement())
+  name       String
+  zipcode    Int
+  town       String
+  county     String
+  state      String
+  country    String
+  created_at DateTime @default(now())
+}
+
 model classroom {
   id          Int      @id @default(autoincrement())
   name        String
@@ -36,6 +47,14 @@ model group {
   created_at DateTime @default(now())
 }
 
+model group_permission {
+  id         Int      @id @default(autoincrement())
+  group_id   Int
+  user_id    Int
+  permission AccessLevel
+  created_at DateTime @default(now())
+}
+
 model item {
   id               Int      @id @default(autoincrement())
   name             String
@@ -44,10 +63,19 @@ model item {
   category_id      Int? 
   item_type        ItemType
   due_date         DateTime
+  access_level     AccessLevel @default(public)
   created_by_id    Int
   last_modified_by_id Int
   date             DateTime @default(now())
   created_at       DateTime @default(now())
+}
+
+model item_permission {
+  id           Int      @id @default(autoincrement())
+  item_id      Int
+  access_level AccessLevel
+  user_id      Int
+  created_at   DateTime @default(now())
 }
 
 enum ItemType {
@@ -59,13 +87,10 @@ enum ItemType {
   other
 }
 
-model permission {
-  id           Int      @id @default(autoincrement())
-  item_type    String
-  item_type_id Int
-  access_level String
-  user_id      Int
-  created_at   DateTime @default(now())
+enum AccessLevel {
+  admin
+  private
+  public
 }
 
 enum Category {
@@ -80,15 +105,4 @@ enum Semester {
   summer
   winter
   na
-}
-
-model school {
-  id         Int      @id @default(autoincrement())
-  name       String
-  zipcode    Int
-  town       String
-  county     String
-  state      String
-  country    String
-  created_at DateTime @default(now())
 }

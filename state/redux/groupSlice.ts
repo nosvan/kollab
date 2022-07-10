@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { GroupSliceState } from 'lib/types/group';
+import { Category, ItemType } from 'lib/types/item';
 
 const initialState: GroupSliceState = {
   group: {
@@ -10,7 +11,16 @@ const initialState: GroupSliceState = {
     created_at: ''
   },
   groups: [],
-  item: null,
+  item: {
+    id: -999,
+    name: '',
+    description: null,
+    category: Category.OWN,
+    category_id: null,
+    item_type: ItemType.OTHER,
+    due_date: '',
+    date: ''
+  },
   items: [],
   viewGroupItemMode: false,
 };
