@@ -33,7 +33,7 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
           semester: Semester[row.semester as keyof typeof Semester],
           description: row.description,
           owner_id: row.owner_id,
-          created_at: row.created_at.toString()
+          created_at: row.created_at
         }
         safeResult.push(classRow)
       })
