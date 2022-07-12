@@ -68,6 +68,7 @@ export default function Groups({ user }: { user: UserSafe }) {
   const [selectedDate, setSelectedDate] = useState(() => new Date());
   const [dayLayout, setDayLayout] = useState(7);
   const [days, setDays] = useState(() => getDays(dayLayout, selectedDate));
+  const [viewItemMode, setViewItemMode] = useState(false);
 
   return (
     <>
@@ -117,6 +118,7 @@ export default function Groups({ user }: { user: UserSafe }) {
             setSelectedDate={setSelectedDate}
             category={Category.CLASSROOM}
             items={classItems}
+            setViewItemMode={setViewItemMode}
           ></TaskView>
         </div>
       </Layout>
