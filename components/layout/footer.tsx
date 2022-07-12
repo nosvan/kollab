@@ -37,12 +37,12 @@ export default function Footer() {
       />
       <TbUser
         onClick={() => {
-          handleActiveTab(TabName.USER);
+          handleActiveTab(TabName.OWN);
         }}
         size={32}
         strokeWidth={1}
         className={
-          user.currentTab == TabName.USER
+          user.currentTab == TabName.OWN
             ? 'text-white font-light'
             : 'text-gray-400 font-extralight'
         }

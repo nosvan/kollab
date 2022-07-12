@@ -1,7 +1,6 @@
 export enum Category {
   CLASSROOM = 'CLASSROOM',
   GROUP = 'GROUP',
-  OWN  = 'OWN',
 }
 
 export enum ItemType {
@@ -15,6 +14,11 @@ export enum ItemType {
 
 export enum AccessLevel {
   ADMIN = 'ADMIN',
+  PUBLIC = 'PUBLIC',
+}
+
+export enum VisibilityLevel {
+  ADMIN = 'ADMIN',
   PRIVATE = 'PRIVATE',
   PUBLIC = 'PUBLIC',
 }
@@ -22,36 +26,37 @@ export enum AccessLevel {
 export type Item = {
   id: number
   name: string
-  description: string | null
-  category: Category
-  category_id: number | null
+  description: string
+  category?: Category
+  category_id: number
   item_type: ItemType
-  due_date: string
+  due_date?: Date
+  permission_level: VisibilityLevel
   created_by_id: number
   last_modified_by_id: number
-  date: string
-  created_at: string
+  date: Date
+  created_at: Date
 }
 
 export type CreateItem = {
   name: string
-  description: string | null
-  category: Category
-  category_id: number | null
+  description?: string
+  category?: Category
+  category_id?: number
   item_type: ItemType
-  due_date: string
-  date: string
+  due_date?: Date
+  permission_level: VisibilityLevel
+  last_modified_by_id?: number
+  date: Date
 }
 
 export type ItemSafe = {
   id: number
   name: string
-  description: string | null
-  category: Category
-  category_id: number | null
+  description?: string
+  category?: Category
+  category_id?: number
   item_type: ItemType
-  due_date: string
-  date: string
+  due_date?: Date
+  date?: Date
 }
-
-

@@ -9,7 +9,7 @@ const initialState: ClassSliceState = {
     semester: Semester.NA,
     description: '',
     owner_id: -999,
-    created_at: ''
+    created_at: undefined
   },
   classes: [],
   item: null,

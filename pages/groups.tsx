@@ -12,7 +12,6 @@ import {
   setCurrentGroup,
   setCurrentGroupAndGroups,
   setGroupItems,
-  setViewGroupItemMode,
 } from 'state/redux/groupSlice';
 import { useRouter } from 'next/router';
 import TaskView from 'components/layout/task_view';
@@ -67,6 +66,7 @@ export default function Groups({ user }: { user: UserSafe }) {
   const [selectedDate, setSelectedDate] = useState(() => new Date());
   const [dayLayout, setDayLayout] = useState(7);
   const [days, setDays] = useState(() => getDays(dayLayout, selectedDate));
+  const [viewItemMode, setViewItemMode] = useState(false);
 
   useEffect(() => {
     setDays(getDays(dayLayout, selectedDate));
@@ -156,12 +156,13 @@ export default function Groups({ user }: { user: UserSafe }) {
               setSelectedDate={setSelectedDate}
               category={Category.GROUP}
               items={groupState.items}
+              setViewItemMode={setViewItemMode}
             />
           )}
-          {groupState.viewGroupItemMode && (
+          {viewItemMode && (
             <ModalPopup
               modalId="view_group_item_modal"
-              modalOpen={setViewGroupItemMode}
+              modalOpen={setViewItemMode}
             >
               <Item item={groupState.item}></Item>
             </ModalPopup>

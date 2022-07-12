@@ -2,12 +2,18 @@ import axios from 'axios';
 import { ApiRoutes } from 'lib/api/api_routes';
 import { TabName } from 'lib/types/ui';
 import { useRouter } from 'next/router';
+import { Dispatch, SetStateAction } from 'react';
 import { TbLogin, TbLogout, TbPlus, TbUserPlus } from 'react-icons/tb';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'state/redux/store';
-import { setCreateNewTypeMode, setUserState } from 'state/redux/userSlice';
+import { setUserState } from 'state/redux/userSlice';
 
-export default function Header() {
+interface HeaderProps {
+  createNewTypeMode: boolean;
+  setCreateNewTypeMode: Dispatch<SetStateAction<boolean>>;
+}
+
+export default function Header(props: HeaderProps) {
   const userState = useSelector((state: RootState) => state.user_store);
   const dispatch = useDispatch();
   const router = useRouter();
@@ -22,7 +28,7 @@ export default function Header() {
         {(userState.user.currentTab == TabName.CLASS ||
           userState.user.currentTab == TabName.GROUP) && (
           <TbPlus
-            onClick={() => dispatch(setCreateNewTypeMode(true))}
+            onClick={() => props.setCreateNewTypeMode(true)}
             className="hover:bg-stone-800 rounded-xl cursor-pointer"
           />
         )}

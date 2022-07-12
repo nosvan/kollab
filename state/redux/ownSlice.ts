@@ -6,12 +6,12 @@ const initialState: OwnSliceState = {
   item: {
     id: -999,
     name: '',
-    description: null,
-    category: Category.OWN,
-    category_id: null,
+    description: '',
+    category: undefined,
+    category_id: undefined,
     item_type: ItemType.OTHER,
-    due_date: '',
-    date: ''
+    due_date: undefined,
+    date: undefined
   },
   items: [],
   viewOwnItemMode: false,

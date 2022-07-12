@@ -31,24 +31,22 @@ export default function Settings({ user }: { user: UserSafe }) {
   return (
     <Layout>
       <animated.div style={settingsSpring}>
-        {false && (
-          <div className="bg-black rounded-3xl p-5 text-white mt-2">
-            <div className="flex flex-col space-y-1 p-1">
-              <div className="flex flex-row">
-                <div className="flex flex-row items-center space-x-1 px-1 rounded-lg bg-stone-800 hover:bg-stone-700 cursor-pointer">
-                  <div>Change name</div>
-                  <TbArrowBigRight></TbArrowBigRight>
-                </div>
+        <div className="bg-black rounded-3xl p-5 text-white mt-2">
+          <div className="flex flex-col space-y-1 p-1">
+            <div className="flex flex-row">
+              <div className="flex flex-row items-center space-x-1 px-1 rounded-lg bg-stone-800 hover:bg-stone-700 cursor-pointer">
+                <div>To Do: Change name</div>
+                <TbArrowBigRight></TbArrowBigRight>
               </div>
-              <div className="flex flex-row">
-                <div className="flex flex-row items-center space-x-1 px-1 rounded-lg bg-stone-800 hover:bg-stone-700 cursor-pointer">
-                  <div>Change password</div>
-                  <TbArrowBigRight></TbArrowBigRight>
-                </div>
+            </div>
+            <div className="flex flex-row">
+              <div className="flex flex-row items-center space-x-1 px-1 rounded-lg bg-stone-800 hover:bg-stone-700 cursor-pointer">
+                <div>To Do: Change password</div>
+                <TbArrowBigRight></TbArrowBigRight>
               </div>
             </div>
           </div>
-        )}
+        </div>
       </animated.div>
     </Layout>
   );

@@ -17,10 +17,10 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
         data: {
           name: reqBody.name,
           description: reqBody.description,
-          category: PrismaCategory[reqBody.category.toLowerCase() as keyof typeof PrismaCategory],
+          category: reqBody.category ? PrismaCategory[reqBody.category.toLowerCase() as keyof typeof PrismaCategory] : null,
           category_id: reqBody.category_id,
           item_type: PrismaItemType[reqBody.item_type.toLowerCase() as keyof typeof PrismaItemType],
-          due_date: new Date(reqBody.due_date),
+          due_date: reqBody.due_date ? reqBody.due_date : null,
           created_by_id: req.session.userSession.id,
           last_modified_by_id: req.session.userSession.id,
           date: new Date(reqBody.date)
@@ -28,12 +28,12 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
       const resultSafe: ItemSafe[] = [{
         id: result.id,
         name: result.name,
-        description: result.description,
-        category: Category[result.category.toUpperCase() as keyof typeof Category],
-        category_id: result.category_id,
+        description: result.description ? result.description : undefined,
+        category: result.category ? Category[result.category.toUpperCase() as keyof typeof Category] : undefined,
+        category_id: result.category_id ? result.category_id : undefined,
         item_type: ItemType[result.item_type.toUpperCase() as keyof typeof ItemType],
-        due_date: result.due_date.toString(),
-        date: result.date.toString(),
+        due_date: result.due_date ? result.due_date : undefined,
+        date: result.date,
       }]
       res.json(resultSafe)
     } catch (error) {

@@ -10,8 +10,7 @@ import TaskView from 'components/layout/task_view';
 import ModalPopup from 'components/layout/modal';
 import { getDays, incrementDate, decrementDate } from 'utils/dateUtils';
 import { RootState } from 'state/redux/store';
-import { Category } from 'lib/types/item';
-import { setOwnItems, setViewOwnItemMode } from 'state/redux/ownSlice';
+import { setOwnItems } from 'state/redux/ownSlice';
 import Item from 'components/item/item';
 import { setUserState } from 'state/redux/userSlice';
 import axios from 'axios';
@@ -38,9 +37,6 @@ export default function Own({ user }: { user: UserSafe }) {
       await axios({
         method: 'get',
         url: `/api/item/own/item`,
-        params: {
-          category: Category.OWN,
-        },
       }).then((res) => {
         dispatch(setOwnItems(res.data));
       });
@@ -51,6 +47,7 @@ export default function Own({ user }: { user: UserSafe }) {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [dayLayout, setDayLayout] = useState(7);
   const [days, setDays] = useState(() => getDays(dayLayout, selectedDate));
+  const [viewItemMode, setViewItemMode] = useState(false);
 
   useEffect(() => {
     setDays(getDays(dayLayout, selectedDate));
@@ -120,13 +117,13 @@ export default function Own({ user }: { user: UserSafe }) {
             days={days}
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}
-            category={Category.OWN}
             items={ownState.items}
+            setViewItemMode={setViewItemMode}
           />
-          {ownState.viewOwnItemMode && (
+          {viewItemMode && (
             <ModalPopup
               modalId="view_personal_item_modal"
-              modalOpen={setViewOwnItemMode}
+              modalOpen={setViewItemMode}
             >
               <Item item={ownState.item}></Item>
             </ModalPopup>

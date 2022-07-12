@@ -35,12 +35,12 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
         const itemRow: ItemSafe = {
           id: row.id,
           name: row.name,
-          description: row.description,
-          category: Category[row.category.toUpperCase() as keyof typeof Category],
-          category_id: row.category_id,
+          description: row.description ? row.description : undefined,
+          category: row.category ? Category[row.category.toUpperCase() as keyof typeof Category] : undefined,
+          category_id: row.category_id ? row.category_id : undefined,
           item_type: ItemType[row.item_type.toUpperCase() as keyof typeof ItemType],
-          due_date: row.due_date.toString(),
-          date: row.date.toString()
+          due_date: row.due_date ? row.due_date : undefined,
+          date: row.date
         }
         resultSafe.push(itemRow)
       })

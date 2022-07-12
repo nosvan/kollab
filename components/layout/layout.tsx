@@ -2,7 +2,6 @@ import { FaStackExchange } from 'react-icons/fa';
 import { BsGithub } from 'react-icons/bs';
 import { FcGoogle } from 'react-icons/fc';
 import { useState } from 'react';
-import { useRouter } from 'next/router';
 import { useSelector } from 'react-redux';
 import { RootState } from 'state/redux/store';
 import NewClass from '../classroom/create_class';
@@ -14,12 +13,12 @@ import Register from './register';
 import SideBar from './sidebar';
 import Header from './header';
 import Footer from './footer';
-import { setCreateNewTypeMode } from 'state/redux/userSlice';
 import AccountReset from './account_reset';
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const userState = useSelector((state: RootState) => state.user_store);
   const [selection, setSelection] = useState('');
+  const [createNewTypeMode, setCreateNewTypeMode] = useState(false);
 
   return (
     <div>
@@ -111,30 +110,31 @@ export function Layout({ children }: { children: React.ReactNode }) {
             {/* Main Page with header */}
             <div className="w-full sm:w-11/12 md:w-10/12 pt-5 space-y-2">
               {/* Header Text */}
-              <Header></Header>
+              <Header
+                createNewTypeMode={createNewTypeMode}
+                setCreateNewTypeMode={setCreateNewTypeMode}
+              ></Header>
               {/* Children */}
               <main>{children}</main>
             </div>
             {/* footer on small screens */}
             <Footer></Footer>
-            {userState.user.currentTab == TabName.CLASS &&
-              userState.createNewTypeMode && (
-                <ModalPopup
-                  modalId="create_class_modal"
-                  modalOpen={setCreateNewTypeMode}
-                >
-                  <NewClass />
-                </ModalPopup>
-              )}
-            {userState.user.currentTab == TabName.GROUP &&
-              userState.createNewTypeMode && (
-                <ModalPopup
-                  modalId="create_group_modal"
-                  modalOpen={setCreateNewTypeMode}
-                >
-                  <NewGroup />
-                </ModalPopup>
-              )}
+            {userState.user.currentTab == TabName.CLASS && createNewTypeMode && (
+              <ModalPopup
+                modalId="create_class_modal"
+                modalOpen={setCreateNewTypeMode}
+              >
+                <NewClass setCreateNewTypeMode={setCreateNewTypeMode} />
+              </ModalPopup>
+            )}
+            {userState.user.currentTab == TabName.GROUP && createNewTypeMode && (
+              <ModalPopup
+                modalId="create_group_modal"
+                modalOpen={setCreateNewTypeMode}
+              >
+                <NewGroup setCreateNewTypeMode={setCreateNewTypeMode} />
+              </ModalPopup>
+            )}
           </div>
         </div>
       )}

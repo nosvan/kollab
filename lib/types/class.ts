@@ -24,7 +24,7 @@ export type ClassSafe = {
   semester: Semester,
   description: string | null,
   owner_id: number,
-  created_at: string
+  created_at?: Date
 }
 
 // redux state

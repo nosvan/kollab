@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import {
   dateStringToNormalizedDateString,
   dateToDayName,
@@ -9,18 +9,10 @@ import { TbPlus } from 'react-icons/tb';
 import ModalPopup from './modal';
 import NewItem from '../item/create_item';
 import { Category, ItemSafe } from 'lib/types/item';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from 'state/redux/store';
-import { setCreateNewItemMode } from 'state/redux/userSlice';
-import {
-  setCurrentGroupItem,
-  setViewGroupItemMode,
-} from 'state/redux/groupSlice';
-import {
-  setCurrentClassItem,
-  setViewClassItemMode,
-} from 'state/redux/classSlice';
-import { setCurrentOwnItem, setViewOwnItemMode } from 'state/redux/ownSlice';
+import { useDispatch } from 'react-redux';
+import { setCurrentGroupItem } from 'state/redux/groupSlice';
+import { setCurrentClassItem } from 'state/redux/classSlice';
+import { setCurrentOwnItem } from 'state/redux/ownSlice';
 import { animated, useSpring } from '@react-spring/web';
 
 interface TaskViewProps {
@@ -28,23 +20,23 @@ interface TaskViewProps {
   days: Date[];
   selectedDate: Date;
   setSelectedDate: Dispatch<SetStateAction<Date>>;
-  category: Category;
+  category?: Category;
   items: ItemSafe[];
+  setViewItemMode: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function TaskView(props: TaskViewProps) {
-  const newItemMode = useSelector(
-    (state: RootState) => state.user_store.createNewItemMode
-  );
   const dispatch = useDispatch();
   const currentDateString = new Date().toDateString();
+  const [createNewItemMode, setCreateNewItemMode] = useState(false);
 
   const ItemsView = (day: Date, items: ItemSafe[]) => {
     return items
       .filter((itemA) => {
         if (
-          itemA.category == Category[props.category] &&
-          dateStringToNormalizedDateString(itemA.date) == day.toDateString()
+          itemA.date &&
+          dateStringToNormalizedDateString(itemA.date.toString()) ==
+            day.toDateString()
         ) {
           return true;
         } else {
@@ -94,18 +86,18 @@ export default function TaskView(props: TaskViewProps) {
                   <TbPlus
                     onClick={() => {
                       props.setSelectedDate(day);
-                      dispatch(setCreateNewItemMode(true));
+                      setCreateNewItemMode(true);
                     }}
                     className="hover:bg-stone-700 cursor-pointer rounded-xl"
                   ></TbPlus>
                 </div>
               </div>
-              {ItemsView(day, props.items)}
+              {props.items.length > 0 && ItemsView(day, props.items)}
             </div>
           );
         })}
       </div>
-      {newItemMode && (
+      {createNewItemMode && (
         <ModalPopup
           modalId="create_item_modal"
           modalOpen={setCreateNewItemMode}
@@ -113,6 +105,7 @@ export default function TaskView(props: TaskViewProps) {
           <NewItem
             selectedDate={props.selectedDate}
             itemCategory={props.category}
+            setCreateNewItemMode={setCreateNewItemMode}
           />
         </ModalPopup>
       )}
@@ -120,20 +113,19 @@ export default function TaskView(props: TaskViewProps) {
   );
 
   function handleItemClick(item: ItemSafe) {
-    switch (props.category) {
-      case Category.GROUP:
-        dispatch(setViewGroupItemMode(true));
-        dispatch(setCurrentGroupItem(item));
-        break;
-      case Category.CLASSROOM:
-        dispatch(setViewClassItemMode(true));
-        dispatch(setCurrentClassItem(item));
-        break;
-      case Category.OWN:
-        dispatch(setViewOwnItemMode(true));
-        dispatch(setCurrentOwnItem(item));
-        break;
+    if (props.category) {
+      switch (props.category) {
+        case Category.GROUP:
+          dispatch(setCurrentGroupItem(item));
+          break;
+        case Category.CLASSROOM:
+          dispatch(setCurrentClassItem(item));
+          break;
+      }
+    } else {
+      dispatch(setCurrentOwnItem(item));
     }
+    props.setViewItemMode(true);
   }
 
   function itemTypeStyling(itemType: string) {
@@ -149,7 +141,7 @@ export default function TaskView(props: TaskViewProps) {
       case 'MEETING':
         return 'bg-green-400 hover:bg-green-300';
       default:
-        return 'bg-white';
+        return 'bg-gray-100 hover:bg-white';
     }
   }
 }

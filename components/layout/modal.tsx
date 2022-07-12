@@ -1,7 +1,6 @@
 import { useSpring, animated } from '@react-spring/web';
 import { ReactNode } from 'react';
 import { TbX } from 'react-icons/tb';
-import { useDispatch } from 'react-redux';
 import styles from './modal.module.css';
 
 interface ModalPopupProps {
@@ -11,7 +10,6 @@ interface ModalPopupProps {
 }
 
 function ModalPopup(props: ModalPopupProps) {
-  const dispatch = useDispatch();
   const modalSpring = useSpring({
     from: { opacity: 0 },
     to: { opacity: 1 },
@@ -28,10 +26,10 @@ function ModalPopup(props: ModalPopupProps) {
         className="flex justify-center items-center h-full"
       >
         <div
-          className={`flex flex-col sm:basis-3/6 md:basis-2/6 space-y-2 bg-black text-white p-5 rounded-2xl ${styles.modalchildren}`}
+          className={`flex flex-col basis-5/6 md:basis-1/3 space-y-2 bg-black text-white p-5 rounded-2xl ${styles.modalchildren}`}
         >
           <div
-            onClick={() => dispatch(props.modalOpen(false))}
+            onClick={() => props.modalOpen(false)}
             className="flex justify-end"
           >
             <TbX className="hover:bg-stone-700 rounded-2xl cursor-pointer"></TbX>

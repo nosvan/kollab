@@ -2,11 +2,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { GroupJoin, GroupRegister } from 'lib/types/group';
 import axios from 'axios';
 import { setCurrentGroup, setGroups } from 'state/redux/groupSlice';
-import { setCreateNewTypeMode } from 'state/redux/userSlice';
 import { RootState } from 'state/redux/store';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 
-export default function NewGroup() {
+interface NewGroupProps {
+  setCreateNewTypeMode: Dispatch<SetStateAction<boolean>>;
+}
+
+export default function NewGroup(props: NewGroupProps) {
   const user = useSelector((state: RootState) => state.user_store.user);
   const dispatch = useDispatch();
   const [selection, setSelection] = useState('join_group');
@@ -52,7 +55,7 @@ export default function NewGroup() {
               <div className="flex flex-row py-5 justify-start text-center text-sm space-x-2">
                 <div
                   className="bg-black border-2 border-white hover:bg-gray-800 hover:border-gray-300 text-white rounded-lg px-2 cursor-pointer"
-                  onClick={() => dispatch(setCreateNewTypeMode(false))}
+                  onClick={() => props.setCreateNewTypeMode(false)}
                 >
                   <span>Cancel</span>
                 </div>
@@ -114,7 +117,7 @@ export default function NewGroup() {
               <div className="flex flex-row py-5 justify-start text-center text-sm space-x-2">
                 <div
                   className="bg-black border-2 border-white hover:bg-gray-800 hover:border-gray-300 text-white rounded-lg px-2 cursor-pointer"
-                  onClick={() => dispatch(setCreateNewTypeMode(false))}
+                  onClick={() => props.setCreateNewTypeMode(false)}
                 >
                   <span>Cancel</span>
                 </div>
@@ -188,7 +191,7 @@ export default function NewGroup() {
         dispatch(setGroups(res.data));
       });
       formData.reset();
-      dispatch(setCreateNewTypeMode(false));
+      props.setCreateNewTypeMode(false);
     } catch (error) {
       console.log(error);
     }
