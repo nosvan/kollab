@@ -57,7 +57,8 @@ export default function NewItem(props: NewItemProps) {
   return (
     <div>
       <form onSubmit={handleCreateItemFormSubmit}>
-        <div className="flex flex-col text-sm space-y-1">
+        <div className="flex flex-col text-sm space-y-1 pt-2 px-2 bg-stone-900 border-b-2 rounded-xl border-blue-700">
+          <div className="py-2 text-3xl">Create an Item</div>
           <div>
             <select
               className="text-white bg-stone-800 py-1 rounded-lg"
@@ -129,7 +130,7 @@ export default function NewItem(props: NewItemProps) {
           <div className="flex flex-col">
             <label className="text-white px-1">description</label>
             <textarea
-              className="text-white bg-stone-800 px-1 rounded-lg"
+              className="text-white resize-none bg-stone-800 px-1 rounded-lg"
               value={formValues.description}
               onChange={(event) =>
                 setFormValues({
@@ -170,7 +171,7 @@ export default function NewItem(props: NewItemProps) {
           </div>
           <div className="flex flex-row py-5 justify-start text-center text-sm space-x-2">
             <div
-              className="bg-black border-2 border-white hover:bg-gray-800 hover:border-gray-300 text-white rounded-lg px-2 cursor-pointer"
+              className="bg-stone-900 border-2 border-white hover:bg-stone-800 hover:border-stone-300 text-white rounded-lg px-2 cursor-pointer"
               onClick={() => props.setCreateNewItemMode(false)}
             >
               <span>Cancel</span>

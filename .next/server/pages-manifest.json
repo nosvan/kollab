@@ -1,7 +1,11 @@
 {
   "/_app": "pages/_app.js",
-  "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
+  "/_error": "pages/_error.js",
   "/own": "pages/own.js",
-  "/api/item/own/item": "pages/api/item/own/item.js"
+  "/api/item/own/item": "pages/api/item/own/item.js",
+  "/groups": "pages/groups.js",
+  "/api/item/item": "pages/api/item/item.js",
+  "/api/group/group": "pages/api/group/group.js",
+  "/settings": "pages/settings.js"
 }

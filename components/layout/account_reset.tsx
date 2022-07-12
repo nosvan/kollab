@@ -16,7 +16,7 @@ export default function AccountReset(props: AccountResetProps) {
   return (
     <animated.div style={modalSpring} className="flex flex-col">
       <div className="text-white text-center text-2xl mb-5">
-        Reset <span className="text-blue-700">kollab</span> password
+        Login <span className="text-blue-700">kollab</span> with email
       </div>
       <div className="px-1">
         <form onSubmit={handlePasswordReset}>
@@ -50,7 +50,7 @@ export default function AccountReset(props: AccountResetProps) {
                 className="basis-3/5 bg-blue-700 hover:bg-blue-600 
             w-full rounded-xl text-white"
               >
-                Reset
+                Send
               </button>
             </div>
           </div>

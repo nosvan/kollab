@@ -26,7 +26,7 @@ function ModalPopup(props: ModalPopupProps) {
         className="flex justify-center items-center h-full"
       >
         <div
-          className={`flex flex-col basis-5/6 md:basis-1/3 space-y-2 bg-black text-white p-5 rounded-2xl ${styles.modalchildren}`}
+          className={`flex flex-col basis-5/6 md:basis-1/3 space-y-2 bg-black text-white p-2 rounded-2xl ${styles.modalchildren}`}
         >
           <div
             onClick={() => props.modalOpen(false)}

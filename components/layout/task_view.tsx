@@ -135,11 +135,11 @@ export default function TaskView(props: TaskViewProps) {
       case 'NOTE':
         return 'bg-yellow-400 hover:bg-yellow-300';
       case 'PROJECT':
-        return 'bg-fuchsia-400 hover:bg-fuchsia-300';
+        return 'bg-red-400 hover:bg-red-300';
       case 'REMINDER':
         return 'bg-cyan-400 hover:bg-cyan-300';
       case 'MEETING':
-        return 'bg-green-400 hover:bg-green-300';
+        return 'bg-fuchsia-400 hover:bg-fuchsia-300';
       default:
         return 'bg-gray-100 hover:bg-white';
     }

@@ -36,12 +36,13 @@ async function handle(req: NextApiRequest, res: NextApiResponse) {
         });
 
         const emailBody = `Hi there!
-        Please use the following link to login: (link will expire in 15 minutes)
-        <a href="${locationOrigin as string}/api/account/magiclink?seal=${seal}">Click here to reset password</a>`
+        Please use the following link to login:
+        <a href="${locationOrigin as string}/api/account/magiclink?seal=${seal}">Click here to login with link</a>`
+        
         const mailOptions = {
           from: 'kollabservice@gmail.com',
           to: result.email,
-          subject: 'Reset Kollab Account password request',
+          subject: 'Kollab: Login with link',
           html: emailBody
         };        
         await transporter.sendMail(mailOptions, (error, info) =>{

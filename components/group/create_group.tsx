@@ -16,8 +16,8 @@ export default function NewGroup(props: NewGroupProps) {
   return (
     <>
       {selection === 'join_group' && (
-        <div>
-          <div className="px-1 py-5">
+        <div className="px-2 bg-stone-900 border-b-2 rounded-xl border-blue-700">
+          <div className="px-1 py-2">
             <div className="text-3xl">Join a Group</div>
             <div
               onClick={() => setSelection('create_group')}
@@ -54,7 +54,7 @@ export default function NewGroup(props: NewGroupProps) {
               />
               <div className="flex flex-row py-5 justify-start text-center text-sm space-x-2">
                 <div
-                  className="bg-black border-2 border-white hover:bg-gray-800 hover:border-gray-300 text-white rounded-lg px-2 cursor-pointer"
+                  className="bg-stone-900 border-2 border-white hover:bg-stone-800 hover:border-stone-300 text-white rounded-lg px-2 cursor-pointer"
                   onClick={() => props.setCreateNewTypeMode(false)}
                 >
                   <span>Cancel</span>
@@ -71,9 +71,9 @@ export default function NewGroup(props: NewGroupProps) {
         </div>
       )}
       {selection === 'create_group' && (
-        <div>
+        <div className="px-2 bg-stone-900 border-b-2 rounded-xl border-blue-700">
           <div className="px-1 py-5">
-            <div className="text-3xl">Create a new Group</div>
+            <div className="text-3xl">Create a New Group</div>
             <div
               onClick={() => setSelection('join_group')}
               className="text-sm hover:underline cursor-pointer"
