@@ -66,7 +66,7 @@ export default function Own({ user }: { user: UserSafe }) {
           style={ownSpring}
           className="bg-black rounded-3xl p-5 text-white mt-2"
         >
-          <div className="flex flex-row flex-wrap items-center justify-end text-sm mb-1">
+          <div className="flex flex-row items-center justify-end text-sm mb-1">
             <div
               onClick={() => setSelectedDate(new Date())}
               className="bg-stone-800 hover:bg-stone-700 p-1 rounded-lg cursor-pointer"

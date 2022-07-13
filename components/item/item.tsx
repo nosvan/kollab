@@ -15,15 +15,15 @@ export default function Item(props: ItemProps) {
   function itemBorder() {
     switch (props.item.item_type) {
       case 'ASSIGNMENT':
-        return 'border-emerald-700';
+        return 'border-emerald-500';
       case 'NOTE':
-        return 'border-yellow-700';
+        return 'border-yellow-500';
       case 'PROJECT':
-        return 'border-red-700';
+        return 'border-red-500';
       case 'REMINDER':
-        return 'border-cyan-700';
+        return 'border-cyan-500';
       case 'MEETING':
-        return 'border-fuchsia-700';
+        return 'border-fuchsia-500';
       default:
         return 'border-gray-100';
     }

@@ -131,15 +131,15 @@ export default function TaskView(props: TaskViewProps) {
       case 'ASSIGNMENT':
         return 'bg-emerald-400 hover:bg-emerald-300';
       case 'NOTE':
-        return 'bg-yellow-400 hover:bg-yellow-300';
-      case 'PROJECT':
-        return 'bg-red-400 hover:bg-red-300';
-      case 'REMINDER':
         return 'bg-cyan-400 hover:bg-cyan-300';
-      case 'MEETING':
+      case 'PROJECT':
         return 'bg-fuchsia-400 hover:bg-fuchsia-300';
+      case 'REMINDER':
+        return 'bg-indigo-400 hover:bg-indigo-300';
+      case 'MEETING':
+        return 'bg-rose-400 hover:bg-rose-300';
       default:
-        return 'bg-gray-100 hover:bg-white';
+        return 'bg-stone-100 hover:bg-white';
     }
   }
 }
