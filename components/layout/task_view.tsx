@@ -49,9 +49,9 @@ export default function TaskView(props: TaskViewProps) {
             key={itemB.id}
             onClick={() => handleItemClick(itemB)}
             className={`text-xs rounded-md
-            text-center text-black cursor-pointer ${
-              styles.mobilePadding
-            } ${itemTypeStyling(itemB.item_type)}`}
+            text-center text-black ${itemTypeStyling(
+              itemB.item_type
+            )} cursor-pointer ${styles.mobilePadding}`}
           >
             {itemB.name}
           </div>
@@ -133,7 +133,7 @@ export default function TaskView(props: TaskViewProps) {
       case 'NOTE':
         return 'bg-cyan-400 hover:bg-cyan-300';
       case 'PROJECT':
-        return 'bg-fuchsia-400 hover:bg-fuchsia-300';
+        return 'bg-purple-400 hover:bg-purple-300';
       case 'REMINDER':
         return 'bg-indigo-400 hover:bg-indigo-300';
       case 'MEETING':

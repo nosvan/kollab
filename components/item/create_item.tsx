@@ -17,6 +17,9 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { setAdditionalOwnItems } from 'state/redux/ownSlice';
 import ToggleSwitch from 'components/layout/ui_components/toggle_switch';
 import { UserSliceState } from 'lib/types/user';
+import styles from './create_item.module.css';
+import * as Yup from 'yup';
+import { setErrorTruthy } from 'utils/formValidateUtils';
 
 interface NewItemProps {
   selectedDate?: Date;
@@ -39,20 +42,65 @@ export default function NewItem(props: NewItemProps) {
 
   const dispatch = useDispatch();
   const [visibilityControlCheck, setVisibilityControlCheck] = useState(false);
+  const currentDate = props.selectedDate || new Date();
 
   const initialFormState = {
     name: '',
     category: props.itemCategory ? props.itemCategory : undefined,
     category_id: props.itemCategory ? getCategoryId() : undefined,
-    item_type: ItemType.ASSIGNMENT,
+    item_type: ItemType.NOTE,
     permission_level: VisibilityLevel.PUBLIC,
     description: undefined,
     due_date: undefined,
+    start_time: undefined,
+    end_time: undefined,
     last_modified_by_id: userState.user.id,
-    date: props.selectedDate ? props.selectedDate : new Date(),
+    date: currentDate,
   };
 
   const [formValues, setFormValues] = useState<CreateItem>(initialFormState);
+
+  const yupValidationSchema = Yup.object({
+    name: Yup.string().required(),
+    category: Yup.mixed<Category>()
+      .oneOf(Object.values(Category))
+      .default(undefined),
+    category_id: formValues.category
+      ? Yup.number().required()
+      : Yup.number().default(undefined),
+    item_type: Yup.mixed<ItemType>()
+      .oneOf(Object.values(ItemType))
+      .default(ItemType.ASSIGNMENT),
+    permission_level: Yup.mixed<VisibilityLevel>()
+      .oneOf(Object.values(VisibilityLevel))
+      .default(VisibilityLevel.PUBLIC),
+    description: Yup.string().default(undefined),
+    due_date: Yup.date().default(undefined),
+    start_time:
+      formValues.item_type === ItemType.MEETING
+        ? Yup.string().required()
+        : Yup.string().default(undefined),
+    end_time:
+      formValues.item_type === ItemType.MEETING
+        ? Yup.string().required()
+        : Yup.string().default(undefined),
+    last_modified_by_id: Yup.number().default(userState.user.id),
+    date: Yup.date().required().default(currentDate),
+  });
+
+  const [yupValidationError, setValidationError] = useState({
+    name: false,
+    category: false,
+    category_id: false,
+    item_type: false,
+    permission_level: false,
+    description: false,
+    due_date: false,
+    start_time: false,
+    end_time: false,
+    last_modified_by_id: false,
+    date: false,
+  });
 
   return (
     <div>
@@ -62,7 +110,6 @@ export default function NewItem(props: NewItemProps) {
           <div>
             <select
               className="text-white bg-stone-800 py-1 rounded-lg"
-              required
               value={formValues.item_type}
               onChange={(event) =>
                 setFormValues({
@@ -90,7 +137,7 @@ export default function NewItem(props: NewItemProps) {
                 <span>
                   <select
                     className="text-white bg-stone-800 py-1 rounded-lg"
-                    required
+                    value={formValues.permission_level}
                     onChange={(event) =>
                       setFormValues({
                         ...formValues,
@@ -100,7 +147,6 @@ export default function NewItem(props: NewItemProps) {
                           ],
                       })
                     }
-                    value={VisibilityLevel.PUBLIC}
                   >
                     {Object.keys(VisibilityLevel).map((key) => (
                       <option key={key} value={key}>
@@ -116,9 +162,9 @@ export default function NewItem(props: NewItemProps) {
             <label className="text-white px-1">name</label>
             <input
               className="text-white bg-stone-800 p-1 rounded-lg"
-              type="text"
-              required
-              value={formValues.name}
+              onFocus={() =>
+                setValidationError({ ...yupValidationError, name: false })
+              }
               onChange={(event) =>
                 setFormValues({
                   ...formValues,
@@ -126,12 +172,16 @@ export default function NewItem(props: NewItemProps) {
                 })
               }
             />
+            {yupValidationError.name && (
+              <span className={`${styles['field-error-styling']}`}>
+                required
+              </span>
+            )}
           </div>
           <div className="flex flex-col">
             <label className="text-white px-1">description</label>
             <textarea
               className="text-white resize-none bg-stone-800 px-1 rounded-lg"
-              value={formValues.description}
               onChange={(event) =>
                 setFormValues({
                   ...formValues,
@@ -144,7 +194,6 @@ export default function NewItem(props: NewItemProps) {
             <label className="text-white px-1">Due Date</label>
             <DatePicker
               className="text-white bg-stone-800 p-1 rounded-lg"
-              // selected={datePickerValue}
               selected={formValues.due_date}
               onChange={(event) => {
                 setFormValues({
@@ -154,17 +203,70 @@ export default function NewItem(props: NewItemProps) {
               }}
             />
           </div>
+          {formValues.item_type == ItemType.MEETING && (
+            <div className="flex flex-col">
+              <label className="text-white px-1">Time</label>
+              <span className="flex space-x-1">
+                <span className="flex flex-col">
+                  <input
+                    className="text-white bg-stone-800 p-1 rounded-lg"
+                    type="time"
+                    value={formValues.start_time}
+                    onFocus={() =>
+                      setValidationError({
+                        ...yupValidationError,
+                        start_time: false,
+                      })
+                    }
+                    onChange={(event) =>
+                      setFormValues({
+                        ...formValues,
+                        start_time: event.target.value,
+                      })
+                    }
+                  />
+                  {yupValidationError.start_time && (
+                    <span className={`${styles['field-error-styling']}`}>
+                      required
+                    </span>
+                  )}
+                </span>
+                <span className="flex flex-col">
+                  <input
+                    className="text-white bg-stone-800 p-1 rounded-lg"
+                    type="time"
+                    onFocus={() =>
+                      setValidationError({
+                        ...yupValidationError,
+                        end_time: false,
+                      })
+                    }
+                    onChange={(event) =>
+                      setFormValues({
+                        ...formValues,
+                        end_time: event.target.value,
+                      })
+                    }
+                  />
+                  {yupValidationError.end_time && (
+                    <span className={`${styles['field-error-styling']}`}>
+                      required
+                    </span>
+                  )}
+                </span>
+              </span>
+            </div>
+          )}
           <div>
             <label className="text-white px-1">For Date</label>
             <DatePicker
               className="text-white bg-stone-800 p-1 rounded-lg"
               // selected={datePickerValue}
               selected={formValues.date}
-              required
               onChange={(event) => {
                 setFormValues({
                   ...formValues,
-                  due_date: event ? event : undefined,
+                  date: event ? event : new Date(),
                 });
               }}
             />
@@ -201,6 +303,18 @@ export default function NewItem(props: NewItemProps) {
     event: React.FormEvent<HTMLFormElement>
   ) {
     event.preventDefault();
+    const yupValidateResult = await yupValidationSchema
+      .validate(formValues, { abortEarly: false })
+      .catch((err) => {
+        setErrorTruthy(err.inner, yupValidationError);
+        setValidationError({ ...yupValidationError });
+      });
+    if (JSON.stringify(yupValidateResult) === JSON.stringify(formValues)) {
+      await callCreateNewItemApi(formValues);
+    }
+  }
+
+  async function callCreateNewItemApi(formValues: CreateItem) {
     try {
       await axios({
         method: 'post',
@@ -208,7 +322,6 @@ export default function NewItem(props: NewItemProps) {
         data: JSON.stringify(formValues),
         headers: { 'Content-Type': 'application/json' },
       }).then((res) => {
-        console.log(res.data);
         if (res.data[0].category) {
           if (res.data[0].category === Category.CLASSROOM) {
             dispatch(setAdditionalClassItems(res.data));

@@ -78,8 +78,8 @@ export default function Footer() {
 
   function handleActiveTab(tab: string) {
     if (user.currentTab.toLowerCase() != tab.toLowerCase()) {
-      dispatch(setCurrentTab(tab));
-      router.push('/' + tab.toLowerCase());
+      if (tab == TabName.HOME) router.push('/');
+      else router.push('/' + tab.toLowerCase());
     }
   }
 }
