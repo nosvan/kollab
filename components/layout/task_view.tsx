@@ -49,9 +49,9 @@ export default function TaskView(props: TaskViewProps) {
             key={itemB.id}
             onClick={() => handleItemClick(itemB)}
             className={`text-xs rounded-md
-            text-center text-black mx-1 cursor-pointer ${itemTypeStyling(
-              itemB.item_type
-            )}`}
+            text-center text-black cursor-pointer ${
+              styles.mobilePadding
+            } ${itemTypeStyling(itemB.item_type)}`}
           >
             {itemB.name}
           </div>
@@ -75,21 +75,19 @@ export default function TaskView(props: TaskViewProps) {
               className={`pb-1 space-y-1 px-1 ${styles['day-container']}`}
             >
               <div
-                className={`flex flex-row justify-center items-center bg-stone-800 text-center text-sm rounded-lg ${
+                onClick={() => {
+                  props.setSelectedDate(day);
+                  setCreateNewItemMode(true);
+                }}
+                className={`flex flex-row cursor-pointer justify-center items-center bg-stone-800 hover:bg-stone-700 text-center text-sm rounded-lg ${
                   currentDateString == day.toDateString() ? 'underline' : ''
-                }`}
+                } ${styles.mobilePadding}`}
               >
                 <div>
                   {dateToDayName(day)} {dateToMonthName(day)} {day.getDate()}
                 </div>
                 <div>
-                  <TbPlus
-                    onClick={() => {
-                      props.setSelectedDate(day);
-                      setCreateNewItemMode(true);
-                    }}
-                    className="hover:bg-stone-700 cursor-pointer rounded-xl"
-                  ></TbPlus>
+                  <TbPlus className="hover:bg-stone-700 cursor-pointer rounded-xl"></TbPlus>
                 </div>
               </div>
               {props.items.length > 0 && ItemsView(day, props.items)}

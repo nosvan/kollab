@@ -8,16 +8,28 @@
   .day-container {
     width: 33.33%;
   }
+  .mobilePadding {
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
 }
 
 @media only screen and (max-width: 600px) {
   .day-container {
     width: 50%;
   }
+  .mobilePadding {
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
 }
 
 @media only screen and (max-width: 400px) {
   .day-container {
     width: 100%;
+  }
+  .mobilePadding {
+    padding-top: 3px;
+    padding-bottom: 3px;
   }
 }

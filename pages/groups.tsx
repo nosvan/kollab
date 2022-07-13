@@ -92,7 +92,7 @@ export default function Groups({ user }: { user: UserSafe }) {
                 onChange={handleDropdownSelect}
                 name="groups"
                 id="groups-select"
-                className="flex flex-col rounded-lg items-center text-white bg-stone-800 hover:bg-stone-700 cursor-pointer p-1 text-sm mx-1"
+                className="flex flex-col rounded-lg items-center text-white bg-stone-800 hover:bg-stone-700 cursor-pointer p-1 text-sm m-1"
               >
                 {groupState.groups.map((group: GroupSafe) => (
                   <option key={group.id} value={group.id}>
