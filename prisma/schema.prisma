@@ -63,6 +63,8 @@ model item {
   category_id         Int?
   item_type           ItemType
   due_date            DateTime?
+  start_time          String?
+  end_time            String?
   permission_level    VisibilityLevel @default(public)
   created_by_id       Int
   last_modified_by_id Int
@@ -83,6 +85,7 @@ enum ItemType {
   project
   reminder
   meeting
+  test
   other
 }
 

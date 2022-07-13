@@ -9,6 +9,7 @@ export enum ItemType {
   PROJECT = 'PROJECT',
   REMINDER = 'REMINDER',
   MEETING = 'MEETING',
+  TEST = 'TEST',
   OTHER = 'OTHER',
 }
 
@@ -31,6 +32,8 @@ export type Item = {
   category_id: number
   item_type: ItemType
   due_date?: Date
+  start_time?: string
+  end_time?: string
   permission_level: VisibilityLevel
   created_by_id: number
   last_modified_by_id: number
@@ -45,6 +48,8 @@ export type CreateItem = {
   category_id?: number
   item_type: ItemType
   due_date?: Date
+  start_time?: string
+  end_time?: string
   permission_level: VisibilityLevel
   last_modified_by_id?: number
   date: Date
@@ -58,5 +63,7 @@ export type ItemSafe = {
   category_id?: number
   item_type: ItemType
   due_date?: Date
+  start_time?: string
+  end_time?: string
   date?: Date
 }
