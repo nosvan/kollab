@@ -71,15 +71,14 @@ export default function Register(props: RegisterProps) {
             <div className="flex flex-row py-5 text-center space-x-1">
               <div
                 onClick={() => props.setSelection('')}
-                className="basis-2/5 bg-stone-800 border-2 border-white 
-                            hover:bg-stone-700 text-white rounded-xl px-1 cursor-pointer"
+                className="basis-2/5 bg-stone-800 border-2 border-white
+                hover:bg-stone-700 text-white rounded-xl px-1 cursor-pointer"
               >
                 <span>{'back'}</span>
               </div>
               <button
                 type="submit"
-                className="basis-3/5 bg-blue-700 hover:bg-blue-600 
-                            w-full rounded-xl text-white"
+                className="basis-3/5 bg-blue-700 hover:bg-blue-600 w-full rounded-xl text-white"
               >
                 Create Account
               </button>
