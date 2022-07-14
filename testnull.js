@@ -1,11 +1,40 @@
-const namee = '';
-if (namee) {
-  console.log('namee is not null');
-} else {
-  console.log('namee is null');
+const date = new Date();
+function dateToUTCDate(date) {
+  return new Date(
+    Date.UTC(
+      date.getUTCFullYear(),
+      date.getUTCMonth(),
+      date.getUTCDate(),
+      date.getUTCHours(),
+      date.getUTCMinutes(),
+      date.getUTCSeconds(),
+      date.getUTCMilliseconds()
+    )
+  );
 }
 
-if (namee === null) {
-  console.log('namee 2 is null');
+function dateToUTC(date) {
+  return Date.UTC(
+    date.getUTCFullYear(),
+    date.getUTCMonth(),
+    date.getUTCDate(),
+    date.getUTCHours(),
+    date.getUTCMinutes(),
+    date.getUTCSeconds(),
+    date.getUTCMilliseconds()
+  );
 }
-console.log(new Date('2022-07-12T20:02:45.504Z').toLocaleDateString());
+const dd = Date.UTC(
+  date.getUTCFullYear(),
+  date.getUTCMonth(),
+  date.getUTCDate(),
+  date.getUTCHours(),
+  date.getUTCMinutes(),
+  date.getUTCSeconds(),
+  date.getUTCMilliseconds()
+);
+console.log(date);
+console.log(dd);
+console.log(date.toISOString());
+console.log(dateToUTCDate(date));
+console.log(dateToUTC(date));

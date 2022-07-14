@@ -19,7 +19,6 @@ import { UserSliceState } from 'lib/types/user';
 import styles from './create_item.module.css';
 import * as Yup from 'yup';
 import { setErrorTruthy } from 'utils/formValidateUtils';
-import { dateToYYYYMMDD } from 'utils/dateUtils';
 
 interface NewItemProps {
   selectedDate?: Date;
@@ -62,30 +61,26 @@ export default function NewItem(props: NewItemProps) {
 
   const yupValidationSchema = Yup.object({
     name: Yup.string().required(),
-    category: Yup.mixed<Category>()
-      .oneOf(Object.values(Category))
-      .default(undefined),
-    category_id: formValues.category
-      ? Yup.number().required()
-      : Yup.number().default(undefined),
+    category: Yup.mixed<Category>().oneOf(Object.values(Category)),
+    category_id: formValues.category ? Yup.number().required() : Yup.number(),
     item_type: Yup.mixed<ItemType>()
       .oneOf(Object.values(ItemType))
       .default(ItemType.ASSIGNMENT),
     permission_level: Yup.mixed<VisibilityLevel>()
       .oneOf(Object.values(VisibilityLevel))
       .default(VisibilityLevel.PUBLIC),
-    description: Yup.string().default(undefined),
-    due_date: Yup.date().default(undefined),
+    description: Yup.string(),
+    due_date: Yup.date(),
     start_time:
       formValues.item_type === ItemType.MEETING
         ? Yup.string().required()
-        : Yup.string().default(undefined),
+        : Yup.string(),
     end_time:
       formValues.item_type === ItemType.MEETING
         ? Yup.string().required()
-        : Yup.string().default(undefined),
-    last_modified_by_id: Yup.number().default(userState.user.id),
-    date: Yup.date().required().default(currentDate),
+        : Yup.string(),
+    last_modified_by_id: Yup.number(),
+    date: Yup.date().required(),
   });
 
   const [yupValidationError, setValidationError] = useState({
@@ -196,6 +191,7 @@ export default function NewItem(props: NewItemProps) {
               <input
                 className="text-white bg-stone-800 p-1 rounded-lg"
                 type="date"
+                placeholder="YYYY-MM-DD"
                 onFocus={() =>
                   setValidationError({
                     ...yupValidationError,
@@ -209,7 +205,6 @@ export default function NewItem(props: NewItemProps) {
                       ? new Date(event.target.value)
                       : undefined,
                   });
-                  console.log(event);
                 }}
               />
             </span>
@@ -273,7 +268,6 @@ export default function NewItem(props: NewItemProps) {
               <input
                 className="text-white bg-stone-800 p-1 rounded-lg"
                 type="date"
-                value={dateToYYYYMMDD(formValues.date)}
                 onFocus={() =>
                   setValidationError({
                     ...yupValidationError,
@@ -289,6 +283,11 @@ export default function NewItem(props: NewItemProps) {
                   })
                 }
               />
+              {yupValidationError.date && (
+                <span className={`${styles['field-error-styling']}`}>
+                  required
+                </span>
+              )}
             </span>
           </div>
           <div className="flex flex-row py-5 justify-start text-center text-sm space-x-2">
@@ -326,6 +325,7 @@ export default function NewItem(props: NewItemProps) {
     const yupValidateResult = await yupValidationSchema
       .validate(formValues, { abortEarly: false })
       .catch((err) => {
+        console.log(err.errors);
         setErrorTruthy(err.inner, yupValidationError);
         setValidationError({ ...yupValidationError });
       });

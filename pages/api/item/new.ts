@@ -12,7 +12,6 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
   if(req.method === 'POST'){
     try {
       const reqBody: CreateItem = req.body;
-      console.log(reqBody)
       const result = await prisma.item.create({
         data: {
           name: reqBody.name,
@@ -23,7 +22,7 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
           due_date: reqBody.due_date ? reqBody.due_date : null,
           created_by_id: req.session.userSession.id,
           last_modified_by_id: req.session.userSession.id,
-          date: new Date(reqBody.date)
+          date: reqBody.date
         }})
       const resultSafe: ItemSafe[] = [{
         id: result.id,
