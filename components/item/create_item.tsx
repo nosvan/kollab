@@ -19,7 +19,7 @@ import { UserSliceState } from 'lib/types/user';
 import styles from './create_item.module.css';
 import * as Yup from 'yup';
 import { setErrorTruthy } from 'utils/formValidateUtils';
-import { dateToDDMMYYYY, dateToYYYYMMDD } from 'utils/dateUtils';
+import { dateToYYYYMMDD } from 'utils/dateUtils';
 
 interface NewItemProps {
   selectedDate?: Date;
