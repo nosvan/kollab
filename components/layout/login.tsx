@@ -18,24 +18,27 @@ export default function Login(props: LoginProps) {
     config: { duration: 250 },
   });
   return (
-    <animated.div style={modalSpring} className="flex flex-col">
+    <animated.div
+      style={modalSpring}
+      className="flex flex-col bg-stone-900 rounded-xl"
+    >
       <div className="text-white text-center text-2xl mb-5">
         Log in to <span className="text-blue-700">kollab</span>
       </div>
       <div className="px-1">
         <form onSubmit={handleLogin}>
           <div className="flex flex-col">
-            <label className="text-white">email</label>
+            <label className="text-white px-1">email</label>
             <input
-              className="text-black rounded-xl px-2"
+              className="bg-stone-800 text-white rounded-xl px-2"
               type="text"
               required
               id="email"
               name="email"
             />
-            <label className="text-white">password</label>
+            <label className="text-white px-1">password</label>
             <input
-              className="text-black rounded-xl px-2"
+              className="bg-stone-800 text-white rounded-xl px-2"
               type="password"
               required
               id="password"
@@ -44,8 +47,8 @@ export default function Login(props: LoginProps) {
             <div className="flex flex-row py-5 text-center space-x-1">
               <div
                 onClick={() => props.setSelection('')}
-                className="basis-2/5 bg-black border-2 border-white 
-              hover:bg-gray-800 text-white rounded-xl px-1 cursor-pointer"
+                className="basis-2/5 bg-stone-800 border-2 border-white 
+              hover:bg-stone-700 text-white rounded-xl px-1 cursor-pointer"
               >
                 <span>{'back'}</span>
               </div>

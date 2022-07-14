@@ -57,6 +57,7 @@ export type UserState = {
   currentTab: string;
 }
 
-export type AccountPasswordReset = {
+export type UserReset = {
   email: string;
+  locationOrigin: string;
 }

@@ -14,26 +14,34 @@ import SideBar from './sidebar';
 import Header from './header';
 import Footer from './footer';
 import AccountReset from './account_reset';
+import { animated, useSpring } from '@react-spring/web';
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const userState = useSelector((state: RootState) => state.user_store);
   const [selection, setSelection] = useState('');
   const [createNewTypeMode, setCreateNewTypeMode] = useState(false);
-
+  const layoutSpring = useSpring({
+    from: { opacity: 0 },
+    to: { opacity: 1 },
+    config: { duration: 250 },
+  });
   return (
     <div>
       {!userState.user.isLoggedIn && (
         <div className="flex justify-center items-center h-screen">
           <div
-            className="px-5 pb-2 basis-3/5 md:basis-2/5 lg:basis-1/5 
+            className="p-2 basis-3/5 md:basis-2/5 lg:basis-1/5 
           bg-black shadow-xl shadow-black rounded-3xl"
           >
             <div>
-              <div className="flex flex-col items-center mt-10 space-y-3 text-blue-700">
+              <div className="flex flex-col items-center my-5 space-y-3 text-blue-700">
                 <FaStackExchange size={100}></FaStackExchange>
               </div>
               {selection === '' && (
-                <>
+                <animated.div
+                  style={layoutSpring}
+                  className="bg-black rounded-xl px-1 pb-2"
+                >
                   <div className="text-blue-700 text-3xl text-center mb-5">
                     kollab
                   </div>
@@ -66,7 +74,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   >
                     <div className="text-white">Sign up with Email</div>
                   </div>
-                  <div className="py-1 my-2 text-sm text-white mt-5">
+                  <div className="py-1 my-2 text-sm text-white mt-2">
                     Already have an account?
                   </div>
                   <div
@@ -85,7 +93,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                       login with email
                     </span>
                   </div>
-                </>
+                </animated.div>
               )}
               {selection === 'login' && (
                 <Login setSelection={setSelection}></Login>

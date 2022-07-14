@@ -18,48 +18,51 @@ export default function Register(props: RegisterProps) {
     config: { duration: 250 },
   });
   return (
-    <animated.div style={modalSpring} className="flex flex-col">
+    <animated.div
+      style={modalSpring}
+      className="flex flex-col bg-stone-900 rounded-xl pt-4"
+    >
       <div className="text-white text-center text-2xl mb-5">
         Create a <span className="text-blue-700">kollab</span> account
       </div>
       <div className="px-1">
         <form onSubmit={handleRegisterFormSubmit}>
           <div className="flex flex-col">
-            <label className="text-white">first name</label>
+            <label className="text-white px-1">first name</label>
             <input
-              className="text-black rounded-xl px-2"
+              className="bg-stone-800 text-white rounded-xl px-2"
               type="text"
               required
               id="first_name"
               name="first_name"
             />
-            <label className="text-white">last name</label>
+            <label className="text-white px-1">last name</label>
             <input
-              className="text-black rounded-xl px-2"
+              className="bg-stone-800 text-white rounded-xl px-2"
               type="text"
               required
               id="last_name"
               name="last_name"
             />
-            <label className="text-white">email</label>
+            <label className="text-white px-1">email</label>
             <input
-              className="text-black rounded-xl px-2"
+              className="bg-stone-800 text-white rounded-xl px-2"
               type="text"
               required
               id="email"
               name="email"
             />
-            <label className="text-white">password</label>
+            <label className="text-white px-1">password</label>
             <input
-              className="text-black rounded-xl px-2"
+              className="bg-stone-800 text-white rounded-xl px-2"
               type="password"
               required
               id="password"
               name="password"
             />
-            <label className="text-white">confirm password</label>
+            <label className="text-white px-1">confirm password</label>
             <input
-              className="text-black rounded-xl px-2"
+              className="bg-stone-800 text-white rounded-xl px-2"
               type="password"
               required
               id="confirm_password"
@@ -68,8 +71,8 @@ export default function Register(props: RegisterProps) {
             <div className="flex flex-row py-5 text-center space-x-1">
               <div
                 onClick={() => props.setSelection('')}
-                className="basis-2/5 bg-black border-2 border-white 
-                            hover:bg-gray-800 text-white rounded-xl px-1 cursor-pointer"
+                className="basis-2/5 bg-stone-800 border-2 border-white 
+                            hover:bg-stone-700 text-white rounded-xl px-1 cursor-pointer"
               >
                 <span>{'back'}</span>
               </div>

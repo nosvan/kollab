@@ -127,7 +127,7 @@ export default function NewItem(props: NewItemProps) {
             </select>
           </div>
           <div className="flex flex-col space-y-1">
-            <label className="text-white px-1">Control Visibility</label>
+            <label className="text-white px-1">control visibility</label>
             <div className="flex flex-row space-x-1">
               <ToggleSwitch
                 isChecked={visibilityControlCheck}
@@ -190,28 +190,37 @@ export default function NewItem(props: NewItemProps) {
               }
             />
           </div>
-          <div>
-            <label className="text-white px-1">Due Date</label>
-            <DatePicker
-              className="text-white bg-stone-800 p-1 rounded-lg"
-              selected={formValues.due_date}
-              onChange={(event) => {
-                setFormValues({
-                  ...formValues,
-                  due_date: event ? event : undefined,
-                });
-              }}
-            />
+          <div className="flex flex-col">
+            <label className="text-white px-1">due date</label>
+            <span>
+              <input
+                className="text-white bg-stone-800 p-1 rounded-lg"
+                type="date"
+                onFocus={() =>
+                  setValidationError({
+                    ...yupValidationError,
+                    due_date: false,
+                  })
+                }
+                onChange={(event) =>
+                  setFormValues({
+                    ...formValues,
+                    due_date: event.target.value
+                      ? new Date(event.target.value)
+                      : undefined,
+                  })
+                }
+              />
+            </span>
           </div>
           {formValues.item_type == ItemType.MEETING && (
             <div className="flex flex-col">
-              <label className="text-white px-1">Time</label>
+              <label className="text-white px-1">time</label>
               <span className="flex space-x-1">
                 <span className="flex flex-col">
                   <input
                     className="text-white bg-stone-800 p-1 rounded-lg"
                     type="time"
-                    value={formValues.start_time}
                     onFocus={() =>
                       setValidationError({
                         ...yupValidationError,
@@ -221,7 +230,7 @@ export default function NewItem(props: NewItemProps) {
                     onChange={(event) =>
                       setFormValues({
                         ...formValues,
-                        start_time: event.target.value,
+                        start_time: event.target.value ?? undefined,
                       })
                     }
                   />
@@ -244,7 +253,7 @@ export default function NewItem(props: NewItemProps) {
                     onChange={(event) =>
                       setFormValues({
                         ...formValues,
-                        end_time: event.target.value,
+                        end_time: event.target.value ?? undefined,
                       })
                     }
                   />
@@ -258,7 +267,7 @@ export default function NewItem(props: NewItemProps) {
             </div>
           )}
           <div>
-            <label className="text-white px-1">For Date</label>
+            <label className="text-white px-1">for date</label>
             <DatePicker
               className="text-white bg-stone-800 p-1 rounded-lg"
               // selected={datePickerValue}
