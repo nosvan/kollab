@@ -6,6 +6,10 @@ export function dateToDayName(date: Date): string {
   return date.toLocaleString('default', { weekday: 'short' });
 }
 
+export function dateToYYYYMMDD(date: Date): string {
+  return date.toLocaleDateString('en-CA');
+}
+
 export function getDays(days: number, selectedDate: Date) {
   const daysArray: Date[] = [];
   if (days == 1) {

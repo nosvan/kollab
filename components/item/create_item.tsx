@@ -12,7 +12,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setAdditionalClassItems } from 'state/redux/classSlice';
 import { setAdditionalGroupItems } from 'state/redux/groupSlice';
 import { RootState } from 'state/redux/store';
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { setAdditionalOwnItems } from 'state/redux/ownSlice';
 import ToggleSwitch from 'components/layout/ui_components/toggle_switch';
@@ -20,6 +19,7 @@ import { UserSliceState } from 'lib/types/user';
 import styles from './create_item.module.css';
 import * as Yup from 'yup';
 import { setErrorTruthy } from 'utils/formValidateUtils';
+import { dateToDDMMYYYY, dateToYYYYMMDD } from 'utils/dateUtils';
 
 interface NewItemProps {
   selectedDate?: Date;
@@ -42,7 +42,7 @@ export default function NewItem(props: NewItemProps) {
 
   const dispatch = useDispatch();
   const [visibilityControlCheck, setVisibilityControlCheck] = useState(false);
-  const currentDate = props.selectedDate || new Date();
+  const currentDate = props.selectedDate ? props.selectedDate : new Date();
 
   const initialFormState = {
     name: '',
@@ -202,14 +202,15 @@ export default function NewItem(props: NewItemProps) {
                     due_date: false,
                   })
                 }
-                onChange={(event) =>
+                onChange={(event) => {
                   setFormValues({
                     ...formValues,
                     due_date: event.target.value
                       ? new Date(event.target.value)
                       : undefined,
-                  })
-                }
+                  });
+                  console.log(event);
+                }}
               />
             </span>
           </div>
@@ -266,19 +267,29 @@ export default function NewItem(props: NewItemProps) {
               </span>
             </div>
           )}
-          <div>
+          <div className="flex flex-col">
             <label className="text-white px-1">for date</label>
-            <DatePicker
-              className="text-white bg-stone-800 p-1 rounded-lg"
-              // selected={datePickerValue}
-              selected={formValues.date}
-              onChange={(event) => {
-                setFormValues({
-                  ...formValues,
-                  date: event ? event : new Date(),
-                });
-              }}
-            />
+            <span>
+              <input
+                className="text-white bg-stone-800 p-1 rounded-lg"
+                type="date"
+                value={dateToYYYYMMDD(formValues.date)}
+                onFocus={() =>
+                  setValidationError({
+                    ...yupValidationError,
+                    date: false,
+                  })
+                }
+                onChange={(event) =>
+                  setFormValues({
+                    ...formValues,
+                    date: event.target.value
+                      ? new Date(event.target.value)
+                      : currentDate,
+                  })
+                }
+              />
+            </span>
           </div>
           <div className="flex flex-row py-5 justify-start text-center text-sm space-x-2">
             <div
