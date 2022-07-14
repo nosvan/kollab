@@ -30,15 +30,16 @@ export function getDays(days: number, selectedDate: Date) {
     return daysArray;
     // monthly
   } else {
+    const dayInMonth = selectedDate.getDate();
     const daysInMonth = getDaysInMonth(selectedDate);
-    const dayOfWeekOfFirstDay = getDayOfWeekForFirstDayOfMonth(selectedDate)
-    const dayOfWeekOfLastDay = getDayOfWeekForLastDayOfMonth(selectedDate)
-    const daysToHaveOnView = dayOfWeekOfFirstDay + daysInMonth + (7 - (dayOfWeekOfLastDay + 1))
-    const dayInMonthOffsetToDaysInMonthCalendar = selectedDate.getDate() + (dayOfWeekOfFirstDay - 1);
+    const dayOfWeekOfFirstDayOfMonth = getDayOfWeekForFirstDayOfMonth(selectedDate)
+    const dayOfWeekOfLastDayOfMonth = getDayOfWeekForLastDayOfMonth(selectedDate)
+    const daysToHaveOnView = (dayOfWeekOfFirstDayOfMonth-1) + daysInMonth + (7 - (dayOfWeekOfLastDayOfMonth))
+    const dayInMonthOffsetToDaysToHaveOnView = dayInMonth + (dayOfWeekOfFirstDayOfMonth-2);
     const selectedDateTime = selectedDate.getTime();
     for (let i = 0; i < daysToHaveOnView; i++) {
         daysArray[i] = new Date(
-          selectedDateTime + (i - dayInMonthOffsetToDaysInMonthCalendar) * 24 * 60 * 60 * 1000
+          selectedDateTime + (i - dayInMonthOffsetToDaysToHaveOnView) * 24 * 60 * 60 * 1000
         );
     }
     return daysArray;
@@ -50,7 +51,7 @@ export function getDayOfWeekForFirstDayOfMonth(date: Date): number {
     date.getFullYear(),
     date.getMonth(),
     1
-  ).getDay()
+  ).getDay()+1
 }
 
 export function getDayOfWeekForLastDayOfMonth(date: Date): number {
@@ -58,7 +59,7 @@ export function getDayOfWeekForLastDayOfMonth(date: Date): number {
     date.getFullYear(),
     date.getMonth(),
     getDaysInMonth(date)
-  ).getDay();
+  ).getDay()+1
 }
 
 export function getDaysInNextMonth(date: Date): number {

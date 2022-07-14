@@ -41,7 +41,12 @@ export default function NewItem(props: NewItemProps) {
 
   const dispatch = useDispatch();
   const [visibilityControlCheck, setVisibilityControlCheck] = useState(false);
-  const currentDate = props.selectedDate ? props.selectedDate : new Date();
+  const [currentDate] = useState(
+    props.selectedDate ? props.selectedDate : new Date()
+  );
+  const [currentDateFormatted] = useState(
+    currentDate.toISOString().split('T')[0]
+  );
 
   const initialFormState = {
     name: '',
@@ -268,6 +273,7 @@ export default function NewItem(props: NewItemProps) {
               <input
                 className="text-white bg-stone-800 p-1 rounded-lg"
                 type="date"
+                defaultValue={currentDateFormatted}
                 onFocus={() =>
                   setValidationError({
                     ...yupValidationError,
@@ -325,7 +331,6 @@ export default function NewItem(props: NewItemProps) {
     const yupValidateResult = await yupValidationSchema
       .validate(formValues, { abortEarly: false })
       .catch((err) => {
-        console.log(err.errors);
         setErrorTruthy(err.inner, yupValidationError);
         setValidationError({ ...yupValidationError });
       });

@@ -2,6 +2,10 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
+  "/groups": "pages/groups.js",
   "/own": "pages/own.js",
-  "/api/item/own/item": "pages/api/item/own/item.js"
+  "/api/group/group": "pages/api/group/group.js",
+  "/api/item/own/item": "pages/api/item/own/item.js",
+  "/": "pages/index.js",
+  "/api/item/item": "pages/api/item/item.js"
 }

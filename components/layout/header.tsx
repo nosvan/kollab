@@ -1,3 +1,4 @@
+import { animated, useSpring } from '@react-spring/web';
 import axios from 'axios';
 import { ApiRoutes } from 'lib/api/api_routes';
 import { TabName } from 'lib/types/ui';
@@ -18,8 +19,15 @@ export default function Header(props: HeaderProps) {
   const dispatch = useDispatch();
   const router = useRouter();
 
+  const headerTitleSpring = useSpring({
+    from: { opacity: 0 },
+    to: { opacity: 1 },
+    config: { duration: 250 },
+  });
+
   return (
-    <div
+    <animated.div
+      style={headerTitleSpring}
       className="flex items-center flex-wrap justify-between p-5 mt-5  bg-black rounded-3xl
   text-white text-2xl font-bold"
     >
@@ -69,7 +77,7 @@ export default function Header(props: HeaderProps) {
           </>
         )}
       </div>
-    </div>
+    </animated.div>
   );
 
   async function handleLogout() {

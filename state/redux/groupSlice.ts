@@ -8,7 +8,7 @@ const initialState: GroupSliceState = {
     name: '',
     description: '',
     owner_id: -999,
-    created_at: undefined
+    created_at: new Date()
   },
   groups: [],
   item: {
@@ -18,7 +18,7 @@ const initialState: GroupSliceState = {
     category_id: -999,
     item_type: ItemType.OTHER,
     due_date: undefined,
-    date: undefined
+    date: new Date(),
   },
   items: [],
   viewGroupItemMode: false,

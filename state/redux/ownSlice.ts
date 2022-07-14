@@ -11,7 +11,7 @@ const initialState: OwnSliceState = {
     category_id: undefined,
     item_type: ItemType.OTHER,
     due_date: undefined,
-    date: undefined
+    date: new Date(),
   },
   items: [],
   viewOwnItemMode: false,

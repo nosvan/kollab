@@ -65,5 +65,5 @@ export type ItemSafe = {
   due_date?: Date
   start_time?: string
   end_time?: string
-  date?: Date
+  date: Date
 }
