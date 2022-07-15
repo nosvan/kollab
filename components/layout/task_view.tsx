@@ -3,6 +3,7 @@ import {
   dateStringToNormalizedDateString,
   dateToDayName,
   dateToMonthName,
+  dateToYYYYMMDD,
 } from 'utils/dateUtils';
 import styles from './task_view.module.css';
 import { TbPlus } from 'react-icons/tb';
@@ -33,11 +34,7 @@ export default function TaskView(props: TaskViewProps) {
   const ItemsView = (day: Date, items: ItemSafe[]) => {
     return items
       .filter((itemA) => {
-        if (
-          itemA.date &&
-          dateStringToNormalizedDateString(itemA.date.toString()) ==
-            day.toDateString()
-        ) {
+        if (itemA.date && itemA.date == dateToYYYYMMDD(day)) {
           return true;
         } else {
           return false;

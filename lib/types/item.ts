@@ -32,12 +32,12 @@ export type Item = {
   category_id: number
   item_type: ItemType
   due_date?: Date
-  start_time?: string
-  end_time?: string
+  start_time?: Date
+  end_time?: Date
   permission_level: VisibilityLevel
   created_by_id: number
   last_modified_by_id: number
-  date: Date
+  date?: string
   created_at: Date
 }
 
@@ -48,11 +48,11 @@ export type CreateItem = {
   category_id?: number
   item_type: ItemType
   due_date?: Date
-  start_time?: string
-  end_time?: string
+  start_time?: Date
+  end_time?: Date
   permission_level: VisibilityLevel
-  last_modified_by_id?: number
-  date: Date
+  last_modified_by_id: number
+  date?: string
 }
 
 export type ItemSafe = {
@@ -63,7 +63,10 @@ export type ItemSafe = {
   category_id?: number
   item_type: ItemType
   due_date?: Date
-  start_time?: string
-  end_time?: string
-  date: Date
+  start_time?: Date
+  end_time?: Date
+  permission_level: VisibilityLevel
+  created_by_id: number
+  last_modified_by_id: number,
+  date?: string
 }

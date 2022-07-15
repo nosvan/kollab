@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Category, ItemType } from 'lib/types/item';
+import { ItemType, VisibilityLevel } from 'lib/types/item';
 import { OwnSliceState } from 'lib/types/own';
 
 const initialState: OwnSliceState = {
@@ -11,7 +11,12 @@ const initialState: OwnSliceState = {
     category_id: undefined,
     item_type: ItemType.OTHER,
     due_date: undefined,
-    date: new Date(),
+    start_time: undefined,
+    end_time: undefined,
+    permission_level: VisibilityLevel.PUBLIC,
+    date: undefined,
+    created_by_id: -999,
+    last_modified_by_id: -999,
   },
   items: [],
   viewOwnItemMode: false,

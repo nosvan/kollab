@@ -2,7 +2,7 @@ import { withIronSessionApiRoute } from 'iron-session/next';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { sessionOptions } from 'lib/iron_session';
 import prisma from 'lib/prisma';
-import { Category, CreateItem, ItemSafe, ItemType } from 'lib/types/item';
+import { Category, CreateItem, ItemSafe, ItemType, VisibilityLevel } from 'lib/types/item';
 import { Category as PrismaCategory} from '@prisma/client';
 
 export default withIronSessionApiRoute(handle, sessionOptions)
@@ -19,6 +19,11 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
           category_id: true,
           item_type: true,
           due_date: true,
+          start_time: true,
+          end_time: true,
+          permission_level: true,
+          last_modified_by_id: true,
+          created_by_id: true,
           date: true,
         },
         where: {
@@ -39,7 +44,12 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
           category_id: row.category_id ? row.category_id : undefined,
           item_type: ItemType[row.item_type.toUpperCase() as keyof typeof ItemType],
           due_date: row.due_date ? row.due_date : undefined,
-          date: row.date
+          start_time: row.start_time ? row.start_time : undefined,
+          end_time: row.end_time ? row.end_time : undefined,
+          permission_level: VisibilityLevel[row.permission_level.toUpperCase() as keyof typeof VisibilityLevel],
+          last_modified_by_id: row.last_modified_by_id,
+          created_by_id: row.created_by_id,
+          date: row.date ? row.date : undefined,
         }
         resultSafe.push(itemRow)
       })

@@ -40,8 +40,6 @@ export default function NewItem(props: NewItemProps) {
     (state: RootState) => state.user_store
   );
 
-  console.log('selected date:', props.selectedDate);
-
   const dispatch = useDispatch();
   const [visibilityControlCheck, setVisibilityControlCheck] = useState(false);
   const [currentDate] = useState(
@@ -55,13 +53,13 @@ export default function NewItem(props: NewItemProps) {
     category: props.itemCategory ? props.itemCategory : undefined,
     category_id: props.itemCategory ? getCategoryId() : undefined,
     item_type: ItemType.NOTE,
-    permission_level: VisibilityLevel.PUBLIC,
     description: undefined,
     due_date: undefined,
     start_time: undefined,
     end_time: undefined,
     last_modified_by_id: userState.user.id,
-    date: currentDate,
+    permission_level: VisibilityLevel.PUBLIC,
+    date: currentDateFormattedYYYYMMDD,
   };
 
   const [formValues, setFormValues] = useState<CreateItem>(initialFormState);
@@ -87,7 +85,7 @@ export default function NewItem(props: NewItemProps) {
         ? Yup.string().required()
         : Yup.string(),
     last_modified_by_id: Yup.number(),
-    date: Yup.date().required(),
+    date: Yup.string().required(),
   });
 
   const [yupValidationError, setValidationError] = useState({
@@ -233,7 +231,7 @@ export default function NewItem(props: NewItemProps) {
                     onChange={(event) =>
                       setFormValues({
                         ...formValues,
-                        start_time: event.target.value ?? undefined,
+                        start_time: event.target.valueAsDate ?? undefined,
                       })
                     }
                   />
@@ -256,7 +254,7 @@ export default function NewItem(props: NewItemProps) {
                     onChange={(event) =>
                       setFormValues({
                         ...formValues,
-                        end_time: event.target.value ?? undefined,
+                        end_time: event.target.valueAsDate ?? undefined,
                       })
                     }
                   />
@@ -285,12 +283,10 @@ export default function NewItem(props: NewItemProps) {
                 onChange={(event) => {
                   setFormValues({
                     ...formValues,
-                    date: event.target.valueAsDate
-                      ? event.target.valueAsDate
-                      : currentDate,
+                    date: event.target.value ? event.target.value : undefined,
                   });
-                  console.log('formValues:', formValues.date);
-                  console.log('form event:', event.target.value);
+                  console.log('value:', event.target.value);
+                  console.log('value as date:', event.target.valueAsDate);
                 }}
               />
               {yupValidationError.date && (
@@ -332,13 +328,17 @@ export default function NewItem(props: NewItemProps) {
     event: React.FormEvent<HTMLFormElement>
   ) {
     event.preventDefault();
+    console.log('handleCreateItemFormSubmit:', formValues);
     const yupValidateResult = await yupValidationSchema
       .validate(formValues, { abortEarly: false })
       .catch((err) => {
+        console.log('yupValidateResult:', err);
         setErrorTruthy(err.inner, yupValidationError);
         setValidationError({ ...yupValidationError });
       });
+    console.log('after yupValidateResult:', yupValidateResult);
     if (JSON.stringify(yupValidateResult) === JSON.stringify(formValues)) {
+      // console.log('item valid');
       await callCreateNewItemApi(formValues);
     }
   }

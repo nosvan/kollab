@@ -63,12 +63,12 @@ model item {
   category_id         Int?
   item_type           ItemType
   due_date            DateTime?
-  start_time          String?
-  end_time            String?
+  start_time          DateTime?
+  end_time            DateTime?
   permission_level    VisibilityLevel @default(public)
   created_by_id       Int
   last_modified_by_id Int
-  date                DateTime @default(now())
+  date                String?
   created_at          DateTime @default(now())
 }
 

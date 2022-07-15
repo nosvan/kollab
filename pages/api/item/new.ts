@@ -2,8 +2,8 @@ import { withIronSessionApiRoute } from 'iron-session/next';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { sessionOptions } from 'lib/iron_session';
 import prisma from 'lib/prisma';
-import { Category, CreateItem, ItemSafe, ItemType } from 'lib/types/item';
-import { Category as PrismaCategory, ItemType as PrismaItemType } from '@prisma/client';
+import { Category, CreateItem, ItemSafe, ItemType, VisibilityLevel } from 'lib/types/item';
+import { Category as PrismaCategory, ItemType as PrismaItemType, VisibilityLevel as PrismaVisibilityLevel } from '@prisma/client';
 
 
 export default withIronSessionApiRoute(handle, sessionOptions)
@@ -20,9 +20,12 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
           category_id: reqBody.category_id,
           item_type: PrismaItemType[reqBody.item_type.toLowerCase() as keyof typeof PrismaItemType],
           due_date: reqBody.due_date ? reqBody.due_date : null,
+          start_time: reqBody.start_time ? reqBody.start_time : null,
+          end_time: reqBody.end_time ? reqBody.end_time : null,
+          permission_level: reqBody.permission_level ? PrismaVisibilityLevel[reqBody.permission_level.toLocaleLowerCase() as keyof typeof PrismaVisibilityLevel] : PrismaVisibilityLevel.public,
           created_by_id: req.session.userSession.id,
           last_modified_by_id: req.session.userSession.id,
-          date: reqBody.date
+          date: reqBody.date ? reqBody.date : null,
         }})
       const resultSafe: ItemSafe[] = [{
         id: result.id,
@@ -32,7 +35,12 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
         category_id: result.category_id ? result.category_id : undefined,
         item_type: ItemType[result.item_type.toUpperCase() as keyof typeof ItemType],
         due_date: result.due_date ? result.due_date : undefined,
-        date: result.date,
+        start_time: result.start_time ? result.start_time : undefined,
+        end_time: result.end_time ? result.end_time : undefined,
+        permission_level: VisibilityLevel[result.permission_level.toUpperCase() as keyof typeof VisibilityLevel],
+        last_modified_by_id: result.last_modified_by_id,
+        created_by_id: result.created_by_id,
+        date: result.date ? result.date : undefined,
       }]
       res.json(resultSafe)
     } catch (error) {
