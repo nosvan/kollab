@@ -9,7 +9,6 @@ export default withIronSessionApiRoute(handle, sessionOptions)
 
 async function handle(req: NextApiRequest,res: NextApiResponse){
   if(req.method === 'GET'){
-    console.log(req.query)
     try {
       const result = await prisma.item.findMany({
         select: {

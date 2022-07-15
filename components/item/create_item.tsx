@@ -19,6 +19,7 @@ import { UserSliceState } from 'lib/types/user';
 import styles from './create_item.module.css';
 import * as Yup from 'yup';
 import { setErrorTruthy } from 'utils/formValidateUtils';
+import { dateToYYYYMMDD } from 'utils/dateUtils';
 
 interface NewItemProps {
   selectedDate?: Date;
@@ -39,14 +40,16 @@ export default function NewItem(props: NewItemProps) {
     (state: RootState) => state.user_store
   );
 
+  console.log('selected date:', props.selectedDate);
+
   const dispatch = useDispatch();
   const [visibilityControlCheck, setVisibilityControlCheck] = useState(false);
   const [currentDate] = useState(
     props.selectedDate ? props.selectedDate : new Date()
   );
-  const [currentDateFormatted] = useState(
-    currentDate.toISOString().split('T')[0]
-  );
+  const [currentDateFormatted] = useState(dateToYYYYMMDD(currentDate));
+
+  console.log('current date formatted:', currentDateFormatted);
 
   const initialFormState = {
     name: '',
