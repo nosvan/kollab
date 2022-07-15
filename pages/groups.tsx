@@ -67,6 +67,7 @@ export default function Groups({ user }: { user: UserSafe }) {
   const [dayLayout, setDayLayout] = useState(7);
   const [days, setDays] = useState(() => getDays(dayLayout, selectedDate));
   const [viewItemMode, setViewItemMode] = useState(false);
+  console.log(days);
 
   useEffect(() => {
     setDays(getDays(dayLayout, selectedDate));

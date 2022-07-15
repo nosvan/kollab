@@ -282,14 +282,16 @@ export default function NewItem(props: NewItemProps) {
                     date: false,
                   })
                 }
-                onChange={(event) =>
+                onChange={(event) => {
                   setFormValues({
                     ...formValues,
-                    date: event.target.value
-                      ? new Date(event.target.value)
+                    date: event.target.valueAsDate
+                      ? event.target.valueAsDate
                       : currentDate,
-                  })
-                }
+                  });
+                  console.log('formValues:', formValues.date);
+                  console.log('form event:', event.target.value);
+                }}
               />
               {yupValidationError.date && (
                 <span className={`${styles['field-error-styling']}`}>
