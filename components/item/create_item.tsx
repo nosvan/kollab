@@ -47,9 +47,8 @@ export default function NewItem(props: NewItemProps) {
   const [currentDate] = useState(
     props.selectedDate ? props.selectedDate : new Date()
   );
-  const [currentDateFormatted] = useState(dateToYYYYMMDD(currentDate));
 
-  console.log('current date formatted:', currentDateFormatted);
+  const [currentDateFormattedYYYYMMDD] = useState(dateToYYYYMMDD(currentDate));
 
   const initialFormState = {
     name: '',
@@ -276,7 +275,7 @@ export default function NewItem(props: NewItemProps) {
               <input
                 className="text-white bg-stone-800 p-1 rounded-lg"
                 type="date"
-                defaultValue={currentDateFormatted}
+                defaultValue={currentDateFormattedYYYYMMDD}
                 onFocus={() =>
                   setValidationError({
                     ...yupValidationError,

@@ -7,7 +7,8 @@ export function dateToDayName(date: Date): string {
 }
 
 export function dateToYYYYMMDD(date: Date): string {
-  return date.toLocaleDateString('locale', { year: 'numeric', month: '2-digit', day: '2-digit' });
+  const dateInParts = date.toLocaleDateString('locale', { year: 'numeric', month: '2-digit', day: '2-digit' }).split('/');
+  return `${dateInParts[2]}-${dateInParts[0]}-${dateInParts[1]}`;
 }
 
 export function getDays(days: number, selectedDate: Date) {
