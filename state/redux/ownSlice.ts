@@ -9,7 +9,7 @@ const initialState: OwnSliceState = {
     description: '',
     category: undefined,
     category_id: undefined,
-    item_type: ItemType.OTHER,
+    item_type: ItemType.GENERAL,
     date_tz_sensitive: new Date(),
     date_tz_sensitive_end: new Date(),
     time_sensitive_flag: false,

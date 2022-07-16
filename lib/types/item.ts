@@ -35,6 +35,7 @@ export type Item = {
   date_tz_sensitive_end?: Date
   time_sensitive_flag: boolean
   date_tz_insensitive?: string
+  date_tz_insensitive_end?: string
   permission_level: VisibilityLevel
   created_by_id: number
   last_modified_by_id: number
@@ -51,6 +52,7 @@ export type CreateItem = {
   date_tz_sensitive_end?: Date
   time_sensitive_flag: boolean
   date_tz_insensitive?: string
+  date_tz_insensitive_end?: string
   permission_level: VisibilityLevel
 }
 
@@ -65,6 +67,7 @@ export type ItemSafe = {
   date_tz_sensitive_end?: Date
   time_sensitive_flag: boolean
   date_tz_insensitive?: string
+  date_tz_insensitive_end?: string
   permission_level: VisibilityLevel
   created_by_id: number
   last_modified_by_id: number,

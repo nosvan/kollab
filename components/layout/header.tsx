@@ -31,7 +31,7 @@ export default function Header(props: HeaderProps) {
       className="flex items-center flex-wrap justify-between p-5 mt-5  bg-black rounded-3xl
   text-white text-2xl font-bold"
     >
-      <div className="flex flex-row items-center space-x-1">
+      <div className="flex flex-row items-center space-x-1 pl-1">
         <div>{userState.user.currentTab}</div>
         {(userState.user.currentTab == TabName.CLASS ||
           userState.user.currentTab == TabName.GROUP) && (

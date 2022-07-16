@@ -7,7 +7,7 @@ import {
   CreateItem,
   ItemType,
 } from 'lib/types/item';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAdditionalClassItems } from 'state/redux/classSlice';
 import { setAdditionalGroupItems } from 'state/redux/groupSlice';
@@ -20,6 +20,7 @@ import styles from './create_item.module.css';
 import * as Yup from 'yup';
 import { setErrorTruthy } from 'utils/formValidateUtils';
 import { dateToYYYYMMDD } from 'utils/dateUtils';
+import { useSpring, animated } from '@react-spring/web';
 
 interface NewItemProps {
   selectedDate?: Date;
@@ -42,7 +43,8 @@ export default function NewItem(props: NewItemProps) {
 
   const dispatch = useDispatch();
   const [visibilityControlCheck, setVisibilityControlCheck] = useState(false);
-  const [timeControlChecked, setTimeControlChecked] = useState(false);
+  const [timeControlChecked, setTimeControlChecked] = useState(true);
+  const [dateRangeControlChecked, setDateRangeControlChecked] = useState(false);
   const [currentDate] = useState(
     props.selectedDate ? props.selectedDate : new Date()
   );
@@ -57,13 +59,19 @@ export default function NewItem(props: NewItemProps) {
     item_type: ItemType.NOTE,
     date_tz_sensitive: undefined,
     date_tz_sensitive_end: undefined,
-    time_sensitive_flag: false,
-    date_tz_insensitive: undefined,
+    time_sensitive_flag: timeControlChecked,
+    date_tz_insensitive: currentDateFormattedYYYYMMDD,
+    date_tz_insensitive_end: currentDateFormattedYYYYMMDD,
     last_modified_by_id: userState.user.id,
     permission_level: VisibilityLevel.PUBLIC,
   };
 
   const [formValues, setFormValues] = useState<CreateItem>(initialFormState);
+
+  useEffect(() => {
+    setFormValues({ ...formValues, time_sensitive_flag: timeControlChecked });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [timeControlChecked]);
 
   const yupValidationSchema = Yup.object({
     name: Yup.string().required(),
@@ -78,8 +86,9 @@ export default function NewItem(props: NewItemProps) {
     description: Yup.string(),
     date_tz_sensitive: Yup.date(),
     date_tz_sensitive_end: Yup.date(),
-    time_sensitive: Yup.boolean().required(),
-    date_tz_insensitive: Yup.string().required(),
+    time_sensitive_flag: Yup.boolean().required(),
+    date_tz_insensitive: Yup.string(),
+    date_tz_insensitive_end: Yup.string(),
     last_modified_by_id: Yup.number(),
   });
 
@@ -97,7 +106,18 @@ export default function NewItem(props: NewItemProps) {
     date_tz_sensitive_end: false,
     time_sensitive_flag: false,
     date_tz_insensitive: false,
+    date_tz_insensitive_end: false,
     last_modified_by_id: false,
+  });
+
+  const additionalInputsSpring = useSpring({
+    opacity: dateRangeControlChecked ? 1 : 0,
+    config: { duration: 100 },
+  });
+
+  const selectorSpring = useSpring({
+    opacity: visibilityControlCheck ? 1 : 0,
+    config: { duration: 100 },
   });
 
   return (
@@ -105,6 +125,24 @@ export default function NewItem(props: NewItemProps) {
       <form onSubmit={handleCreateItemFormSubmit}>
         <div className="flex flex-col text-sm space-y-1 pt-2 px-2 bg-stone-900 border-b-2 rounded-xl border-blue-700">
           <div className="py-2 text-3xl">Create an Item</div>
+          <span className="flex flex-row items-center space-x-1 pb-2">
+            <span
+              onClick={() => setTimeControlChecked(true)}
+              className={`px-2 py-1 text-base rounded-xl ${
+                timeControlChecked ? 'bg-blue-600' : 'bg-stone-800'
+              } hover:bg-blue-600 cursor-pointer`}
+            >
+              event
+            </span>
+            <span
+              onClick={() => setTimeControlChecked(false)}
+              className={`px-2 py-1 text-base rounded-xl ${
+                !timeControlChecked ? 'bg-emerald-600' : 'bg-stone-800'
+              } hover:bg-emerald-600 cursor-pointer`}
+            >
+              task
+            </span>
+          </span>
           {/* item type */}
           <div>
             <select
@@ -135,7 +173,7 @@ export default function NewItem(props: NewItemProps) {
                 setIsChecked={setVisibilityControlCheck}
               ></ToggleSwitch>
               {visibilityControlCheck && (
-                <span>
+                <animated.span style={selectorSpring}>
                   <select
                     className="text-white bg-stone-800 py-1 rounded-lg"
                     value={formValues.permission_level}
@@ -155,7 +193,7 @@ export default function NewItem(props: NewItemProps) {
                       </option>
                     ))}
                   </select>
-                </span>
+                </animated.span>
               )}
             </div>
           </div>
@@ -197,103 +235,35 @@ export default function NewItem(props: NewItemProps) {
           </div>
           {/* description end */}
           {/* if meeting */}
-          {/* {formValues.item_type == ItemType.MEETING && (
-            <div className="flex flex-col">
-              <label className="text-white px-1">time</label>
-              <span className="flex space-x-1">
-                <span className="flex flex-col">
-                  <input
-                    className="text-white bg-stone-800 p-1 rounded-lg"
-                    type="time"
-                    onFocus={() =>
-                      setValidationError({
-                        ...yupValidationError,
-                        date_tz_sensitive: false,
-                      })
-                    }
-                    onChange={(event) =>
-                      setFormValues({
-                        ...formValues,
-                        date_tz_sensitive:
-                          event.target.valueAsDate ?? undefined,
-                      })
-                    }
-                  />
-                  {yupValidationError.date_tz_sensitive && (
-                    <span className={`${styles['field-error-styling']}`}>
-                      required
-                    </span>
-                  )}
-                </span>
-                <span className="flex flex-col">
-                  <input
-                    className="text-white bg-stone-800 p-1 rounded-lg"
-                    type="time"
-                    onFocus={() =>
-                      setValidationError({
-                        ...yupValidationError,
-                        date_tz_sensitive_end: false,
-                      })
-                    }
-                    onChange={(event) =>
-                      setFormValues({
-                        ...formValues,
-                        date_tz_sensitive_end:
-                          event.target.valueAsDate ?? undefined,
-                      })
-                    }
-                  />
-                  {yupValidationError.date_tz_sensitive_end && (
-                    <span className={`${styles['field-error-styling']}`}>
-                      required
-                    </span>
-                  )}
-                </span>
-              </span>
-            </div>
-          )} */}
           {/* if meeting end */}
           <div className="flex flex-col space-y-1">
+            {/* time control checker */}
+            <span className="flex flex-col space-y-1">
+              {/* date range checker */}
+              <span className="flex flex-row space-x-1">
+                <label className="text-white px-1">date range</label>
+                <ToggleSwitch
+                  isChecked={dateRangeControlChecked}
+                  setIsChecked={setDateRangeControlChecked}
+                ></ToggleSwitch>
+              </span>
+              {/* date range checker end */}
+              {/* time control checker */}
+              {/* <span className="flex flex-row space-x-1 ">
+                <label className="text-white px-1">time</label>
+                <ToggleSwitch
+                  isChecked={timeControlChecked}
+                  setIsChecked={setTimeControlChecked}
+                ></ToggleSwitch>
+              </span> */}
+              {/* time checker end */}
+            </span>
+            {/* time control checker end */}
             {/* time control unchecked */}
             {!timeControlChecked && (
               <>
-                <label className="text-white px-1">date</label>
-                <span>
-                  <input
-                    className="text-white bg-stone-800 p-1 rounded-lg"
-                    type="date"
-                    defaultValue={currentDateFormattedYYYYMMDD}
-                    onFocus={() =>
-                      setValidationError({
-                        ...yupValidationError,
-                        date_tz_insensitive: false,
-                      })
-                    }
-                    onChange={(event) => {
-                      setFormValues({
-                        ...formValues,
-                        date_tz_insensitive: event.target.value
-                          ? event.target.value
-                          : undefined,
-                      });
-                      console.log('value:', event.target.value);
-                      console.log('value as date:', event.target.valueAsDate);
-                    }}
-                  />
-                  {yupValidationError.date_tz_insensitive && (
-                    <span className={`${styles['field-error-styling']}`}>
-                      required
-                    </span>
-                  )}
-                </span>
-              </>
-            )}
-            {/* time control unchecked end */}
-            {/* time control checked */}
-            {timeControlChecked && (
-              <>
-                <label className="text-white px-1">date</label>
-                <span className="flex flex-row space-x-1">
+                {/* <label className="text-white px-1">date</label> */}
+                <span className="flex flex-row items-center space-x-1">
                   <span>
                     <input
                       className="text-white bg-stone-800 p-1 rounded-lg"
@@ -302,13 +272,13 @@ export default function NewItem(props: NewItemProps) {
                       onFocus={() =>
                         setValidationError({
                           ...yupValidationError,
-                          date: false,
+                          date_tz_insensitive: false,
                         })
                       }
                       onChange={(event) => {
                         setFormValues({
                           ...formValues,
-                          date: event.target.value
+                          date_tz_insensitive: event.target.value
                             ? event.target.value
                             : undefined,
                         });
@@ -316,7 +286,81 @@ export default function NewItem(props: NewItemProps) {
                         console.log('value as date:', event.target.valueAsDate);
                       }}
                     />
-                    {yupValidationError.date && (
+                    {yupValidationError.date_tz_insensitive && (
+                      <span className={`${styles['field-error-styling']}`}>
+                        required
+                      </span>
+                    )}
+                  </span>
+                  {dateRangeControlChecked && (
+                    <animated.span
+                      style={additionalInputsSpring}
+                      className="space-x-1"
+                    >
+                      <span>
+                        <input
+                          className="text-white bg-stone-800 p-1 rounded-lg"
+                          type="date"
+                          defaultValue={currentDateFormattedYYYYMMDD}
+                          onFocus={() =>
+                            setValidationError({
+                              ...yupValidationError,
+                              date_tz_insensitive: false,
+                            })
+                          }
+                          onChange={(event) => {
+                            setFormValues({
+                              ...formValues,
+                              date_tz_insensitive_end: event.target.value
+                                ? event.target.value
+                                : undefined,
+                            });
+                            console.log('value:', event.target.value);
+                            console.log(
+                              'value as date:',
+                              event.target.valueAsDate
+                            );
+                          }}
+                        />
+                        {yupValidationError.date_tz_insensitive_end && (
+                          <span className={`${styles['field-error-styling']}`}>
+                            required
+                          </span>
+                        )}
+                      </span>
+                    </animated.span>
+                  )}
+                </span>
+              </>
+            )}
+            {/* time control unchecked end */}
+            {/* time control checked */}
+            {timeControlChecked && (
+              <>
+                {/* <label className="text-white px-1">date</label> */}
+                <span className="flex flex-row space-x-1">
+                  <span>
+                    <input
+                      className="text-white bg-stone-800 p-1 rounded-lg"
+                      type="date"
+                      onFocus={() =>
+                        setValidationError({
+                          ...yupValidationError,
+                          date_tz_sensitive: false,
+                        })
+                      }
+                      onChange={(event) => {
+                        setFormValues({
+                          ...formValues,
+                          date_tz_sensitive: event.target.valueAsDate
+                            ? event.target.valueAsDate
+                            : undefined,
+                        });
+                        console.log('value:', event.target.value);
+                        console.log('value as date:', event.target.valueAsDate);
+                      }}
+                    />
+                    {yupValidationError.date_tz_sensitive && (
                       <span className={`${styles['field-error-styling']}`}>
                         required
                       </span>
@@ -329,35 +373,88 @@ export default function NewItem(props: NewItemProps) {
                       onFocus={() =>
                         setValidationError({
                           ...yupValidationError,
-                          start_time: false,
+                          date_tz_sensitive_end: false,
                         })
                       }
                       onChange={(event) =>
                         setFormValues({
                           ...formValues,
-                          start_time: event.target.valueAsDate ?? undefined,
+                          date_tz_sensitive_end:
+                            event.target.valueAsDate ?? undefined,
                         })
                       }
                     />
-                    {yupValidationError.start_time && (
+                    {yupValidationError.date_tz_sensitive_end && (
                       <span className={`${styles['field-error-styling']}`}>
                         required
                       </span>
                     )}
                   </span>
                 </span>
+                {dateRangeControlChecked && (
+                  <animated.span
+                    style={additionalInputsSpring}
+                    className="flex flex-row space-x-1"
+                  >
+                    <span>
+                      <input
+                        className="text-white bg-stone-800 p-1 rounded-lg"
+                        type="date"
+                        onFocus={() =>
+                          setValidationError({
+                            ...yupValidationError,
+                            date_tz_sensitive: false,
+                          })
+                        }
+                        onChange={(event) => {
+                          setFormValues({
+                            ...formValues,
+                            date_tz_sensitive: event.target.valueAsDate
+                              ? event.target.valueAsDate
+                              : undefined,
+                          });
+                          console.log('value:', event.target.value);
+                          console.log(
+                            'value as date:',
+                            event.target.valueAsDate
+                          );
+                        }}
+                      />
+                      {yupValidationError.date_tz_sensitive && (
+                        <span className={`${styles['field-error-styling']}`}>
+                          required
+                        </span>
+                      )}
+                    </span>
+                    <span className="flex flex-col">
+                      <input
+                        className="text-white bg-stone-800 p-1 rounded-lg"
+                        type="time"
+                        onFocus={() =>
+                          setValidationError({
+                            ...yupValidationError,
+                            date_tz_sensitive_end: false,
+                          })
+                        }
+                        onChange={(event) =>
+                          setFormValues({
+                            ...formValues,
+                            date_tz_sensitive_end:
+                              event.target.valueAsDate ?? undefined,
+                          })
+                        }
+                      />
+                      {yupValidationError.date_tz_sensitive_end && (
+                        <span className={`${styles['field-error-styling']}`}>
+                          required
+                        </span>
+                      )}
+                    </span>
+                  </animated.span>
+                )}
               </>
             )}
             {/* time control checked end */}
-            {/* time control checker */}
-            <span className="flex col-row space-x-1">
-              <label className="text-white px-1">time</label>
-              <ToggleSwitch
-                isChecked={timeControlChecked}
-                setIsChecked={setTimeControlChecked}
-              ></ToggleSwitch>
-            </span>
-            {/* time control checker end */}
           </div>
           {/* cancel and save */}
           <div className="flex flex-row py-5 justify-start text-center text-sm space-x-2">

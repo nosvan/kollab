@@ -16,7 +16,7 @@ const initialState: GroupSliceState = {
     name: '',
     category: Category.GROUP,
     category_id: -999,
-    item_type: ItemType.OTHER,
+    item_type: ItemType.GENERAL,
     date_tz_sensitive: new Date(),
     date_tz_sensitive_end: new Date(),
     time_sensitive_flag: false,

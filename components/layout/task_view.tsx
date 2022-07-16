@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import {
-  dateStringToNormalizedDateString,
   dateToDayName,
   dateToMonthName,
   dateToYYYYMMDD,
@@ -22,7 +21,8 @@ interface TaskViewProps {
   selectedDate: Date;
   setSelectedDate: Dispatch<SetStateAction<Date>>;
   category?: Category;
-  items: ItemSafe[];
+  itemsTimeSensitive: ItemSafe[];
+  itemsTimeInsensitive: ItemSafe[];
   setViewItemMode: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -31,10 +31,43 @@ export default function TaskView(props: TaskViewProps) {
   const currentDateString = new Date().toDateString();
   const [createNewItemMode, setCreateNewItemMode] = useState(false);
 
-  const ItemsView = (day: Date, items: ItemSafe[]) => {
+  const ItemsTimeInsensitiveView = (day: Date, items: ItemSafe[]) => {
+    const dayInYYYYMMDD = dateToYYYYMMDD(day);
     return items
-      .filter((itemA) => {
-        if (itemA.date && itemA.date == dateToYYYYMMDD(day)) {
+      ?.filter((itemA) => {
+        if (
+          itemA.date_tz_insensitive &&
+          itemA.date_tz_insensitive == dayInYYYYMMDD
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      })
+      .map((itemB) => {
+        return (
+          <div
+            key={itemB.id}
+            onClick={() => handleItemClick(itemB)}
+            className={`text-xs rounded-md
+            text-center text-black ${itemTypeStyling(
+              itemB.item_type
+            )} cursor-pointer ${styles.mobilePadding}`}
+          >
+            {itemB.name}
+          </div>
+        );
+      });
+  };
+
+  const ItemsTimeSensitiveView = (day: Date, items: ItemSafe[]) => {
+    const dayInYYYYMMDD = dateToYYYYMMDD(day);
+    return items
+      ?.filter((itemA) => {
+        if (
+          itemA.date_tz_sensitive &&
+          dateToYYYYMMDD(itemA.date_tz_sensitive) == dayInYYYYMMDD
+        ) {
           return true;
         } else {
           return false;
@@ -87,7 +120,10 @@ export default function TaskView(props: TaskViewProps) {
                   <TbPlus className="hover:bg-stone-700 cursor-pointer rounded-xl"></TbPlus>
                 </div>
               </div>
-              {props.items.length > 0 && ItemsView(day, props.items)}
+              {props.itemsTimeInsensitive?.length > 0 &&
+                ItemsTimeInsensitiveView(day, props.itemsTimeInsensitive)}
+              {props.itemsTimeSensitive?.length > 0 &&
+                ItemsTimeSensitiveView(day, props.itemsTimeSensitive)}
             </div>
           );
         })}

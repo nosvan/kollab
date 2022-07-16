@@ -11,21 +11,6 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
   if(req.method === 'GET'){
     try {
       const result = await prisma.item.findMany({
-        select: {
-          id: true,
-          name: true,
-          description: true,
-          category: true,
-          category_id: true,
-          item_type: true,
-          due_date: true,
-          start_time: true,
-          end_time: true,
-          permission_level: true,
-          last_modified_by_id: true,
-          created_by_id: true,
-          date: true,
-        },
         where: {
           category: PrismaCategory[req.query.category.toString().toLowerCase() as keyof typeof PrismaCategory],
           category_id: parseInt(req.query.category_id.toString()),
@@ -43,13 +28,14 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
           category: row.category ? Category[row.category.toUpperCase() as keyof typeof Category] : undefined,
           category_id: row.category_id ? row.category_id : undefined,
           item_type: ItemType[row.item_type.toUpperCase() as keyof typeof ItemType],
-          due_date: row.due_date ? row.due_date : undefined,
-          start_time: row.start_time ? row.start_time : undefined,
-          end_time: row.end_time ? row.end_time : undefined,
+          date_tz_sensitive: row.date_tz_sensitive ? row.date_tz_sensitive : undefined,
+          date_tz_sensitive_end: row.date_tz_sensitive_end ? row.date_tz_sensitive_end : undefined,
+          time_sensitive_flag: row.time_sensitive_flag,
+          date_tz_insensitive: row.date_tz_insensitive ? row.date_tz_insensitive : undefined,
+          date_tz_insensitive_end: row.date_tz_insensitive_end ? row.date_tz_insensitive_end : undefined,
           permission_level: VisibilityLevel[row.permission_level.toUpperCase() as keyof typeof VisibilityLevel],
           last_modified_by_id: row.last_modified_by_id,
           created_by_id: row.created_by_id,
-          date: row.date ? row.date : undefined,
         }
         resultSafe.push(itemRow)
       })

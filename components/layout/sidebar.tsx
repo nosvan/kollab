@@ -1,6 +1,5 @@
 import { TabName } from 'lib/types/ui';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 import { FaStackExchange } from 'react-icons/fa';
 import { TbBook2, TbHome2, TbSettings, TbUser, TbUsers } from 'react-icons/tb';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,10 +10,6 @@ export default function SideBar() {
   const user = useSelector((state: RootState) => state.user_store.user);
   const dispatch = useDispatch();
   const router = useRouter();
-
-  useEffect(() => {
-    console.log('in side bar');
-  }, []);
 
   return (
     <div className="flex flex-col py-5 space-y-5">

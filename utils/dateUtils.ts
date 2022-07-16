@@ -2,8 +2,16 @@ export function dateToMonthName(date: Date): string {
   return date.toLocaleString('default', { month: 'short' });
 }
 
+export function dateToLongMonthName(date: Date): string {
+  return date.toLocaleString('default', { month: 'long' });
+}
+
 export function dateToDayName(date: Date): string {
   return date.toLocaleString('default', { weekday: 'short' });
+}
+
+export function dateToLongDayName(date: Date): string {
+  return date.toLocaleString('default', { weekday: 'long' });
 }
 
 export function dateToYYYYMMDD(date: Date): string {
