@@ -10,7 +10,7 @@ export enum ItemType {
   REMINDER = 'REMINDER',
   MEETING = 'MEETING',
   TEST = 'TEST',
-  OTHER = 'OTHER',
+  GENERAL = 'GENERAL',
 }
 
 export enum AccessLevel {
@@ -31,13 +31,13 @@ export type Item = {
   category?: Category
   category_id: number
   item_type: ItemType
-  due_date?: Date
-  start_time?: Date
-  end_time?: Date
+  date_tz_sensitive?: Date
+  date_tz_sensitive_end?: Date
+  time_sensitive_flag: boolean
+  date_tz_insensitive?: string
   permission_level: VisibilityLevel
   created_by_id: number
   last_modified_by_id: number
-  date?: string
   created_at: Date
 }
 
@@ -47,12 +47,11 @@ export type CreateItem = {
   category?: Category
   category_id?: number
   item_type: ItemType
-  due_date?: Date
-  start_time?: Date
-  end_time?: Date
+  date_tz_sensitive?: Date
+  date_tz_sensitive_end?: Date
+  time_sensitive_flag: boolean
+  date_tz_insensitive?: string
   permission_level: VisibilityLevel
-  last_modified_by_id: number
-  date?: string
 }
 
 export type ItemSafe = {
@@ -62,11 +61,11 @@ export type ItemSafe = {
   category?: Category
   category_id?: number
   item_type: ItemType
-  due_date?: Date
-  start_time?: Date
-  end_time?: Date
+  date_tz_sensitive?: Date
+  date_tz_sensitive_end?: Date
+  time_sensitive_flag: boolean
+  date_tz_insensitive?: string
   permission_level: VisibilityLevel
   created_by_id: number
   last_modified_by_id: number,
-  date?: string
 }

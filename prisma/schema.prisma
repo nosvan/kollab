@@ -56,20 +56,20 @@ model group_permission {
 }
 
 model item {
-  id                  Int      @id @default(autoincrement())
-  name                String
-  description         String?
-  category            Category?
-  category_id         Int?
-  item_type           ItemType
-  due_date            DateTime?
-  start_time          DateTime?
-  end_time            DateTime?
-  permission_level    VisibilityLevel @default(public)
-  created_by_id       Int
-  last_modified_by_id Int
-  date                String?
-  created_at          DateTime @default(now())
+  id                    Int @id @default(autoincrement())
+  name                  String
+  description           String?
+  category              Category?
+  category_id           Int?
+  item_type             ItemType @default(general)
+  date_tz_sensitive     DateTime?
+  date_tz_sensitive_end DateTime?
+  time_sensitive_flag   Boolean @default(false)
+  date_tz_insensitive   DateTime?
+  permission_level      VisibilityLevel @default(public)
+  created_by_id         Int
+  last_modified_by_id   Int
+  created_at            DateTime @default(now())
 }
 
 model item_permission {
@@ -86,7 +86,7 @@ enum ItemType {
   reminder
   meeting
   test
-  other
+  general
 }
 
 enum AccessLevel {
