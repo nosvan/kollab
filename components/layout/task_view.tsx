@@ -171,6 +171,8 @@ export default function TaskView(props: TaskViewProps) {
         return 'bg-indigo-400 hover:bg-indigo-300';
       case 'MEETING':
         return 'bg-rose-400 hover:bg-rose-300';
+      case 'TEST':
+        return 'bg-blue-400 hover:bg-blue-300';
       default:
         return 'bg-stone-100 hover:bg-white';
     }

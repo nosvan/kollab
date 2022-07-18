@@ -15,8 +15,23 @@ export function dateToLongDayName(date: Date): string {
 }
 
 export function dateToYYYYMMDD(date: Date): string {
-  const dateInParts = date.toLocaleDateString('locale', { year: 'numeric', month: '2-digit', day: '2-digit' }).split('/');
+  const dateInParts = new Date(date).toLocaleDateString('locale', { year: 'numeric', month: '2-digit', day: '2-digit' }).split('/');
   return `${dateInParts[2]}-${dateInParts[0]}-${dateInParts[1]}`;
+}
+export function getTimeCeiling(date: Date, interval: number, addOn: number = 0) {
+  const ms = 1000 * 60 * interval;
+  const time = new Date(
+    Math.ceil(date.getTime() / ms) * ms + addOn * 60 * 1000
+  );
+  let hour = time.getHours().toString();
+  if(hour.length == 1){
+    hour = `0${hour}`;
+  }
+  let minute = time.getMinutes().toString();
+  if(minute.length == 1){
+    minute = `0${minute}`;
+  }
+  return `${hour}:${minute}`;
 }
 
 export function getDays(days: number, selectedDate: Date) {

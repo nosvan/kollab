@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUserState } from 'state/redux/userSlice';
 import { RootState } from 'state/redux/store';
-import { ClassSafe } from 'lib/types/class';
+import { ClassSafe, ClassSliceState } from 'lib/types/class';
 import axios from 'axios';
 import {
   setCurrentClassAndClasses,
@@ -16,7 +16,7 @@ import {
 import { useRouter } from 'next/router';
 import TaskView from 'components/layout/task_view';
 import { getDays } from 'utils/dateUtils';
-import { Category } from 'lib/types/item';
+import { Category, ItemSafe } from 'lib/types/item';
 
 export default function Groups({ user }: { user: UserSafe }) {
   const dispatch = useDispatch();
@@ -40,13 +40,9 @@ export default function Groups({ user }: { user: UserSafe }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const currentClass: ClassSafe = useSelector(
-    (state: RootState) => state.class_store.class
+  const classState: ClassSliceState = useSelector(
+    (state: RootState) => state.class_store
   );
-  const userClasses: ClassSafe[] = useSelector(
-    (state: RootState) => state.class_store.classes
-  );
-  const classItems = useSelector((state: RootState) => state.class_store.items);
 
   useEffect(() => {
     async function getGroupItems() {
@@ -55,15 +51,31 @@ export default function Groups({ user }: { user: UserSafe }) {
         url: `/api/item/item`,
         params: {
           category: Category.CLASSROOM,
-          category_id: currentClass.id,
+          category_id: classState.class.id,
         },
       }).then((res) => {
         dispatch(setClassItems(res.data));
       });
     }
-    if (currentClass.id !== -999) getGroupItems();
+    if (classState.class.id !== -999) getGroupItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentClass]);
+  }, [classState.class]);
+
+  const [timeInsensitiveItems, setTimeInsensitiveItems] = useState<ItemSafe[]>(
+    []
+  );
+  const [timeSensitiveItems, setTimeSensitiveItems] = useState<ItemSafe[]>([]);
+
+  useEffect(() => {
+    if (classState.items.length > 0) {
+      setTimeInsensitiveItems(
+        classState.items.filter((item) => !item.time_sensitive_flag)
+      );
+      setTimeSensitiveItems(
+        classState.items.filter((item) => item.time_sensitive_flag)
+      );
+    }
+  }, [classState.items]);
 
   const [selectedDate, setSelectedDate] = useState(() => new Date());
   const [dayLayout, setDayLayout] = useState(7);
@@ -75,15 +87,15 @@ export default function Groups({ user }: { user: UserSafe }) {
       <Layout>
         <div>
           <div className="flex flex-row flex-wrap space-y-1 items-center justify-between text-sm mb-1">
-            {userClasses && userClasses.length > 0 && (
+            {classState.classes && classState.classes.length > 0 && (
               <select
-                value={currentClass.id}
+                value={classState.class.id}
                 onChange={handleDropdownSelect}
                 name="groups"
                 id="groups-select"
                 className="rounded-lg text-white text-base bg-stone-800 p-1 ml-1"
               >
-                {userClasses.map((classroom: ClassSafe) => (
+                {classState.classes.map((classroom: ClassSafe) => (
                   <option key={classroom.id} value={classroom.id}>
                     {classroom.name} (#{classroom.id})
                   </option>
@@ -117,7 +129,8 @@ export default function Groups({ user }: { user: UserSafe }) {
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}
             category={Category.CLASSROOM}
-            items={classItems}
+            itemsTimeSensitive={timeSensitiveItems}
+            itemsTimeInsensitive={timeInsensitiveItems}
             setViewItemMode={setViewItemMode}
           ></TaskView>
         </div>
@@ -136,7 +149,7 @@ export default function Groups({ user }: { user: UserSafe }) {
   }) {
     event.preventDefault();
     const classroomId = event.currentTarget.value;
-    const classroom = userClasses.find(
+    const classroom = classState.classes.find(
       (classroom: ClassSafe) => classroom.id == classroomId
     );
     dispatch(setCurrentClass(classroom));

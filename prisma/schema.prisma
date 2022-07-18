@@ -65,6 +65,7 @@ model item {
   date_tz_sensitive       DateTime?
   date_tz_sensitive_end   DateTime?
   time_sensitive_flag     Boolean @default(false)
+  date_range_flag         Boolean @default(false)
   date_tz_insensitive     String?
   date_tz_insensitive_end String?
   permission_level        VisibilityLevel @default(public)
@@ -96,7 +97,7 @@ enum AccessLevel {
 }
 
 enum VisibilityLevel {
-  admin
+  // admin
   private
   public
 }

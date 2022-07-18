@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUserState } from 'state/redux/userSlice';
 import axios from 'axios';
-import { GroupSafe } from 'lib/types/group';
+import { GroupSafe, GroupSliceState } from 'lib/types/group';
 import { RootState } from 'state/redux/store';
 import {
   setCurrentGroup,
@@ -16,7 +16,7 @@ import {
 import { useRouter } from 'next/router';
 import TaskView from 'components/layout/task_view';
 import { decrementDate, getDays, incrementDate } from 'utils/dateUtils';
-import { Category } from 'lib/types/item';
+import { Category, ItemSafe } from 'lib/types/item';
 import { TbArrowBigLeft, TbArrowBigRight } from 'react-icons/tb';
 import Item from 'components/item/item';
 import ModalPopup from 'components/layout/modal';
@@ -44,7 +44,9 @@ export default function Groups({ user }: { user: UserSafe }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const groupState = useSelector((state: RootState) => state.group_store);
+  const groupState: GroupSliceState = useSelector(
+    (state: RootState) => state.group_store
+  );
 
   useEffect(() => {
     async function getGroupItems() {
@@ -62,6 +64,22 @@ export default function Groups({ user }: { user: UserSafe }) {
     if (groupState.group.id !== -999) getGroupItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [groupState.group]);
+
+  const [timeInsensitiveItems, setTimeInsensitiveItems] = useState<ItemSafe[]>(
+    []
+  );
+  const [timeSensitiveItems, setTimeSensitiveItems] = useState<ItemSafe[]>([]);
+
+  useEffect(() => {
+    if (groupState.items.length > 0) {
+      setTimeInsensitiveItems(
+        groupState.items.filter((item) => !item.time_sensitive_flag)
+      );
+      setTimeSensitiveItems(
+        groupState.items.filter((item) => item.time_sensitive_flag)
+      );
+    }
+  }, [groupState.items]);
 
   const [selectedDate, setSelectedDate] = useState(() => new Date());
   const [dayLayout, setDayLayout] = useState(7);
@@ -156,7 +174,8 @@ export default function Groups({ user }: { user: UserSafe }) {
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
               category={Category.GROUP}
-              items={groupState.items}
+              itemsTimeSensitive={timeSensitiveItems}
+              itemsTimeInsensitive={timeInsensitiveItems}
               setViewItemMode={setViewItemMode}
             />
           )}

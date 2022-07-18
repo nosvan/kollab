@@ -19,7 +19,7 @@ export enum AccessLevel {
 }
 
 export enum VisibilityLevel {
-  ADMIN = 'ADMIN',
+  // ADMIN = 'ADMIN',
   PRIVATE = 'PRIVATE',
   PUBLIC = 'PUBLIC',
 }
@@ -71,4 +71,21 @@ export type ItemSafe = {
   permission_level: VisibilityLevel
   created_by_id: number
   last_modified_by_id: number,
+}
+
+export type ItemYupValidationError = {
+  name: boolean,
+  category: boolean,
+  category_id: boolean,
+  item_type: boolean,
+  permission_level: boolean,
+  description: boolean,
+  date_tz_sensitive: boolean,
+  date_tz_sensitive_end: boolean,
+  time_tz_sensitive: boolean,
+  time_tz_sensitive_end: boolean,
+  time_sensitive_flag: boolean,
+  date_tz_insensitive: boolean,
+  date_tz_insensitive_end: boolean,
+  last_modified_by_id: boolean,
 }
