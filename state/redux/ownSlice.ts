@@ -13,6 +13,7 @@ const initialState: OwnSliceState = {
     date_tz_sensitive: new Date(),
     date_tz_sensitive_end: new Date(),
     time_sensitive_flag: false,
+    date_range_flag: false,
     date_tz_insensitive: undefined,
     permission_level: VisibilityLevel.PUBLIC,
     created_by_id: -999,

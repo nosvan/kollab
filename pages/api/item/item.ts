@@ -2,7 +2,7 @@ import { withIronSessionApiRoute } from 'iron-session/next';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { sessionOptions } from 'lib/iron_session';
 import prisma from 'lib/prisma';
-import { Category, CreateItem, ItemSafe, ItemType, VisibilityLevel } from 'lib/types/item';
+import { Category, ItemSafe, ItemType, VisibilityLevel } from 'lib/types/item';
 import { Category as PrismaCategory} from '@prisma/client';
 
 export default withIronSessionApiRoute(handle, sessionOptions)
@@ -31,6 +31,7 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
           date_tz_sensitive: row.date_tz_sensitive ?? undefined,
           date_tz_sensitive_end: row.date_tz_sensitive_end ?? undefined,
           time_sensitive_flag: row.time_sensitive_flag,
+          date_range_flag: row.date_range_flag,
           date_tz_insensitive: row.date_tz_insensitive ?? undefined,
           date_tz_insensitive_end: row.date_tz_insensitive_end ?? undefined,
           permission_level: VisibilityLevel[row.permission_level.toUpperCase() as keyof typeof VisibilityLevel],
