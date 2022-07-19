@@ -2,13 +2,11 @@ import { TabName } from 'lib/types/ui';
 import { useRouter } from 'next/router';
 import { FaStackExchange } from 'react-icons/fa';
 import { TbBook2, TbHome2, TbUser, TbUsers } from 'react-icons/tb';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from 'state/redux/store';
-import { setCurrentTab } from 'state/redux/userSlice';
 
 export default function Footer() {
   const user = useSelector((state: RootState) => state.user_store.user);
-  const dispatch = useDispatch();
   const router = useRouter();
   return (
     <div

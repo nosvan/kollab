@@ -125,3 +125,11 @@ export function decrementDate(date: Date, days: number) {
 export function dateStringToNormalizedDateString(date: string){
   return new Date(date).toDateString()
 }
+
+export function dateRangeTimeValid(datePart: string, timePart: string, datePartEnd: string, timePartEnd: string): boolean {
+  return new Date(`${datePart}T${timePart}`).getTime() <= new Date(`${datePartEnd}T${timePartEnd}`).getTime();
+}
+
+export function dateRangeValid(datePart: string, datePartEnd: string): boolean {
+  return new Date(`${datePart}T00:00`).getTime() <= new Date(`${datePartEnd}T00:00`).getTime();
+}

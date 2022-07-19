@@ -84,4 +84,4 @@ function dateToYYYYMMDD(date) {
 // console.log('dateToYYYYMMDD', dateToYYYYMMDD(datee));
 // console.log(datee.toLocaleDateString());
 
-console.log(new Date().trim());
+console.log(new Date());

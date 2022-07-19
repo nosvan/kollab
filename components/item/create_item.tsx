@@ -23,7 +23,11 @@ import {
   setErrorTruthy,
   trimStringsInObjectShallow,
 } from 'utils/formValidateUtils';
-import { dateToYYYYMMDD } from 'utils/dateUtils';
+import {
+  dateRangeTimeValid,
+  dateRangeValid,
+  dateToYYYYMMDD,
+} from 'utils/dateUtils';
 import { useSpring, animated } from '@react-spring/web';
 import { DateInputs2 } from './date_inputs';
 import { FooterInputs } from './footer_inputs';
@@ -36,6 +40,7 @@ interface NewItemProps {
 }
 
 export default function NewItem2(props: NewItemProps) {
+  const { selectedDate, itemCategory, setCreateNewItemMode } = props;
   const dispatch = useDispatch();
 
   const groupState: GroupSafe = useSelector(
@@ -52,7 +57,7 @@ export default function NewItem2(props: NewItemProps) {
   const [timeControlChecked, setTimeControlChecked] = useState(false);
   const [dateRangeControlChecked, setDateRangeControlChecked] = useState(false);
   const [selectedDateForNewItemFormattedYYYYMMDD] = useState(() =>
-    dateToYYYYMMDD(props.selectedDate ?? new Date())
+    dateToYYYYMMDD(selectedDate ?? new Date())
   );
 
   const [datePart, setDatePart] = useState(
@@ -69,16 +74,16 @@ export default function NewItem2(props: NewItemProps) {
   );
 
   const [selectedDateForNewItem] = useState(() => {
-    if (props.selectedDate) {
-      return props.selectedDate;
+    if (selectedDate) {
+      return selectedDate;
     }
     return new Date();
   });
 
   const initialFormState = {
     name: '',
-    category: props.itemCategory ?? undefined,
-    category_id: props.itemCategory ? getCategoryId() : undefined,
+    category: itemCategory ?? undefined,
+    category_id: itemCategory ? getCategoryId() : undefined,
     description: undefined,
     item_type: ItemType.NOTE,
     date_tz_sensitive: selectedDateForNewItem,
@@ -97,11 +102,20 @@ export default function NewItem2(props: NewItemProps) {
     if (timeControlChecked) {
       const newDate = new Date(`${datePart}T${timePart}`);
       const newDateEnd = new Date(`${datePartEnd}T${timePartEnd}`);
+      console.log(newDate, newDateEnd);
       setFormValues((prevState) => {
         return {
           ...prevState,
           date_tz_sensitive: newDate,
           date_tz_sensitive_end: newDateEnd,
+        };
+      });
+    } else {
+      setFormValues((prevState) => {
+        return {
+          ...prevState,
+          date_tz_insensitive: datePart,
+          date_tz_insensitive_end: datePartEnd,
         };
       });
     }
@@ -136,15 +150,38 @@ export default function NewItem2(props: NewItemProps) {
       .oneOf(Object.values(VisibilityLevel))
       .default(VisibilityLevel.PUBLIC),
     description: Yup.string(),
-    date_tz_sensitive: Yup.date(),
-    date_tz_sensitive_end: Yup.date().min(
-      Yup.ref('date_tz_sensitive'),
-      'end date must be after start date'
-    ),
+    date_tz_sensitive: timeControlChecked ? Yup.date() : Yup.date(),
+    date_tz_sensitive_end: timeControlChecked
+      ? dateRangeControlChecked
+        ? Yup.date()
+            .min(
+              Yup.ref('date_tz_sensitive'),
+              'end date must be after start date'
+            )
+            .required('end date is required')
+        : Yup.date()
+      : Yup.date(),
     time_sensitive_flag: Yup.boolean().required(),
     date_range_flag: Yup.boolean().required(),
-    date_tz_insensitive: Yup.string(),
-    date_tz_insensitive_end: Yup.string(),
+    date_tz_insensitive: timeControlChecked
+      ? Yup.string()
+      : Yup.string().required('date is required'),
+    date_tz_insensitive_end: timeControlChecked
+      ? Yup.string()
+      : dateRangeControlChecked
+      ? Yup.string()
+          .test(
+            'compare-dates-no-time',
+            'end date must be after start date',
+            function () {
+              return dateRangeValid(
+                this.parent['date_tz_insensitive'],
+                this.parent['date_tz_insensitive_end']
+              );
+            }
+          )
+          .required('end date is required')
+      : Yup.string(),
     last_modified_by_id: Yup.number(),
   });
 
@@ -316,7 +353,7 @@ export default function NewItem2(props: NewItemProps) {
             </span>
           </div>
           <FooterInputs
-            setCreateNewItemMode={props.setCreateNewItemMode}
+            setCreateNewItemMode={setCreateNewItemMode}
           ></FooterInputs>
         </div>
       </form>
@@ -324,7 +361,7 @@ export default function NewItem2(props: NewItemProps) {
   );
 
   function getCategoryId() {
-    switch (props.itemCategory) {
+    switch (itemCategory) {
       case Category.CLASSROOM:
         return classState.id;
       case Category.GROUP:
@@ -332,23 +369,12 @@ export default function NewItem2(props: NewItemProps) {
     }
   }
 
-  function dateRangeTimeValid() {
-    const rangeStart = new Date(`${datePart}T$${timePart}`).getTime();
-    const rangeEnd = new Date(`${datePartEnd}T${timePartEnd}`).getTime();
-    return rangeStart <= rangeEnd;
-  }
-
-  function dateRangeValid() {
-    const rangeStart = new Date(`${datePart}T00:00`).getTime();
-    const rangeEnd = new Date(`${datePartEnd}T00:00`).getTime();
-    return rangeStart <= rangeEnd;
-  }
-
   async function handleCreateItemFormSubmit(
     event: React.FormEvent<HTMLFormElement>
   ) {
     event.preventDefault();
     trimStringsInObjectShallow(formValues);
+    console.log(formValues);
     let yupValidateResult = await yupValidationSchema
       .validate(formValues, { abortEarly: false })
       .catch((err) => {
@@ -356,26 +382,6 @@ export default function NewItem2(props: NewItemProps) {
         setErrorTruthy(err.inner, yupValidationError);
         setYupValidationError({ ...yupValidationError });
       });
-    if (
-      dateRangeControlChecked &&
-      timeControlChecked &&
-      !dateRangeTimeValid()
-    ) {
-      setYupValidationError({
-        ...yupValidationError,
-        date_tz_sensitive: true,
-        date_tz_sensitive_end: true,
-      });
-      return;
-    }
-    if (dateRangeControlChecked && !dateRangeValid()) {
-      setYupValidationError({
-        ...yupValidationError,
-        date_tz_insensitive: true,
-        date_tz_insensitive_end: true,
-      });
-      return;
-    }
     if (!(JSON.stringify(yupValidateResult) === JSON.stringify(formValues))) {
       return;
     }
@@ -401,7 +407,7 @@ export default function NewItem2(props: NewItemProps) {
         }
       });
       setFormValues(initialFormState);
-      props.setCreateNewItemMode(false);
+      setCreateNewItemMode(false);
     } catch (error) {
       console.log(error);
     }

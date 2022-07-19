@@ -12,6 +12,7 @@ interface AccountResetProps {
 }
 
 export default function AccountReset(props: AccountResetProps) {
+  const { setSelection } = props;
   const [formValues, setFormValues] = useState({
     email: '',
     confirm_email: '',
@@ -95,7 +96,7 @@ export default function AccountReset(props: AccountResetProps) {
             )}
             <div className="flex flex-row py-5 text-center space-x-1">
               <div
-                onClick={() => props.setSelection('')}
+                onClick={() => setSelection('')}
                 className="basis-2/5 bg-stone-800 border-2 border-white 
             hover:bg-stone-700 text-white rounded-xl px-1 cursor-pointer"
               >
@@ -146,7 +147,7 @@ export default function AccountReset(props: AccountResetProps) {
         switch (res.data.message.toLowerCase()) {
           case 'email sent':
             alert('email sent');
-            props.setSelection('');
+            setSelection('');
             return;
           case 'email not sent':
             alert('email error, try again');

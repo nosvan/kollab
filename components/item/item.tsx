@@ -5,14 +5,15 @@ export interface ItemProps {
 }
 
 export default function Item(props: ItemProps) {
+  const { item } = props;
   return (
     <div
       className={`p-5 border-b-2 rounded-xl bg-stone-900 ${itemBorder(
-        props.item.item_type
+        item.item_type
       )}`}
     >
-      <h1>{props.item.item_type}</h1>
-      <div>{props.item.name}</div>
+      <h1>{item.item_type}</h1>
+      <div>{item.name}</div>
     </div>
   );
 

@@ -8,24 +8,25 @@ interface ToggleSwitchProps {
 }
 
 export default function ToggleSwitch(props: ToggleSwitchProps) {
+  const { isChecked, setIsChecked, className } = props;
   const toggleSpring = useSpring({
-    left: !props.isChecked ? '0' : '50%',
+    left: !isChecked ? '0' : '50%',
     config: { duration: 250 },
   });
   return (
     <label
-      className={`${props.className} relative w-12 h-6 bg-stone-800 rounded-xl cursor-pointer`}
+      className={`${className} relative w-12 h-6 bg-stone-800 rounded-xl cursor-pointer`}
     >
       <input
         className="hidden"
         type="checkbox"
-        defaultChecked={props.isChecked}
-        onChange={() => props.setIsChecked(!props.isChecked)}
+        defaultChecked={isChecked}
+        onChange={() => setIsChecked(!isChecked)}
       />
       <animated.span
         style={toggleSpring}
         className={`w-1/2 h-full ${
-          !props.isChecked
+          !isChecked
             ? 'bg-stone-700 border-stone-500'
             : 'bg-blue-700 border-blue-500'
         } border-2 absolute cursor-pointer rounded-xl`}

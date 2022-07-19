@@ -5,12 +5,13 @@ interface FooterInputsProps {
 }
 
 export function FooterInputs(props: FooterInputsProps) {
+  const { setCreateNewItemMode } = props;
   return (
     <div className="flex flex-row py-5 justify-start text-center text-sm space-x-2">
       <div
         className="bg-stone-900 border-2 border-white hover:bg-stone-800 hover:border-stone-300
               text-white rounded-xl px-2 cursor-pointer"
-        onClick={() => props.setCreateNewItemMode(false)}
+        onClick={() => setCreateNewItemMode(false)}
       >
         <span>Cancel</span>
       </div>

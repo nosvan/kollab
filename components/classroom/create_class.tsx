@@ -9,6 +9,7 @@ interface NewClassProps {
 }
 
 export default function NewClass(props: NewClassProps) {
+  const { setCreateNewTypeMode } = props;
   const dispatch = useDispatch();
   const currentYear = new Date().getFullYear();
   const years = createYears();
@@ -88,7 +89,7 @@ export default function NewClass(props: NewClassProps) {
             <div className="flex flex-row py-5 justify-start text-center text-sm space-x-2">
               <div
                 className="bg-black border-2 border-white hover:bg-gray-900 hover:border-gray-300 text-white rounded-lg px-2 cursor-pointer"
-                onClick={() => props.setCreateNewTypeMode(false)}
+                onClick={() => setCreateNewTypeMode(false)}
               >
                 <span>Cancel</span>
               </div>
@@ -144,7 +145,7 @@ export default function NewClass(props: NewClassProps) {
         dispatch(setClasses(res.data));
       });
       formData.reset();
-      props.setCreateNewTypeMode(false);
+      setCreateNewTypeMode(false);
     } catch (error) {
       console.log(error);
     }

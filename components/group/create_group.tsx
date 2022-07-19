@@ -10,6 +10,7 @@ interface NewGroupProps {
 }
 
 export default function NewGroup(props: NewGroupProps) {
+  const { setCreateNewTypeMode } = props;
   const user = useSelector((state: RootState) => state.user_store.user);
   const dispatch = useDispatch();
   const [selection, setSelection] = useState('join_group');
@@ -55,7 +56,7 @@ export default function NewGroup(props: NewGroupProps) {
               <div className="flex flex-row py-5 justify-start text-center text-sm space-x-2">
                 <div
                   className="bg-stone-900 border-2 border-white hover:bg-stone-800 hover:border-stone-300 text-white rounded-lg px-2 cursor-pointer"
-                  onClick={() => props.setCreateNewTypeMode(false)}
+                  onClick={() => setCreateNewTypeMode(false)}
                 >
                   <span>Cancel</span>
                 </div>
@@ -117,7 +118,7 @@ export default function NewGroup(props: NewGroupProps) {
               <div className="flex flex-row py-5 justify-start text-center text-sm space-x-2">
                 <div
                   className="bg-black border-2 border-white hover:bg-gray-800 hover:border-gray-300 text-white rounded-lg px-2 cursor-pointer"
-                  onClick={() => props.setCreateNewTypeMode(false)}
+                  onClick={() => setCreateNewTypeMode(false)}
                 >
                   <span>Cancel</span>
                 </div>
@@ -191,7 +192,7 @@ export default function NewGroup(props: NewGroupProps) {
         dispatch(setGroups(res.data));
       });
       formData.reset();
-      props.setCreateNewTypeMode(false);
+      setCreateNewTypeMode(false);
     } catch (error) {
       console.log(error);
     }
