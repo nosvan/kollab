@@ -19,11 +19,15 @@ import ToggleSwitch from 'components/layout/ui_components/toggle_switch';
 import { UserSliceState } from 'lib/types/user';
 import styles from './create_item.module.css';
 import * as Yup from 'yup';
-import { setErrorTruthy } from 'utils/formValidateUtils';
+import {
+  setErrorTruthy,
+  trimStringsInObjectShallow,
+} from 'utils/formValidateUtils';
 import { dateToYYYYMMDD } from 'utils/dateUtils';
 import { useSpring, animated } from '@react-spring/web';
-import { DateInputs } from './date_inputs';
+import { DateInputs2 } from './date_inputs';
 import { FooterInputs } from './footer_inputs';
+import { getTimeCeiling } from 'utils/dateUtils';
 
 interface NewItemProps {
   selectedDate?: Date;
@@ -31,7 +35,7 @@ interface NewItemProps {
   setCreateNewItemMode: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function NewItem(props: NewItemProps) {
+export default function NewItem2(props: NewItemProps) {
   const dispatch = useDispatch();
 
   const groupState: GroupSafe = useSelector(
@@ -47,6 +51,22 @@ export default function NewItem(props: NewItemProps) {
   const [visibilityControlCheck, setVisibilityControlCheck] = useState(false);
   const [timeControlChecked, setTimeControlChecked] = useState(false);
   const [dateRangeControlChecked, setDateRangeControlChecked] = useState(false);
+  const [selectedDateForNewItemFormattedYYYYMMDD] = useState(() =>
+    dateToYYYYMMDD(props.selectedDate ?? new Date())
+  );
+
+  const [datePart, setDatePart] = useState(
+    selectedDateForNewItemFormattedYYYYMMDD
+  );
+  const [timePart, setTimePart] = useState(() =>
+    getTimeCeiling(new Date(), 30)
+  );
+  const [datePartEnd, setDatePartEnd] = useState(
+    selectedDateForNewItemFormattedYYYYMMDD
+  );
+  const [timePartEnd, setTimePartEnd] = useState(() =>
+    getTimeCeiling(new Date(), 30, 30)
+  );
 
   const [selectedDateForNewItem] = useState(() => {
     if (props.selectedDate) {
@@ -55,19 +75,16 @@ export default function NewItem(props: NewItemProps) {
     return new Date();
   });
 
-  const [selectedDateForNewItemFormattedYYYYMMDD] = useState(() =>
-    dateToYYYYMMDD(props.selectedDate ?? new Date())
-  );
-
   const initialFormState = {
     name: '',
-    category: props.itemCategory ? props.itemCategory : undefined,
+    category: props.itemCategory ?? undefined,
     category_id: props.itemCategory ? getCategoryId() : undefined,
     description: undefined,
-    item_type: ItemType.GENERAL,
+    item_type: ItemType.NOTE,
     date_tz_sensitive: selectedDateForNewItem,
     date_tz_sensitive_end: selectedDateForNewItem,
     time_sensitive_flag: timeControlChecked,
+    date_range_flag: dateRangeControlChecked,
     date_tz_insensitive: selectedDateForNewItemFormattedYYYYMMDD,
     date_tz_insensitive_end: selectedDateForNewItemFormattedYYYYMMDD,
     last_modified_by_id: userState.user.id,
@@ -77,17 +94,39 @@ export default function NewItem(props: NewItemProps) {
   const [formValues, setFormValues] = useState<CreateItem>(initialFormState);
 
   useEffect(() => {
-    setFormValues((formValues) => {
-      const newFormValues = {
-        ...formValues,
+    if (timeControlChecked) {
+      const newDate = new Date(`${datePart}T${timePart}`);
+      const newDateEnd = new Date(`${datePartEnd}T${timePartEnd}`);
+      setFormValues((prevState) => {
+        return {
+          ...prevState,
+          date_tz_sensitive: newDate,
+          date_tz_sensitive_end: newDateEnd,
+        };
+      });
+    }
+  }, [datePart, datePartEnd, timeControlChecked, timePart, timePartEnd]);
+
+  useEffect(() => {
+    setFormValues((prevState) => {
+      return {
+        ...prevState,
         time_sensitive_flag: timeControlChecked,
       };
-      return newFormValues;
     });
   }, [timeControlChecked]);
 
+  useEffect(() => {
+    setFormValues((prevState) => {
+      return {
+        ...prevState,
+        date_range_flag: dateRangeControlChecked,
+      };
+    });
+  }, [dateRangeControlChecked]);
+
   const yupValidationSchema = Yup.object({
-    name: Yup.string().required(),
+    name: Yup.string().min(5, 'min length of 5').required('name is required'),
     category: Yup.mixed<Category>().oneOf(Object.values(Category)),
     category_id: formValues.category ? Yup.number().required() : Yup.number(),
     item_type: Yup.mixed<ItemType>()
@@ -98,8 +137,12 @@ export default function NewItem(props: NewItemProps) {
       .default(VisibilityLevel.PUBLIC),
     description: Yup.string(),
     date_tz_sensitive: Yup.date(),
-    date_tz_sensitive_end: Yup.date(),
+    date_tz_sensitive_end: Yup.date().min(
+      Yup.ref('date_tz_sensitive'),
+      'end date must be after start date'
+    ),
     time_sensitive_flag: Yup.boolean().required(),
+    date_range_flag: Yup.boolean().required(),
     date_tz_insensitive: Yup.string(),
     date_tz_insensitive_end: Yup.string(),
     last_modified_by_id: Yup.number(),
@@ -118,18 +161,11 @@ export default function NewItem(props: NewItemProps) {
       time_tz_sensitive: false,
       time_tz_sensitive_end: false,
       time_sensitive_flag: false,
+      date_range_flag: false,
       date_tz_insensitive: false,
       date_tz_insensitive_end: false,
       last_modified_by_id: false,
     });
-
-  useEffect(() => {
-    if (!visibilityControlCheck) {
-      setFormValues((formValues) => {
-        return { ...formValues, permission_level: VisibilityLevel.PUBLIC };
-      });
-    }
-  }, [visibilityControlCheck]);
 
   const selectorSpring = useSpring({
     opacity: visibilityControlCheck ? 1 : 0,
@@ -139,51 +175,54 @@ export default function NewItem(props: NewItemProps) {
   return (
     <div>
       <form onSubmit={handleCreateItemFormSubmit}>
-        <div className="flex flex-col text-sm space-y-1 pt-2 px-2 bg-stone-900 border-b-2 rounded-xl border-blue-700">
+        <div className="flex flex-col text-sm space-y-2 pt-2 px-2 bg-stone-900 border-b-2 rounded-xl border-blue-700">
           <div className="py-2 text-3xl">Create an Item</div>
           <span className="flex flex-row items-center space-x-1 pb-2">
             <span
-              onClick={() => setDateRangeControlChecked(true)}
-              className={`px-2 py-1 text-base rounded-xl ${
-                dateRangeControlChecked ? 'bg-blue-600' : 'bg-stone-800'
-              } hover:bg-blue-600 cursor-pointer`}
-            >
-              event
-            </span>
-            <span
               onClick={() => setDateRangeControlChecked(false)}
-              className={`px-2 py-1 text-base rounded-xl ${
+              className={`py-1 px-2 text-lg rounded-xl ${
                 !dateRangeControlChecked ? 'bg-red-600' : 'bg-stone-800'
               } hover:bg-red-600 cursor-pointer`}
             >
-              task
+              Task
+            </span>
+            <span
+              onClick={() => setDateRangeControlChecked(true)}
+              className={`py-1 px-2 text-lg rounded-xl ${
+                dateRangeControlChecked ? 'bg-blue-600' : 'bg-stone-800'
+              } hover:bg-blue-600 cursor-pointer`}
+            >
+              Event
             </span>
           </span>
-          {/* item type */}
-          <div>
-            <select
-              className="text-white bg-stone-800 hover:bg-stone-700 py-1 rounded-xl"
-              value={formValues.item_type}
-              onChange={(event) =>
-                setFormValues({
-                  ...formValues,
-                  item_type:
-                    ItemType[event.target.value as keyof typeof ItemType],
-                })
-              }
-            >
+          <div className="space-y-1">
+            <span className="px-1">type</span>
+            <span className="flex flex-row flex-wrap items-center">
               {Object.keys(ItemType).map((key) => (
-                <option key={key} value={key}>
+                <span
+                  key={key}
+                  className={`${
+                    formValues.item_type ==
+                    ItemType[key as keyof typeof ItemType]
+                      ? `text-black ${itemTypeStyling(formValues.item_type)}`
+                      : 'bg-stone-800 hover:bg-stone-700 text-white'
+                  }
+                  )} cursor-pointer py-1 px-2 mr-1 mt-1 rounded-xl`}
+                  onClick={() =>
+                    setFormValues({
+                      ...formValues,
+                      item_type: ItemType[key as keyof typeof ItemType],
+                    })
+                  }
+                >
                   {key}
-                </option>
+                </span>
               ))}
-            </select>
+            </span>
           </div>
-          {/* item type end */}
-          {/* control visibility */}
           <div className="flex flex-col space-y-1">
             <span className="flex flex-row items-center space-x-1">
-              <label className="text-white px-1">visibility</label>
+              <label className="text-white px-1">control visibility</label>
               <ToggleSwitch
                 isChecked={visibilityControlCheck}
                 setIsChecked={setVisibilityControlCheck}
@@ -215,8 +254,6 @@ export default function NewItem(props: NewItemProps) {
               )}
             </div>
           </div>
-          {/* control visibility end */}
-          {/* name */}
           <div className="flex flex-col">
             <label className="text-white px-1">name</label>
             <input
@@ -237,8 +274,6 @@ export default function NewItem(props: NewItemProps) {
               </span>
             )}
           </div>
-          {/* name end */}
-          {/* description */}
           <div className="flex flex-col">
             <label className="text-white px-1">description</label>
             <textarea
@@ -251,11 +286,8 @@ export default function NewItem(props: NewItemProps) {
               }
             />
           </div>
-          {/* description end */}
           <div className="flex flex-col space-y-1">
-            {/* time control checker */}
             <span className="flex flex-col space-y-1">
-              {/* time control checker */}
               <span className="flex flex-row space-x-1 ">
                 <label className="text-white px-1">time</label>
                 <ToggleSwitch
@@ -263,28 +295,29 @@ export default function NewItem(props: NewItemProps) {
                   setIsChecked={setTimeControlChecked}
                 ></ToggleSwitch>
               </span>
-              {/* time checker end */}
             </span>
             <span>
-              <DateInputs
-                selectedDateForNewItemFormattedYYYYMMDD={
-                  selectedDateForNewItemFormattedYYYYMMDD
-                }
+              <DateInputs2
                 formValues={formValues}
                 setFormValues={setFormValues}
                 yupValidationError={yupValidationError}
                 setYupValidationError={setYupValidationError}
                 timeControlChecked={timeControlChecked}
-                setTimeControlChecked={setTimeControlChecked}
                 dateRangeControlChecked={dateRangeControlChecked}
-              ></DateInputs>
+                datePart={datePart}
+                setDatePart={setDatePart}
+                datePartEnd={datePartEnd}
+                setDatePartEnd={setDatePartEnd}
+                timePart={timePart}
+                setTimePart={setTimePart}
+                timePartEnd={timePartEnd}
+                setTimePartEnd={setTimePartEnd}
+              ></DateInputs2>
             </span>
           </div>
-          {/* cancel and save */}
           <FooterInputs
             setCreateNewItemMode={props.setCreateNewItemMode}
           ></FooterInputs>
-          {/* cancel and save end */}
         </div>
       </form>
     </div>
@@ -299,38 +332,51 @@ export default function NewItem(props: NewItemProps) {
     }
   }
 
+  function dateRangeTimeValid() {
+    const rangeStart = new Date(`${datePart}T$${timePart}`).getTime();
+    const rangeEnd = new Date(`${datePartEnd}T${timePartEnd}`).getTime();
+    return rangeStart <= rangeEnd;
+  }
+
   function dateRangeValid() {
-    const rangeStart = new Date(`${formValues.date_tz_sensitive}`).getTime();
-    const rangeEnd = new Date(`${formValues.date_tz_sensitive_end}`).getTime();
-    return rangeStart < rangeEnd;
+    const rangeStart = new Date(`${datePart}T00:00`).getTime();
+    const rangeEnd = new Date(`${datePartEnd}T00:00`).getTime();
+    return rangeStart <= rangeEnd;
   }
 
   async function handleCreateItemFormSubmit(
     event: React.FormEvent<HTMLFormElement>
   ) {
     event.preventDefault();
-    const yupValidateResult = await yupValidationSchema
+    trimStringsInObjectShallow(formValues);
+    let yupValidateResult = await yupValidationSchema
       .validate(formValues, { abortEarly: false })
       .catch((err) => {
-        console.log('yupValidateResult:', err);
+        console.log(err.inner);
         setErrorTruthy(err.inner, yupValidationError);
         setYupValidationError({ ...yupValidationError });
       });
-    console.log('after yupValidateResult:', yupValidateResult);
-    if (!(JSON.stringify(yupValidateResult) === JSON.stringify(formValues))) {
-      if (!dateRangeValid()) {
-        setYupValidationError({
-          ...yupValidationError,
-          date_tz_sensitive_end: true,
-        });
-      }
-      return;
-    }
-    if (!dateRangeValid()) {
+    if (
+      dateRangeControlChecked &&
+      timeControlChecked &&
+      !dateRangeTimeValid()
+    ) {
       setYupValidationError({
         ...yupValidationError,
+        date_tz_sensitive: true,
         date_tz_sensitive_end: true,
       });
+      return;
+    }
+    if (dateRangeControlChecked && !dateRangeValid()) {
+      setYupValidationError({
+        ...yupValidationError,
+        date_tz_insensitive: true,
+        date_tz_insensitive_end: true,
+      });
+      return;
+    }
+    if (!(JSON.stringify(yupValidateResult) === JSON.stringify(formValues))) {
       return;
     }
     await callCreateNewItemApi(formValues);
@@ -358,6 +404,25 @@ export default function NewItem(props: NewItemProps) {
       props.setCreateNewItemMode(false);
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  function itemTypeStyling(itemType: string) {
+    switch (itemType) {
+      case 'ASSIGNMENT':
+        return 'bg-emerald-400';
+      case 'NOTE':
+        return 'bg-cyan-400';
+      case 'PROJECT':
+        return 'bg-purple-400';
+      case 'REMINDER':
+        return 'bg-indigo-400';
+      case 'MEETING':
+        return 'bg-rose-400';
+      case 'TEST':
+        return 'bg-blue-400';
+      default:
+        return 'bg-stone-100';
     }
   }
 }

@@ -7,13 +7,13 @@ import {
 import styles from './task_view.module.css';
 import { TbPlus } from 'react-icons/tb';
 import ModalPopup from './modal';
-import NewItem from '../item/create_item';
 import { Category, ItemSafe } from 'lib/types/item';
 import { useDispatch } from 'react-redux';
 import { setCurrentGroupItem } from 'state/redux/groupSlice';
 import { setCurrentClassItem } from 'state/redux/classSlice';
 import { setCurrentOwnItem } from 'state/redux/ownSlice';
 import { animated, useSpring } from '@react-spring/web';
+import NewItem2 from 'components/item/create_item';
 
 interface TaskViewProps {
   dayLayout: number;
@@ -133,7 +133,7 @@ export default function TaskView(props: TaskViewProps) {
           modalId="create_item_modal"
           modalOpen={setCreateNewItemMode}
         >
-          <NewItem
+          <NewItem2
             selectedDate={props.selectedDate}
             itemCategory={props.category}
             setCreateNewItemMode={setCreateNewItemMode}

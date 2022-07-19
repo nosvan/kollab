@@ -12,6 +12,7 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
   if(req.method === 'POST'){
     try {
       const reqBody: CreateItem = req.body;
+      cleanReqBody(reqBody)
       const result = await prisma.item.create({
         data: {
           name: reqBody.name,
@@ -22,6 +23,7 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
           date_tz_sensitive: reqBody.date_tz_sensitive,
           date_tz_sensitive_end: reqBody.date_tz_sensitive_end,
           time_sensitive_flag: reqBody.time_sensitive_flag,
+          date_range_flag: reqBody.date_range_flag,
           date_tz_insensitive: reqBody.date_tz_insensitive,
           date_tz_insensitive_end: reqBody.date_tz_insensitive_end,
           permission_level: reqBody.permission_level ? PrismaVisibilityLevel[reqBody.permission_level.toLocaleLowerCase() as keyof typeof PrismaVisibilityLevel] : PrismaVisibilityLevel.public,
@@ -31,15 +33,16 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
       const resultSafe: ItemSafe[] = [{
         id: result.id,
         name: result.name,
-        description: result.description ? result.description : undefined,
+        description: result.description ?? undefined,
         category: result.category ? Category[result.category.toUpperCase() as keyof typeof Category] : undefined,
-        category_id: result.category_id ? result.category_id : undefined,
+        category_id: result.category_id ?? undefined,
         item_type: ItemType[result.item_type.toUpperCase() as keyof typeof ItemType],
-        date_tz_sensitive: result.date_tz_sensitive ? result.date_tz_sensitive : undefined,
-        date_tz_sensitive_end: result.date_tz_sensitive_end ? result.date_tz_sensitive_end : undefined,
+        date_tz_sensitive: result.date_tz_sensitive ?? undefined,
+        date_tz_sensitive_end: result.date_tz_sensitive_end ?? undefined,
         time_sensitive_flag: result.time_sensitive_flag,
-        date_tz_insensitive: result.date_tz_insensitive ? result.date_tz_insensitive : undefined,
-        date_tz_insensitive_end: result.date_tz_insensitive_end ? result.date_tz_insensitive_end : undefined,
+        date_range_flag: result.date_range_flag,
+        date_tz_insensitive: result.date_tz_insensitive ?? undefined,
+        date_tz_insensitive_end: result.date_tz_insensitive_end ?? undefined,
         permission_level: VisibilityLevel[result.permission_level.toUpperCase() as keyof typeof VisibilityLevel],
         last_modified_by_id: result.last_modified_by_id,
         created_by_id: result.created_by_id,
@@ -53,34 +56,16 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
   } 
 }
 
-// id: number
-// name: string
-// description: string
-// category: Category
-// category_id: number
-// item_type: ItemType
-// due_date: string
-// created_by_id: number
-// last_modified_by_id: number
-// date: string
-// created_at: string
-
-// {
-//   name: 'TEST GROUP ASSIGNMENT #2',
-//   description: '#2 description',
-//   category: 'GROUP',
-//   category_id: 1,
-//   item_type: 'ASSIGNMENT',
-//   due_date: 'Wed Jul 20 2022 00:00:00 GMT-0400 (Eastern Daylight Time)',
-//   date: 'Sat Jul 02 2022 17:42:23 GMT-0400 (Eastern Daylight Time)'
-// }
-
-// {
-//   name: 'TEST CLASS ASSIGNMENT #1',
-//   description: 'TEST CLASS ASSIGNMENT #1 description',
-//   category: 'CLASSROOM',
-//   category_id: 1,
-//   item_type: 'ASSIGNMENT',
-//   due_date: 'Wed Jul 20 2022 00:00:00 GMT-0400 (Eastern Daylight Time)',
-//   date: 'Sat Jul 02 2022 17:38:49 GMT-0400 (Eastern Daylight Time)'
-// }
+function cleanReqBody(reqBody: CreateItem){
+  if(reqBody.time_sensitive_flag){
+    reqBody.date_tz_insensitive = undefined
+    reqBody.date_tz_insensitive_end = undefined
+  } else {
+    reqBody.date_tz_sensitive = undefined
+    reqBody.date_tz_sensitive_end = undefined
+  }
+  if(!reqBody.date_range_flag){
+    reqBody.date_tz_sensitive_end = undefined
+    reqBody.date_tz_insensitive_end = undefined
+  }
+}

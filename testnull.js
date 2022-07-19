@@ -55,6 +55,17 @@ function getTimeCeiling(date, interval, addOn = 0) {
   return `${hour}:${minute}`;
 }
 
+function dateToYYYYMMDD(date) {
+  const dateInParts = new Date(date)
+    .toLocaleDateString('locale', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    })
+    .split('/');
+  return `${dateInParts[2]}-${dateInParts[0]}-${dateInParts[1]}`;
+}
+
 // function getTimeCeiling2(date, interval, addOn = 0) {
 //   const ms = 1000 * 60 * interval;
 
@@ -65,12 +76,12 @@ function getTimeCeiling(date, interval, addOn = 0) {
 
 // return `${localHour.toString()}:${localMinuteCeil}`;
 //}
-console.log(
-  new Date()
-    .toLocaleDateString('locale', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-    })
-    .split('/')
-);
+// const datee = new Date('2020-01-01T01:00Z');
+// console.log(datee.toISOString());
+// console.log(datee);
+// console.log(datee.toLocaleString());
+// console.log(new Date(datee.getTime() - datee.getTimezoneOffset() * 60 * 1000));
+// console.log('dateToYYYYMMDD', dateToYYYYMMDD(datee));
+// console.log(datee.toLocaleDateString());
+
+console.log(new Date().trim());

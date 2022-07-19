@@ -1,69 +1,49 @@
 import { CreateItem, ItemYupValidationError } from 'lib/types/item';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { getTimeCeiling } from 'utils/dateUtils';
+import { Dispatch, SetStateAction } from 'react';
 import styles from './date_inputs.module.css';
 
 interface DateFormProps {
-  selectedDateForNewItemFormattedYYYYMMDD: string;
   formValues: CreateItem;
   setFormValues: Dispatch<SetStateAction<CreateItem>>;
   yupValidationError: ItemYupValidationError;
   setYupValidationError: Dispatch<SetStateAction<ItemYupValidationError>>;
   timeControlChecked: boolean;
-  setTimeControlChecked: Dispatch<SetStateAction<boolean>>;
   dateRangeControlChecked: boolean;
+  datePart: string;
+  setDatePart: Dispatch<SetStateAction<string>>;
+  timePart: string;
+  setTimePart: Dispatch<SetStateAction<string>>;
+  datePartEnd: string;
+  setDatePartEnd: Dispatch<SetStateAction<string>>;
+  timePartEnd: string;
+  setTimePartEnd: Dispatch<SetStateAction<string>>;
 }
 
-export function DateInputs(props: DateFormProps) {
+export function DateInputs2(props: DateFormProps) {
   const {
-    setFormValues,
     yupValidationError,
     setYupValidationError,
+    timeControlChecked,
     dateRangeControlChecked,
-    selectedDateForNewItemFormattedYYYYMMDD,
+    datePart,
+    setDatePart,
+    timePart,
+    setTimePart,
+    datePartEnd,
+    setDatePartEnd,
+    timePartEnd,
+    setTimePartEnd,
   } = props;
-
-  const [dateTzSensitive, setDateTzSensitive] = useState(
-    selectedDateForNewItemFormattedYYYYMMDD
-  );
-  const [timeTzSensitive, setTimeTzSensitive] = useState(() =>
-    getTimeCeiling(new Date(), 30)
-  );
-  const [dateTzSensitiveEnd, setDateTzSensitiveEnd] = useState(
-    selectedDateForNewItemFormattedYYYYMMDD
-  );
-  const [timeTzSensitiveEnd, setTimeTzSensitiveEnd] = useState(() =>
-    getTimeCeiling(new Date(), 30, 30)
-  );
-
-  useEffect(() => {
-    setFormValues((prevValue) => {
-      return {
-        ...prevValue,
-        date_tz_sensitive: new Date(`${dateTzSensitive}T${timeTzSensitive}`),
-        date_tz_sensitive_end: new Date(
-          `${dateTzSensitiveEnd}T${timeTzSensitiveEnd}`
-        ),
-      };
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    dateTzSensitive,
-    timeTzSensitive,
-    dateTzSensitiveEnd,
-    timeTzSensitiveEnd,
-  ]);
 
   return (
     <div>
-      {/* does not include time */}
-      {!props.timeControlChecked && (
+      {!timeControlChecked && (
         <span className="flex flex-row space-x-1">
-          <span>
+          <span className="flex flex-col">
             <input
               className="text-white bg-stone-800 hover:bg-stone-700 p-1 rounded-xl"
               type="date"
-              value={selectedDateForNewItemFormattedYYYYMMDD}
+              value={datePart}
               onFocus={() =>
                 setYupValidationError((prevValue) => {
                   return {
@@ -73,12 +53,7 @@ export function DateInputs(props: DateFormProps) {
                 })
               }
               onChange={(event) => {
-                props.setFormValues({
-                  ...props.formValues,
-                  date_tz_insensitive: event.target.value
-                    ? event.target.value
-                    : undefined,
-                });
+                setDatePart(event.target.value);
               }}
             />
             {yupValidationError.date_tz_insensitive && (
@@ -88,11 +63,11 @@ export function DateInputs(props: DateFormProps) {
             )}
           </span>
           {dateRangeControlChecked && (
-            <span>
+            <span className="flex flex-col">
               <input
                 className="text-white bg-stone-800 hover:bg-stone-700 p-1 rounded-xl"
                 type="date"
-                value={selectedDateForNewItemFormattedYYYYMMDD}
+                value={datePartEnd}
                 onFocus={() =>
                   setYupValidationError((prevValue) => {
                     return {
@@ -102,12 +77,7 @@ export function DateInputs(props: DateFormProps) {
                   })
                 }
                 onChange={(event) => {
-                  props.setFormValues({
-                    ...props.formValues,
-                    date_tz_insensitive_end: event.target.value
-                      ? event.target.value
-                      : undefined,
-                  });
+                  setDatePartEnd(event.target.value);
                 }}
               />
               {yupValidationError.date_tz_insensitive_end && (
@@ -119,15 +89,14 @@ export function DateInputs(props: DateFormProps) {
           )}
         </span>
       )}
-      {/* includes time */}
-      {props.timeControlChecked && (
+      {timeControlChecked && (
         <span className="flex flex-col space-y-1">
           <span className="flex flex-row space-x-1">
             <span>
               <input
                 className="text-white bg-stone-800 hover:bg-stone-700 p-1 rounded-xl"
                 type="date"
-                value={dateTzSensitive}
+                value={datePart}
                 onFocus={() =>
                   setYupValidationError((prevValue) => {
                     return {
@@ -137,20 +106,15 @@ export function DateInputs(props: DateFormProps) {
                   })
                 }
                 onChange={(event) => {
-                  setDateTzSensitive(event.target.value);
+                  setDatePart(event.target.value);
                 }}
               />
-              {yupValidationError.date_tz_sensitive && (
-                <span className={`${styles['field-error-styling']}`}>
-                  invalid
-                </span>
-              )}
             </span>
             <span>
               <input
                 className="text-white bg-stone-800 hover:bg-stone-700 p-1 rounded-xl"
                 type="time"
-                value={timeTzSensitive}
+                value={timePart}
                 onFocus={() =>
                   setYupValidationError((prevValue) => {
                     return {
@@ -160,23 +124,25 @@ export function DateInputs(props: DateFormProps) {
                   })
                 }
                 onChange={(event) => {
-                  setTimeTzSensitive(event.target.value);
+                  setTimePart(event.target.value);
                 }}
               />
-              {yupValidationError.date_tz_sensitive && (
-                <span className={`${styles['field-error-styling']}`}>
-                  invalid
-                </span>
-              )}
             </span>
           </span>
+          <span className="flex flex-row">
+            {yupValidationError.date_tz_sensitive && (
+              <span className={`${styles['field-error-styling']}`}>
+                invalid
+              </span>
+            )}
+          </span>
           {dateRangeControlChecked && (
-            <span className="flex flex-row space-x-1">
-              <span className="flex flex-col">
+            <span className="flex flex-col space-y-1">
+              <span className="flex flex-row space-x-1">
                 <input
                   className="text-white bg-stone-800 hover:bg-stone-700 p-1 rounded-xl"
                   type="date"
-                  value={dateTzSensitiveEnd}
+                  value={datePartEnd}
                   onFocus={() =>
                     setYupValidationError((prevValue) => {
                       return {
@@ -186,39 +152,32 @@ export function DateInputs(props: DateFormProps) {
                     })
                   }
                   onChange={(event) => {
-                    setDateTzSensitiveEnd(event.target.value);
+                    setDatePartEnd(event.target.value);
                   }}
                 />
+                <input
+                  className="text-white bg-stone-800 hover:bg-stone-700 p-1 rounded-xl"
+                  type="time"
+                  value={timePartEnd}
+                  onFocus={() =>
+                    setYupValidationError((prevValue) => {
+                      return {
+                        ...prevValue,
+                        date_tz_sensitive_end: false,
+                      };
+                    })
+                  }
+                  onChange={(event) => {
+                    setTimePartEnd(event.target.value);
+                  }}
+                />
+              </span>
+              <span className="flex flex-row">
                 {yupValidationError.date_tz_sensitive_end && (
                   <span className={`${styles['field-error-styling']}`}>
                     invalid
                   </span>
                 )}
-              </span>
-              <span>
-                <span className="flex flex-col">
-                  <input
-                    className="text-white bg-stone-800 hover:bg-stone-700 p-1 rounded-xl"
-                    type="time"
-                    value={timeTzSensitiveEnd}
-                    onFocus={() =>
-                      setYupValidationError((prevValue) => {
-                        return {
-                          ...prevValue,
-                          time_tz_sensitive_end: false,
-                        };
-                      })
-                    }
-                    onChange={(event) => {
-                      setTimeTzSensitiveEnd(event.target.value);
-                    }}
-                  />
-                  {yupValidationError.time_tz_sensitive_end && (
-                    <span className={`${styles['field-error-styling']}`}>
-                      invalid
-                    </span>
-                  )}
-                </span>
               </span>
             </span>
           )}

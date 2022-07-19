@@ -4,13 +4,13 @@ export enum Category {
 }
 
 export enum ItemType {
-  ASSIGNMENT = 'ASSIGNMENT',
-  NOTE = 'NOTE',
-  PROJECT = 'PROJECT',
-  REMINDER = 'REMINDER',
-  MEETING = 'MEETING',
-  TEST = 'TEST',
   GENERAL = 'GENERAL',
+  ASSIGNMENT = 'ASSIGNMENT',
+  REMINDER = 'REMINDER',
+  NOTE = 'NOTE',
+  MEETING = 'MEETING',
+  PROJECT = 'PROJECT',
+  TEST = 'TEST',
 }
 
 export enum AccessLevel {
@@ -19,7 +19,6 @@ export enum AccessLevel {
 }
 
 export enum VisibilityLevel {
-  // ADMIN = 'ADMIN',
   PRIVATE = 'PRIVATE',
   PUBLIC = 'PUBLIC',
 }
@@ -34,6 +33,7 @@ export type Item = {
   date_tz_sensitive?: Date
   date_tz_sensitive_end?: Date
   time_sensitive_flag: boolean
+  date_range_flag: boolean
   date_tz_insensitive?: string
   date_tz_insensitive_end?: string
   permission_level: VisibilityLevel
@@ -51,6 +51,7 @@ export type CreateItem = {
   date_tz_sensitive?: Date
   date_tz_sensitive_end?: Date
   time_sensitive_flag: boolean
+  date_range_flag: boolean
   date_tz_insensitive?: string
   date_tz_insensitive_end?: string
   permission_level: VisibilityLevel
@@ -66,6 +67,7 @@ export type ItemSafe = {
   date_tz_sensitive?: Date
   date_tz_sensitive_end?: Date
   time_sensitive_flag: boolean
+  date_range_flag: boolean
   date_tz_insensitive?: string
   date_tz_insensitive_end?: string
   permission_level: VisibilityLevel
@@ -85,6 +87,7 @@ export type ItemYupValidationError = {
   time_tz_sensitive: boolean,
   time_tz_sensitive_end: boolean,
   time_sensitive_flag: boolean,
+  date_range_flag: boolean
   date_tz_insensitive: boolean,
   date_tz_insensitive_end: boolean,
   last_modified_by_id: boolean,

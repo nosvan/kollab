@@ -9,3 +9,13 @@ export function setErrorTruthy(objectToBeIteratedThrough: any, objectHoldingErro
   }
   return objectHoldingErrorStateThatIsReturned;
 }
+
+export function trimStringsInObjectShallow(object: any) {
+  if(object){
+    Object.keys(object).forEach((key: string) => {
+      if(typeof object[key] === 'string'){
+        object[key] = object[key].trim();
+      }
+    });
+  }
+}

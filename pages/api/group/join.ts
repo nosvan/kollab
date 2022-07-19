@@ -22,7 +22,7 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
         const groupSafeResult: GroupSafe = {
           id: groupResult.id,
           name: groupResult.name,
-          description: groupResult.description ? groupResult.description : undefined,
+          description: groupResult.description ?? undefined,
           owner_id: groupResult.owner_id,
           created_at: groupResult.created_at,
         }
