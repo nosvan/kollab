@@ -116,9 +116,9 @@ export default function TaskView(props: TaskViewProps) {
                 <div>
                   {dateToDayName(day)} {dateToMonthName(day)} {day.getDate()}
                 </div>
-                <div>
+                {/* <div>
                   <TbPlus className="hover:bg-stone-700 cursor-pointer rounded-xl"></TbPlus>
-                </div>
+                </div> */}
               </div>
               {props.itemsTimeInsensitive?.length > 0 &&
                 ItemsTimeInsensitiveView(day, props.itemsTimeInsensitive)}
