@@ -23,11 +23,7 @@ import {
   setErrorTruthy,
   trimStringsInObjectShallow,
 } from 'utils/formValidateUtils';
-import {
-  dateRangeTimeValid,
-  dateRangeValid,
-  dateToYYYYMMDD,
-} from 'utils/dateUtils';
+import { dateRangeValid, dateToYYYYMMDD } from 'utils/dateUtils';
 import { useSpring, animated } from '@react-spring/web';
 import { DateInputs2 } from './date_inputs';
 import { FooterInputs } from './footer_inputs';
@@ -374,7 +370,6 @@ export default function NewItem2(props: NewItemProps) {
   ) {
     event.preventDefault();
     trimStringsInObjectShallow(formValues);
-    console.log(formValues);
     let yupValidateResult = await yupValidationSchema
       .validate(formValues, { abortEarly: false })
       .catch((err) => {
