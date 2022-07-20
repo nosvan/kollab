@@ -214,7 +214,9 @@ export default function NewItem(props: NewItemProps) {
     <div>
       <form onSubmit={handleCreateItemFormSubmit}>
         <div className="flex flex-col text-sm space-y-2 pt-2 px-2 bg-stone-900 border-b-2 rounded-xl border-blue-700">
-          <div className="py-2 text-3xl">Create an Item</div>
+          <div className="py-2 text-3xl">
+            Create {formValues.date_range_flag ? 'an Event' : 'a Task'}
+          </div>
           <span className="flex flex-row items-center space-x-1 pb-2">
             <span
               onClick={() => setDateRangeControlChecked(false)}
