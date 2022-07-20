@@ -1,6 +1,4 @@
 import axios from 'axios';
-import { ClassSafe } from 'lib/types/class';
-import { GroupSafe } from 'lib/types/group';
 import {
   VisibilityLevel,
   Category,
@@ -10,8 +8,7 @@ import {
 } from 'lib/types/item';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setAdditionalClassItems } from 'state/redux/classSlice';
-import { setAdditionalGroupItems } from 'state/redux/groupSlice';
+import { setAdditionalListItems } from 'state/redux/listSlice';
 import { RootState } from 'state/redux/store';
 import 'react-datepicker/dist/react-datepicker.css';
 import { setAdditionalOwnItems } from 'state/redux/ownSlice';
@@ -20,14 +17,15 @@ import { UserSliceState } from 'lib/types/user';
 import styles from './create_item.module.css';
 import * as Yup from 'yup';
 import {
-  setErrorTruthy,
+  matchYupErrorStateWithCompErrorState,
   trimStringsInObjectShallow,
 } from 'utils/formValidateUtils';
 import { dateRangeValid, dateToYYYYMMDD } from 'utils/dateUtils';
 import { useSpring, animated } from '@react-spring/web';
-import { DateInputs2 } from './date_inputs';
 import { FooterInputs } from './footer_inputs';
 import { getTimeCeiling } from 'utils/dateUtils';
+import { ListSafe } from 'lib/types/list';
+import { DateInputs } from './date_inputs';
 
 interface NewItemProps {
   selectedDate?: Date;
@@ -35,16 +33,14 @@ interface NewItemProps {
   setCreateNewItemMode: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function NewItem2(props: NewItemProps) {
+export default function NewItem(props: NewItemProps) {
   const { selectedDate, itemCategory, setCreateNewItemMode } = props;
   const dispatch = useDispatch();
 
-  const groupState: GroupSafe = useSelector(
-    (state: RootState) => state.group_store.group
+  const listState: ListSafe = useSelector(
+    (state: RootState) => state.list_store.list
   );
-  const classState: ClassSafe = useSelector(
-    (state: RootState) => state.class_store.class
-  );
+
   const userState: UserSliceState = useSelector(
     (state: RootState) => state.user_store
   );
@@ -134,6 +130,17 @@ export default function NewItem2(props: NewItemProps) {
       };
     });
   }, [dateRangeControlChecked]);
+
+  useEffect(() => {
+    if (!visibilityControlCheck) {
+      setFormValues((prevState) => {
+        return {
+          ...prevState,
+          permission_level: VisibilityLevel.PUBLIC,
+        };
+      });
+    }
+  }, [visibilityControlCheck]);
 
   const yupValidationSchema = Yup.object({
     name: Yup.string().min(5, 'min length of 5').required('name is required'),
@@ -330,7 +337,7 @@ export default function NewItem2(props: NewItemProps) {
               </span>
             </span>
             <span>
-              <DateInputs2
+              <DateInputs
                 formValues={formValues}
                 setFormValues={setFormValues}
                 yupValidationError={yupValidationError}
@@ -345,7 +352,7 @@ export default function NewItem2(props: NewItemProps) {
                 setTimePart={setTimePart}
                 timePartEnd={timePartEnd}
                 setTimePartEnd={setTimePartEnd}
-              ></DateInputs2>
+              ></DateInputs>
             </span>
           </div>
           <FooterInputs
@@ -358,10 +365,8 @@ export default function NewItem2(props: NewItemProps) {
 
   function getCategoryId() {
     switch (itemCategory) {
-      case Category.CLASSROOM:
-        return classState.id;
-      case Category.GROUP:
-        return groupState.id;
+      case Category.LIST:
+        return listState.id;
     }
   }
 
@@ -373,8 +378,7 @@ export default function NewItem2(props: NewItemProps) {
     let yupValidateResult = await yupValidationSchema
       .validate(formValues, { abortEarly: false })
       .catch((err) => {
-        console.log(err.inner);
-        setErrorTruthy(err.inner, yupValidationError);
+        matchYupErrorStateWithCompErrorState(err.inner, yupValidationError);
         setYupValidationError({ ...yupValidationError });
       });
     if (!(JSON.stringify(yupValidateResult) === JSON.stringify(formValues))) {
@@ -392,10 +396,8 @@ export default function NewItem2(props: NewItemProps) {
         headers: { 'Content-Type': 'application/json' },
       }).then((res) => {
         if (res.data[0].category) {
-          if (res.data[0].category === Category.CLASSROOM) {
-            dispatch(setAdditionalClassItems(res.data));
-          } else if (res.data[0].category === Category.GROUP) {
-            dispatch(setAdditionalGroupItems(res.data));
+          if (res.data[0].category === Category.LIST) {
+            dispatch(setAdditionalListItems(res.data));
           }
         } else {
           dispatch(setAdditionalOwnItems(res.data));

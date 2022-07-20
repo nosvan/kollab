@@ -10,8 +10,8 @@ import { TabName } from 'lib/types/ui';
 import { animated, useSpring } from '@react-spring/web';
 import { TbArrowBigRight } from 'react-icons/tb';
 import ModalPopup from 'components/layout/modal';
-import NewGroup from 'components/group/create_group';
 import NewItem from 'components/item/create_item';
+import NewList from 'components/list/create_list';
 
 export default function Index({ user }: { user: UserSafe }) {
   const dispatch = useDispatch();
@@ -63,7 +63,7 @@ export default function Index({ user }: { user: UserSafe }) {
                 onClick={() => setCreateNewTypeMode(true)}
                 className="flex flex-row items-center space-x-1 text-sm bg-stone-900 hover:bg-stone-800 rounded-2xl p-2 cursor-pointer"
               >
-                <span>Create/Join a Group</span>
+                <span>Create/Join a List</span>
                 <TbArrowBigRight></TbArrowBigRight>
               </span>
             </div>
@@ -81,11 +81,11 @@ export default function Index({ user }: { user: UserSafe }) {
         )}
         {createNewTypeMode && (
           <ModalPopup
-            modalId="create_join_group_modal"
+            modalId="create_join_list_modal"
             modalOpen={setCreateNewTypeMode}
           >
             {createNewTypeMode && (
-              <NewGroup setCreateNewTypeMode={setCreateNewTypeMode}></NewGroup>
+              <NewList setCreateNewTypeMode={setCreateNewTypeMode}></NewList>
             )}
           </ModalPopup>
         )}

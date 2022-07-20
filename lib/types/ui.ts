@@ -1,6 +1,5 @@
 export enum TabName {
-  CLASS = 'classes',
-  GROUP = 'groups',
+  LISTS = 'lists',
   OWN = 'own',
   HOME = 'home',
   SETTINGS = 'settings',

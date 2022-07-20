@@ -4,8 +4,7 @@ import { FcGoogle } from 'react-icons/fc';
 import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from 'state/redux/store';
-import NewClass from '../classroom/create_class';
-import NewGroup from '../group/create_group';
+import NewList from '../list/create_list';
 import { TabName } from 'lib/types/ui';
 import ModalPopup from './modal';
 import Login from './login';
@@ -127,20 +126,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
             </div>
             {/* footer on small screens */}
             <Footer></Footer>
-            {userState.user.currentTab == TabName.CLASS && createNewTypeMode && (
+            {userState.user.currentTab == TabName.LISTS && createNewTypeMode && (
               <ModalPopup
-                modalId="create_class_modal"
+                modalId="create_list_modal"
                 modalOpen={setCreateNewTypeMode}
               >
-                <NewClass setCreateNewTypeMode={setCreateNewTypeMode} />
-              </ModalPopup>
-            )}
-            {userState.user.currentTab == TabName.GROUP && createNewTypeMode && (
-              <ModalPopup
-                modalId="create_group_modal"
-                modalOpen={setCreateNewTypeMode}
-              >
-                <NewGroup setCreateNewTypeMode={setCreateNewTypeMode} />
+                <NewList setCreateNewTypeMode={setCreateNewTypeMode} />
               </ModalPopup>
             )}
           </div>

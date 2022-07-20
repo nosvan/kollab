@@ -19,7 +19,7 @@ interface DateFormProps {
   setTimePartEnd: Dispatch<SetStateAction<string>>;
 }
 
-export function DateInputs2(props: DateFormProps) {
+export function DateInputs(props: DateFormProps) {
   const {
     yupValidationError,
     setYupValidationError,

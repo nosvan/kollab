@@ -108,6 +108,7 @@ export default function Own({ user }: { user: UserSafe }) {
                   <TbArrowBigLeft></TbArrowBigLeft>
                 </div>
                 <div
+                  id="day-selector-id"
                   onClick={() => handleSetDayLayout(1)}
                   className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg ${
                     dayLayout === 1 ? 'bg-stone-700' : ''
@@ -116,6 +117,7 @@ export default function Own({ user }: { user: UserSafe }) {
                   Day
                 </div>
                 <div
+                  id="week-selector-id"
                   onClick={() => handleSetDayLayout(7)}
                   className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg ${
                     dayLayout === 7 ? 'bg-stone-700' : ''
@@ -124,6 +126,7 @@ export default function Own({ user }: { user: UserSafe }) {
                   Week
                 </div>
                 <div
+                  id="month-selector-id"
                   onClick={() => handleSetDayLayout(30)}
                   className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg ${
                     dayLayout === 30 ? 'bg-stone-700' : ''

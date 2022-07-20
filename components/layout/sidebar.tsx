@@ -51,35 +51,18 @@ export default function SideBar() {
           <div className="hidden md:block">{TabName.OWN}</div>
         </div>
       )}
-      {/* classes */}
-      {false && (
-        <div
-          onClick={() => {
-            handleActiveTab(TabName.CLASS);
-          }}
-          className={`${
-            user.currentTab == TabName.CLASS
-              ? 'text-white font-light'
-              : 'text-gray-400 font-extralight'
-          } flex flex-row items-center text-lg cursor-pointer p-1 hover:text-white  rounded-3xl hover:bg-stone-800`}
-        >
-          <TbBook2 size={32} strokeWidth={'1'} />
-          <div className="hidden md:block">{TabName.CLASS}</div>
-        </div>
-      )}
-      {/* groups */}
       <div
         onClick={() => {
-          handleActiveTab(TabName.GROUP);
+          handleActiveTab(TabName.LISTS);
         }}
         className={`${
-          user.currentTab == TabName.GROUP
+          user.currentTab == TabName.LISTS
             ? 'text-white font-light'
             : 'text-gray-400 font-extralight'
         } flex flex-row items-center text-lg cursor-pointer p-1 hover:text-white  rounded-3xl hover:bg-stone-800`}
       >
         <TbUsers size={32} strokeWidth={'1'} />
-        <div className="hidden md:block">{TabName.GROUP}</div>
+        <div className="hidden md:block">{TabName.LISTS}</div>
       </div>
       <div
         onClick={() => {
@@ -108,13 +91,9 @@ export default function SideBar() {
           dispatch(setCurrentTab(tab));
           router.push('/own');
           break;
-        case TabName.CLASS:
+        case TabName.LISTS:
           dispatch(setCurrentTab(tab));
-          router.push('/classes');
-          break;
-        case TabName.GROUP:
-          dispatch(setCurrentTab(tab));
-          router.push('/groups');
+          router.push('/list');
           break;
         case TabName.SETTINGS:
           dispatch(setCurrentTab(tab));

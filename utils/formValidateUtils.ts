@@ -1,4 +1,4 @@
-export function setErrorTruthy(objectToBeIteratedThrough: any, objectHoldingErrorStateThatIsReturned: any) {
+export function matchYupErrorStateWithCompErrorState(objectToBeIteratedThrough: any, objectHoldingErrorStateThatIsReturned: any) {
   if(objectToBeIteratedThrough){
     Object.keys(objectHoldingErrorStateThatIsReturned).forEach((key: string) => {
       objectHoldingErrorStateThatIsReturned[key as keyof typeof objectHoldingErrorStateThatIsReturned] = false;

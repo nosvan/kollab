@@ -1,7 +1,7 @@
 import { TabName } from 'lib/types/ui';
 import { useRouter } from 'next/router';
 import { FaStackExchange } from 'react-icons/fa';
-import { TbBook2, TbHome2, TbUser, TbUsers } from 'react-icons/tb';
+import { TbHome2, TbUser, TbUsers } from 'react-icons/tb';
 import { useSelector } from 'react-redux';
 import { RootState } from 'state/redux/store';
 
@@ -45,28 +45,14 @@ export default function Footer() {
             : 'text-gray-400 font-extralight'
         }
       />
-      {false && (
-        <TbBook2
-          onClick={() => {
-            handleActiveTab(TabName.CLASS);
-          }}
-          size={32}
-          strokeWidth={1}
-          className={
-            user.currentTab == TabName.CLASS
-              ? 'text-white font-light'
-              : 'text-gray-400 font-extralight'
-          }
-        />
-      )}
       <TbUsers
         onClick={() => {
-          handleActiveTab(TabName.GROUP);
+          handleActiveTab(TabName.LISTS);
         }}
         size={32}
         strokeWidth={1}
         className={
-          user.currentTab == TabName.GROUP
+          user.currentTab == TabName.LISTS
             ? 'text-white font-light'
             : 'text-gray-400 font-extralight'
         }

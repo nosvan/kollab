@@ -1,6 +1,5 @@
 export enum Category {
-  CLASSROOM = 'CLASSROOM',
-  GROUP = 'GROUP',
+  LIST = 'list',
 }
 
 export enum ItemType {

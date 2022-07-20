@@ -5,15 +5,13 @@ import {
   dateToYYYYMMDD,
 } from 'utils/dateUtils';
 import styles from './task_view.module.css';
-import { TbPlus } from 'react-icons/tb';
 import ModalPopup from './modal';
 import { Category, ItemSafe } from 'lib/types/item';
 import { useDispatch } from 'react-redux';
-import { setCurrentGroupItem } from 'state/redux/groupSlice';
-import { setCurrentClassItem } from 'state/redux/classSlice';
 import { setCurrentOwnItem } from 'state/redux/ownSlice';
 import { animated, useSpring } from '@react-spring/web';
 import NewItem2 from 'components/item/create_item';
+import { setCurrentListItem } from 'state/redux/listSlice';
 
 interface TaskViewProps {
   dayLayout: number;
@@ -102,6 +100,7 @@ export default function TaskView(props: TaskViewProps) {
           return (
             <div
               key={index}
+              id="day-container-id"
               className={`pb-1 space-y-1 px-1 ${styles['day-container']}`}
             >
               <div
@@ -146,11 +145,8 @@ export default function TaskView(props: TaskViewProps) {
   function handleItemClick(item: ItemSafe) {
     if (props.category) {
       switch (props.category) {
-        case Category.GROUP:
-          dispatch(setCurrentGroupItem(item));
-          break;
-        case Category.CLASSROOM:
-          dispatch(setCurrentClassItem(item));
+        case Category.LIST:
+          dispatch(setCurrentListItem(item));
           break;
       }
     } else {

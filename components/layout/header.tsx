@@ -33,8 +33,7 @@ export default function Header(props: HeaderProps) {
     >
       <div className="flex flex-row items-center space-x-1 pl-1">
         <div>{userState.user.currentTab}</div>
-        {(userState.user.currentTab == TabName.CLASS ||
-          userState.user.currentTab == TabName.GROUP) && (
+        {userState.user.currentTab == TabName.LISTS && (
           <TbPlus
             onClick={() => props.setCreateNewTypeMode(true)}
             className="hover:bg-stone-800 rounded-xl cursor-pointer"

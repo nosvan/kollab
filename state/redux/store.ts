@@ -1,14 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import userReducer from './userSlice';
-import groupReducer from './groupSlice'
-import classReducer from './classSlice';
 import ownReducer from './ownSlice';
+import listReducer from './listSlice';
 
 export const store = configureStore({
   reducer: {
     user_store: userReducer,
-    group_store: groupReducer,
-    class_store: classReducer,
+    list_store: listReducer,
     own_store: ownReducer,
   },
 });

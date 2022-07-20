@@ -16,29 +16,7 @@ model user {
   created_at DateTime @default(now())
 }
 
-model school {
-  id         Int      @id @default(autoincrement())
-  name       String
-  zipcode    Int
-  town       String
-  county     String
-  state      String
-  country    String
-  created_at DateTime @default(now())
-}
-
-model classroom {
-  id          Int      @id @default(autoincrement())
-  name        String
-  school_name String
-  semester    Semester
-  description String?
-  passcode    String
-  owner_id    Int
-  created_at  DateTime @default(now())
-}
-
-model group {
+model list {
   id          Int      @id @default(autoincrement())
   name        String
   description String?
@@ -47,9 +25,9 @@ model group {
   created_at  DateTime @default(now())
 }
 
-model group_permission {
+model list_permission {
   id         Int      @id @default(autoincrement())
-  group_id   Int
+  list_id    Int
   user_id    Int
   permission AccessLevel @default(public)
   created_at DateTime @default(now())
@@ -97,20 +75,10 @@ enum AccessLevel {
 }
 
 enum VisibilityLevel {
-  // admin
   private
   public
 }
 
 enum Category {
-  classroom
-  group
-}
-
-enum Semester {
-  fall
-  spring
-  summer
-  winter
-  na
+  list
 }

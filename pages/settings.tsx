@@ -41,7 +41,7 @@ export default function Settings({ user }: { user: UserSafe }) {
             </div>
             <div className="flex flex-row">
               <div className="flex flex-row items-center space-x-1 px-1 rounded-lg bg-stone-800 hover:bg-stone-700 cursor-pointer">
-                <div>To Do: Manage Groups</div>
+                <div>To Do: Manage Lists</div>
                 <TbArrowBigRight></TbArrowBigRight>
               </div>
             </div>

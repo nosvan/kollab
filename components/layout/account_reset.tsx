@@ -4,7 +4,7 @@ import { ApiRoutes } from 'lib/api/api_routes';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import styles from './account_reset.module.css';
 import * as Yup from 'yup';
-import { setErrorTruthy } from 'utils/formValidateUtils';
+import { matchYupErrorStateWithCompErrorState } from 'utils/formValidateUtils';
 import { UserReset } from 'lib/types/user';
 
 interface AccountResetProps {
@@ -121,7 +121,7 @@ export default function AccountReset(props: AccountResetProps) {
     const yupValidateResult = await yupValidationSchema
       .validate(formValues, { abortEarly: false })
       .catch((err) => {
-        setErrorTruthy(err.inner, yupValidationError);
+        matchYupErrorStateWithCompErrorState(err.inner, yupValidationError);
         setValidationError({ ...yupValidationError });
       });
     if (formValues.email === formValues.confirm_email) {
