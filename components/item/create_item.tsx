@@ -37,9 +37,7 @@ export default function NewItem(props: NewItemProps) {
   const { selectedDate, itemCategory, setCreateNewItemMode } = props;
   const dispatch = useDispatch();
 
-  const listState: ListSafe = useSelector(
-    (state: RootState) => state.list_store.list
-  );
+  const listState = useSelector((state: RootState) => state.list_store.list);
 
   const userState: UserSliceState = useSelector(
     (state: RootState) => state.user_store

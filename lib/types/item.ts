@@ -74,6 +74,24 @@ export type ItemSafe = {
   last_modified_by_id: number,
 }
 
+export type ItemSafeState = {
+  id?: number
+  name?: string
+  description?: string
+  category?: Category
+  category_id?: number
+  item_type?: ItemType
+  date_tz_sensitive?: Date
+  date_tz_sensitive_end?: Date
+  time_sensitive_flag?: boolean
+  date_range_flag?: boolean
+  date_tz_insensitive?: string
+  date_tz_insensitive_end?: string
+  permission_level?: VisibilityLevel
+  created_by_id?: number
+  last_modified_by_id?: number,
+}
+
 export type ItemYupValidationError = {
   name: boolean,
   category: boolean,

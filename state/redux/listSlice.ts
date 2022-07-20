@@ -10,13 +10,7 @@ const initialState: ListSliceState = {
     owner_id: -999,
     created_at: new Date()
   },
-  lists: [{
-    id: -999,
-    name: '',
-    description: '',
-    owner_id: -999,
-    created_at: new Date()}
-  ],
+  lists: [],
   item: {
     id: -999,
     name: '',
