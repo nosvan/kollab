@@ -12,6 +12,7 @@ export type UserRegister = {
   last_name: string;
   email: string;
   password: string;
+  confirm_password: string;
 };
 
 // return type from server
@@ -59,5 +60,6 @@ export type UserState = {
 
 export type UserReset = {
   email: string;
+  confirm_email: string;
   locationOrigin: string;
 }
