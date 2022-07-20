@@ -3,7 +3,11 @@ import axios from 'axios';
 import { RootState } from 'state/redux/store';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { setCurrentList, setLists } from 'state/redux/listSlice';
-import { ListJoin, ListRegister } from 'lib/types/list';
+import * as Yup from 'yup';
+import {
+  matchYupErrorStateWithCompErrorState,
+  trimStringsInObjectShallow,
+} from 'utils/formValidateUtils';
 
 interface NewListProps {
   setCreateNewTypeMode: Dispatch<SetStateAction<boolean>>;
@@ -14,6 +18,59 @@ export default function NewList(props: NewListProps) {
   const user = useSelector((state: RootState) => state.user_store.user);
   const dispatch = useDispatch();
   const [selection, setSelection] = useState('join_list');
+
+  const initialJoinFormValuesState = {
+    list_id: 0,
+    passcode: '',
+    confirm_passcode: '',
+  };
+  const [joinFormValues, setJoinFormValues] = useState(
+    initialJoinFormValuesState
+  );
+
+  const [joinYupErrors, setJoinYupErrors] = useState({
+    list_id: false,
+    passcode: false,
+    confirm_passcode: false,
+  });
+
+  const joinYupValidationSchema = Yup.object({
+    list_id: Yup.number()
+      .min(1, 'List ID must be above 0')
+      .required('List ID is required'),
+    passcode: Yup.string().required('Passcode is required'),
+    confirm_passcode: Yup.string()
+      .required()
+      .oneOf([Yup.ref('passcode')], 'passcodes must match'),
+  });
+
+  const initialCreateFormValuesState = {
+    name: '',
+    description: '',
+    passcode: '',
+    confirm_passcode: '',
+  };
+
+  const [createFormValues, setCreateFormValues] = useState(
+    initialCreateFormValuesState
+  );
+
+  const [createYupErrors, setCreateYupErrors] = useState({
+    name: false,
+    description: false,
+    passcode: false,
+    confirm_passcode: false,
+  });
+
+  const createYupValidationSchema = Yup.object({
+    name: Yup.string().required('Name is required'),
+    description: Yup.string().required('Description is required'),
+    passcode: Yup.string().required('Passcode is required'),
+    confirm_passcode: Yup.string()
+      .required()
+      .oneOf([Yup.ref('passcode')], 'passcodes must match'),
+  });
+
   return (
     <>
       {selection === 'join_list' && (
@@ -29,30 +86,87 @@ export default function NewList(props: NewListProps) {
           </div>
           <form onSubmit={handleJoinListFormSubmit}>
             <div className="flex flex-col text-sm space-y-1">
-              <label className="text-white px-1">list id</label>
-              <input
-                className="text-white bg-stone-800 p-1 rounded-lg"
-                type="text"
-                required
-                id="list_id"
-                name="list_id"
-              />
-              <label className="text-white px-1">passcode</label>
-              <input
-                className="text-white bg-stone-800 p-1 rounded-lg"
-                type="password"
-                required
-                id="passcode"
-                name="passcode"
-              />
-              <label className="text-white px-1">confirm passcode</label>
-              <input
-                className="text-white bg-stone-800 p-1 rounded-lg"
-                type="password"
-                required
-                id="confirm_passcode"
-                name="confirm_passcode"
-              />
+              <span className="flex flex-col">
+                <label className="text-white px-1">list id</label>
+                <input
+                  className="text-white bg-stone-800 p-1 rounded-lg"
+                  type="number"
+                  id="list_id"
+                  name="list_id"
+                  value={joinFormValues.list_id}
+                  onChange={(event) => {
+                    setJoinFormValues({
+                      ...joinFormValues,
+                      list_id: parseInt(event.target.value ?? 0),
+                    });
+                  }}
+                  onFocus={() => {
+                    setJoinYupErrors({
+                      ...joinYupErrors,
+                      list_id: false,
+                    });
+                  }}
+                />
+                {joinYupErrors.list_id && (
+                  <div className="px-1 text-red-500 text-sm">
+                    list id must be above 0 and is required
+                  </div>
+                )}
+              </span>
+              <span className="flex flex-col">
+                <label className="text-white px-1">passcode</label>
+                <input
+                  className="text-white bg-stone-800 p-1 rounded-lg"
+                  type="password"
+                  id="passcode"
+                  name="passcode"
+                  value={joinFormValues.passcode}
+                  onChange={(event) => {
+                    setJoinFormValues({
+                      ...joinFormValues,
+                      passcode: event.target.value,
+                    });
+                  }}
+                  onFocus={() => {
+                    setJoinYupErrors({
+                      ...joinYupErrors,
+                      passcode: false,
+                    });
+                  }}
+                />
+                {joinYupErrors.passcode && (
+                  <div className="px-1 text-red-500 text-sm">
+                    passcode is required
+                  </div>
+                )}
+              </span>
+              <span className="flex flex-col">
+                <label className="text-white px-1">confirm passcode</label>
+                <input
+                  className="text-white bg-stone-800 p-1 rounded-lg"
+                  type="password"
+                  id="confirm_passcode"
+                  name="confirm_passcode"
+                  value={joinFormValues.confirm_passcode}
+                  onChange={(event) => {
+                    setJoinFormValues({
+                      ...joinFormValues,
+                      confirm_passcode: event.target.value,
+                    });
+                  }}
+                  onFocus={() => {
+                    setJoinYupErrors({
+                      ...joinYupErrors,
+                      confirm_passcode: false,
+                    });
+                  }}
+                />
+                {joinYupErrors.confirm_passcode && (
+                  <div className="px-1 text-red-500 text-sm">
+                    passcodes must match
+                  </div>
+                )}
+              </span>
               <div className="flex flex-row py-5 justify-start text-center text-sm space-x-2">
                 <div
                   className="bg-stone-900 border-2 border-white hover:bg-stone-800 hover:border-stone-300 text-white rounded-lg px-2 cursor-pointer"
@@ -84,37 +198,113 @@ export default function NewList(props: NewListProps) {
           </div>
           <form onSubmit={handleCreateListFormSubmit}>
             <div className="flex flex-col text-sm space-y-1">
-              <label className="text-white px-1">name</label>
-              <input
-                className="text-white bg-stone-800 p-1 rounded-lg"
-                type="text"
-                required
-                id="list_name"
-                name="list_name"
-              />
-              <label className="text-white px-1">passcode</label>
-              <input
-                className="text-white bg-stone-800 p-1 rounded-lg"
-                type="password"
-                required
-                id="passcode"
-                name="passcode"
-              />
-              <label className="text-white px-1">confirm passcode</label>
-              <input
-                className="text-white bg-stone-800 p-1 rounded-lg"
-                type="password"
-                required
-                id="confirm_passcode"
-                name="confirm_passcode"
-              />
-              <label className="text-white px-1">description</label>
-              <textarea
-                className="text-white bg-stone-800 px-1 rounded-lg"
-                required
-                id="description"
-                name="description"
-              />
+              <span className="flex flex-col">
+                <label className="text-white px-1">name</label>
+                <input
+                  className="text-white bg-stone-800 p-1 rounded-lg"
+                  type="text"
+                  id="list_name"
+                  name="list_name"
+                  value={createFormValues.name}
+                  onChange={(event) => {
+                    setCreateFormValues({
+                      ...createFormValues,
+                      name: event.target.value,
+                    });
+                  }}
+                  onFocus={() => {
+                    setCreateYupErrors({
+                      ...createYupErrors,
+                      name: false,
+                    });
+                  }}
+                />
+                {createYupErrors.name && (
+                  <div className="px-1 text-red-500 text-sm">
+                    name is required
+                  </div>
+                )}
+              </span>
+              <span className="flex flex-col">
+                <label className="text-white px-1">passcode</label>
+                <input
+                  className="text-white bg-stone-800 p-1 rounded-lg"
+                  type="password"
+                  id="passcode"
+                  name="passcode"
+                  value={createFormValues.passcode}
+                  onChange={(event) => {
+                    setCreateFormValues({
+                      ...createFormValues,
+                      passcode: event.target.value,
+                    });
+                  }}
+                  onFocus={() => {
+                    setCreateYupErrors({
+                      ...createYupErrors,
+                      passcode: false,
+                    });
+                  }}
+                />
+                {createYupErrors.passcode && (
+                  <div className="px-1 text-red-500 text-sm">
+                    passcode is required
+                  </div>
+                )}
+              </span>
+              <span className="flex flex-col">
+                <label className="text-white px-1">confirm passcode</label>
+                <input
+                  className="text-white bg-stone-800 p-1 rounded-lg"
+                  type="password"
+                  id="confirm_passcode"
+                  name="confirm_passcode"
+                  value={createFormValues.confirm_passcode}
+                  onChange={(event) => {
+                    setCreateFormValues({
+                      ...createFormValues,
+                      confirm_passcode: event.target.value,
+                    });
+                  }}
+                  onFocus={() => {
+                    setCreateYupErrors({
+                      ...createYupErrors,
+                      confirm_passcode: false,
+                    });
+                  }}
+                />
+                {createYupErrors.confirm_passcode && (
+                  <div className="px-1 text-red-500 text-sm">
+                    passcodes must match
+                  </div>
+                )}
+              </span>
+              <span className="flex flex-col">
+                <label className="text-white px-1">description</label>
+                <textarea
+                  className="text-white bg-stone-800 px-1 rounded-lg"
+                  id="description"
+                  name="description"
+                  value={createFormValues.description}
+                  onChange={(event) => {
+                    setCreateFormValues({
+                      ...createFormValues,
+                      description: event.target.value,
+                    });
+                  }}
+                  onFocus={() => {
+                    setCreateYupErrors({
+                      ...createYupErrors,
+                      description: false,
+                    });
+                  }}
+                />
+                {createYupErrors.description && (
+                  <div className="px-1 text-red-500 text-sm">
+                    description is required
+                  </div>
+                )}
+              </span>
               <div className="flex flex-row py-5 justify-start text-center text-sm space-x-2">
                 <div
                   className="bg-black border-2 border-white hover:bg-gray-800 hover:border-gray-300 text-white rounded-lg px-2 cursor-pointer"
@@ -140,26 +330,29 @@ export default function NewList(props: NewListProps) {
     event: React.FormEvent<HTMLFormElement>
   ) {
     event.preventDefault();
-    const formData = event.currentTarget;
-    if (formData.passcode.value !== formData.confirm_passcode.value) {
-      alert('passcodes do not match');
+    trimStringsInObjectShallow(joinFormValues);
+    let yupValidateResult = await joinYupValidationSchema
+      .validate(joinFormValues, { abortEarly: false })
+      .catch((err) => {
+        matchYupErrorStateWithCompErrorState(err.inner, joinYupErrors);
+        setJoinYupErrors({ ...joinYupErrors });
+      });
+    console.log(yupValidateResult);
+    console.log(joinFormValues);
+    if (
+      !(JSON.stringify(yupValidateResult) === JSON.stringify(joinFormValues))
+    ) {
       return;
     }
-    const listJoin: ListJoin = {
-      list_id: parseInt(formData.list_id.value),
-      passcode: formData.passcode.value,
-    };
-
     try {
       await axios({
         method: 'post',
         url: '/api/list/join',
-        data: JSON.stringify(listJoin),
+        data: JSON.stringify(joinFormValues),
         headers: { 'Content-Type': 'application/json' },
       }).then((res) => {
-        formData.reset();
+        setJoinFormValues(initialJoinFormValuesState);
         setCreateNewTypeMode(false);
-        console.log(res.data);
       });
     } catch (error) {
       console.log(error);
@@ -170,19 +363,23 @@ export default function NewList(props: NewListProps) {
     event: React.FormEvent<HTMLFormElement>
   ) {
     event.preventDefault();
-    const formData = event.currentTarget;
-    const newList: ListRegister = {
-      name: formData.list_name.value,
-      description: formData.description.value,
-      owner_id: user.id,
-      passcode: formData.passcode.value,
-    };
-
+    let yupValidateResult = await createYupValidationSchema
+      .validate(createFormValues, { abortEarly: false })
+      .catch((err) => {
+        matchYupErrorStateWithCompErrorState(err.inner, createYupErrors);
+        setCreateYupErrors({ ...createYupErrors });
+      });
+    console.log(yupValidateResult);
+    if (
+      !(JSON.stringify(yupValidateResult) === JSON.stringify(createFormValues))
+    ) {
+      return;
+    }
     try {
       await axios({
         method: 'post',
         url: '/api/list/new',
-        data: JSON.stringify(newList),
+        data: JSON.stringify(createFormValues),
         headers: { 'Content-Type': 'application/json' },
       }).then((res) => {
         dispatch(setCurrentList(res.data));
@@ -193,7 +390,7 @@ export default function NewList(props: NewListProps) {
       }).then((res) => {
         dispatch(setLists(res.data));
       });
-      formData.reset();
+      setCreateFormValues(initialCreateFormValuesState);
       setCreateNewTypeMode(false);
     } catch (error) {
       console.log(error);

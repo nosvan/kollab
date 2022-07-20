@@ -9,17 +9,17 @@ export type list = {
   created_at: Date
 }
 
-// type for new list
 export type ListRegister = {
   name: string
   description?: string
-  owner_id: number
   passcode: string
+  confirm_passcode: string
 }
 
 export type ListJoin = {
-  list_id: number
+  list_id: number 
   passcode: string
+  confirm_passcode: string
 }
 
 // return type from server
