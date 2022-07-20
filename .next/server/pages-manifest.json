@@ -1,22 +1,11 @@
 {
   "/_app": "pages/_app.js",
-  "/api/account/login": "pages/api/account/login.js",
-  "/api/account/logout": "pages/api/account/logout.js",
-  "/api/account/magiclink": "pages/api/account/magiclink.js",
-  "/api/account/reset": "pages/api/account/reset.js",
-  "/api/item/item": "pages/api/item/item.js",
-  "/api/auth/user": "pages/api/auth/user.js",
-  "/api/item/new": "pages/api/item/new.js",
-  "/api/item/own/item": "pages/api/item/own/item.js",
-  "/api/list/list": "pages/api/list/list.js",
-  "/api/list/join": "pages/api/list/join.js",
-  "/api/list/new": "pages/api/list/new.js",
-  "/api/account/register": "pages/api/account/register.js",
-  "/list": "pages/list.js",
   "/_error": "pages/_error.js",
-  "/": "pages/index.js",
-  "/own": "pages/own.js",
-  "/settings": "pages/settings.js",
   "/_document": "pages/_document.js",
-  "/404": "pages/404.html"
+  "/": "pages/index.js",
+  "/list": "pages/list.js",
+  "/api/list/list": "pages/api/list/list.js",
+  "/api/item/item": "pages/api/item/item.js",
+  "/own": "pages/own.js",
+  "/api/item/own/item": "pages/api/item/own/item.js"
 }

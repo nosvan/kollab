@@ -9,8 +9,12 @@ export default withIronSessionApiRoute(handle, sessionOptions)
 
 async function handle(req: NextApiRequest,res: NextApiResponse){
   if(req.method === 'POST'){
-    const newListData: ListJoin = req.body;
     try {
+      const newListData: ListJoin = {
+        list_id: parseInt(req.body.list_id),
+        passcode: req.body.passcode,
+        confirm_passcode: req.body.confirm_passcode
+      };
       const listResult = await prisma.list.findFirst({
         where: {
           id: {

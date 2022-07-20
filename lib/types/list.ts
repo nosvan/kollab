@@ -16,6 +16,12 @@ export type ListRegister = {
   confirm_passcode: string
 }
 
+export type ListJoinClient = {
+  list_id: string,
+  passcode: string
+  confirm_passcode: string
+}
+
 export type ListJoin = {
   list_id: number 
   passcode: string

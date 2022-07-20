@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import { RootState } from 'state/redux/store';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { setCurrentList, setLists } from 'state/redux/listSlice';
 import * as Yup from 'yup';
@@ -8,6 +7,8 @@ import {
   matchYupErrorStateWithCompErrorState,
   trimStringsInObjectShallow,
 } from 'utils/formValidateUtils';
+import { ListJoinClient, ListRegister } from 'lib/types/list';
+import { ListApiRoutes } from 'lib/api/api_routes';
 
 interface NewListProps {
   setCreateNewTypeMode: Dispatch<SetStateAction<boolean>>;
@@ -15,16 +16,15 @@ interface NewListProps {
 
 export default function NewList(props: NewListProps) {
   const { setCreateNewTypeMode } = props;
-  const user = useSelector((state: RootState) => state.user_store.user);
   const dispatch = useDispatch();
   const [selection, setSelection] = useState('join_list');
 
-  const initialJoinFormValuesState = {
-    list_id: 0,
+  const initialJoinFormValuesState: ListJoinClient = {
+    list_id: '',
     passcode: '',
     confirm_passcode: '',
   };
-  const [joinFormValues, setJoinFormValues] = useState(
+  const [joinFormValues, setJoinFormValues] = useState<ListJoinClient>(
     initialJoinFormValuesState
   );
 
@@ -35,7 +35,7 @@ export default function NewList(props: NewListProps) {
   });
 
   const joinYupValidationSchema = Yup.object({
-    list_id: Yup.number()
+    list_id: Yup.string()
       .min(1, 'List ID must be above 0')
       .required('List ID is required'),
     passcode: Yup.string().required('Passcode is required'),
@@ -44,14 +44,14 @@ export default function NewList(props: NewListProps) {
       .oneOf([Yup.ref('passcode')], 'passcodes must match'),
   });
 
-  const initialCreateFormValuesState = {
+  const initialCreateFormValuesState: ListRegister = {
     name: '',
     description: '',
     passcode: '',
     confirm_passcode: '',
   };
 
-  const [createFormValues, setCreateFormValues] = useState(
+  const [createFormValues, setCreateFormValues] = useState<ListRegister>(
     initialCreateFormValuesState
   );
 
@@ -97,7 +97,7 @@ export default function NewList(props: NewListProps) {
                   onChange={(event) => {
                     setJoinFormValues({
                       ...joinFormValues,
-                      list_id: parseInt(event.target.value ?? 0),
+                      list_id: event.target.value,
                     });
                   }}
                   onFocus={() => {
@@ -337,8 +337,6 @@ export default function NewList(props: NewListProps) {
         matchYupErrorStateWithCompErrorState(err.inner, joinYupErrors);
         setJoinYupErrors({ ...joinYupErrors });
       });
-    console.log(yupValidateResult);
-    console.log(joinFormValues);
     if (
       !(JSON.stringify(yupValidateResult) === JSON.stringify(joinFormValues))
     ) {
@@ -347,7 +345,7 @@ export default function NewList(props: NewListProps) {
     try {
       await axios({
         method: 'post',
-        url: '/api/list/join',
+        url: ListApiRoutes.JOIN,
         data: JSON.stringify(joinFormValues),
         headers: { 'Content-Type': 'application/json' },
       }).then((res) => {
@@ -363,13 +361,13 @@ export default function NewList(props: NewListProps) {
     event: React.FormEvent<HTMLFormElement>
   ) {
     event.preventDefault();
+    trimStringsInObjectShallow(createFormValues);
     let yupValidateResult = await createYupValidationSchema
       .validate(createFormValues, { abortEarly: false })
       .catch((err) => {
         matchYupErrorStateWithCompErrorState(err.inner, createYupErrors);
         setCreateYupErrors({ ...createYupErrors });
       });
-    console.log(yupValidateResult);
     if (
       !(JSON.stringify(yupValidateResult) === JSON.stringify(createFormValues))
     ) {
@@ -378,7 +376,7 @@ export default function NewList(props: NewListProps) {
     try {
       await axios({
         method: 'post',
-        url: '/api/list/new',
+        url: ListApiRoutes.REGISTER,
         data: JSON.stringify(createFormValues),
         headers: { 'Content-Type': 'application/json' },
       }).then((res) => {
@@ -386,7 +384,7 @@ export default function NewList(props: NewListProps) {
       });
       await axios({
         method: 'get',
-        url: '/api/list/list',
+        url: ListApiRoutes.LIST,
       }).then((res) => {
         dispatch(setLists(res.data));
       });
