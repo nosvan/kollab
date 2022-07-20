@@ -61,7 +61,7 @@ export default function Lists({ user }: { user: UserSafe }) {
         dispatch(setListItems(res.data));
       });
     }
-    if (parseInt(listState.list.id) !== -999) getListItems();
+    if (listState.list.id !== -999) getListItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listState.list]);
 
