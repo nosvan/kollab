@@ -18,7 +18,9 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
           created_at: true
         },
         where: {
-          owner_id: req.session.userSession.id
+          owner_id: {
+            equals: req.session.userSession.id
+          },
         }})
         res.json(result)
     } catch (error) {

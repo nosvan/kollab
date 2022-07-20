@@ -48,7 +48,7 @@ export default function TaskView(props: TaskViewProps) {
             key={itemB.id}
             onClick={() => handleItemClick(itemB)}
             className={`text-xs rounded-md
-            text-center text-black ${itemTypeStyling(
+            text-center text-black truncate px-2 ${itemTypeStyling(
               itemB.item_type
             )} cursor-pointer ${styles.mobilePadding}`}
           >

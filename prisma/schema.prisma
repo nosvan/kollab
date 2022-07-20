@@ -14,6 +14,8 @@ model user {
   email      String   @unique
   password   String
   created_at DateTime @default(now())
+  item_permissions item_permission[]
+  list_permissions list_permission[]
 }
 
 model list {
@@ -23,11 +25,14 @@ model list {
   owner_id    Int
   passcode    String
   created_at  DateTime @default(now())
+  list_permissions list_permission[]
 }
 
 model list_permission {
   id         Int      @id @default(autoincrement())
+  list       list     @relation(fields: [list_id], references: [id])
   list_id    Int
+  user       user     @relation(fields: [user_id], references: [id])
   user_id    Int
   permission AccessLevel @default(public)
   created_at DateTime @default(now())
@@ -50,11 +55,14 @@ model item {
   created_by_id           Int
   last_modified_by_id     Int
   created_at              DateTime @default(now())
+  item_permissions        item_permission[]         
 }
 
 model item_permission {
   id           Int      @id @default(autoincrement())
+  item         item     @relation(fields: [item_id], references: [id])
   item_id      Int
+  user         user    @relation(fields: [user_id], references: [id])
   user_id      Int
   created_at   DateTime @default(now())
 }
