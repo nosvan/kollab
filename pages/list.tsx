@@ -103,8 +103,8 @@ export default function Lists({ user }: { user: UserSafe }) {
           style={listSpring}
           className="bg-black rounded-3xl p-5 text-white mt-2"
         >
-          <div className="flex flex-row flex-wrap items-center justify-between text-sm mb-1">
-            {listState.lists && listState.lists.length > 0 && (
+          {listState.lists && listState.lists.length > 0 && (
+            <div className="flex flex-row flex-wrap items-center justify-between text-sm mb-1">
               <select
                 value={listState.list.id}
                 onChange={handleDropdownSelect}
@@ -118,54 +118,54 @@ export default function Lists({ user }: { user: UserSafe }) {
                   </option>
                 ))}
               </select>
-            )}
-            <div className="flex flex-row items-center space-x-1 mx-1">
-              <div
-                onClick={() => setSelectedDate(new Date())}
-                className="bg-stone-800 hover:bg-stone-700 p-1 rounded-lg cursor-pointer"
-              >
-                Today
-              </div>
-              <div className="flex flex-row items-center space-x-2 p-1 bg-stone-800 rounded-lg">
+              <div className="flex flex-row items-center space-x-1 mx-1">
                 <div
-                  onClick={() => handleDecrementDate()}
-                  className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg`}
+                  onClick={() => setSelectedDate(new Date())}
+                  className="bg-stone-800 hover:bg-stone-700 p-1 rounded-lg cursor-pointer"
                 >
-                  <TbArrowBigLeft></TbArrowBigLeft>
+                  Today
                 </div>
-                <div
-                  onClick={() => handleSetDayLayout(1)}
-                  className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg ${
-                    dayLayout === 1 ? 'bg-stone-700' : ''
-                  }`}
-                >
-                  Day
-                </div>
-                <div
-                  onClick={() => handleSetDayLayout(7)}
-                  className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg ${
-                    dayLayout === 7 ? 'bg-stone-700' : ''
-                  }`}
-                >
-                  Week
-                </div>
-                <div
-                  onClick={() => handleSetDayLayout(30)}
-                  className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg ${
-                    dayLayout === 30 ? 'bg-stone-700' : ''
-                  }`}
-                >
-                  Month
-                </div>
-                <div
-                  onClick={() => handleIncrementDate()}
-                  className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg`}
-                >
-                  <TbArrowBigRight></TbArrowBigRight>
+                <div className="flex flex-row items-center space-x-2 p-1 bg-stone-800 rounded-lg">
+                  <div
+                    onClick={() => handleDecrementDate()}
+                    className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg`}
+                  >
+                    <TbArrowBigLeft></TbArrowBigLeft>
+                  </div>
+                  <div
+                    onClick={() => handleSetDayLayout(1)}
+                    className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg ${
+                      dayLayout === 1 ? 'bg-stone-700' : ''
+                    }`}
+                  >
+                    Day
+                  </div>
+                  <div
+                    onClick={() => handleSetDayLayout(7)}
+                    className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg ${
+                      dayLayout === 7 ? 'bg-stone-700' : ''
+                    }`}
+                  >
+                    Week
+                  </div>
+                  <div
+                    onClick={() => handleSetDayLayout(30)}
+                    className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg ${
+                      dayLayout === 30 ? 'bg-stone-700' : ''
+                    }`}
+                  >
+                    Month
+                  </div>
+                  <div
+                    onClick={() => handleIncrementDate()}
+                    className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg`}
+                  >
+                    <TbArrowBigRight></TbArrowBigRight>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
           {listState.lists.length > 0 && (
             <TaskView
               dayLayout={dayLayout}
