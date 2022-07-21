@@ -89,8 +89,8 @@ export default function Own({ user }: { user: UserSafe }) {
           style={ownSpring}
           className="bg-black rounded-3xl p-5 text-white mt-2"
         >
-          <div className="flex flex-row items-center justify-between text-sm ml-1 mb-1">
-            <div className="items-center text-xl pl-1">
+          <div className="flex flex-row items-center justify-between text-sm mb-1">
+            <div className="items-center text-xl pl-1 mx-1">
               {dateToLongMonthName(selectedDate)} {selectedDate.getFullYear()}
             </div>
             <div className="flex flex-row items-center">
