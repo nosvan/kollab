@@ -109,7 +109,7 @@ export default function Lists({ user }: { user: UserSafe }) {
           className="bg-black rounded-3xl p-5 text-white mt-2"
         >
           {listState.lists && listState.lists.length > 0 && (
-            <>
+            <div className="mb-1">
               <span className="items-center text-xl mx-1 pl-1">
                 {dateToLongMonthName(selectedDate)} {selectedDate.getFullYear()}
               </span>
@@ -174,7 +174,7 @@ export default function Lists({ user }: { user: UserSafe }) {
                   </div>
                 </span>
               </div>
-            </>
+            </div>
           )}
           {listState.lists.length > 0 && (
             <TaskView

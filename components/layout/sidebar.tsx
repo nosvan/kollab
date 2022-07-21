@@ -89,15 +89,15 @@ export default function SideBar() {
           break;
         case TabName.OWN:
           dispatch(setCurrentTab(tab));
-          router.push('/own');
+          router.push(TabName.OWN);
           break;
         case TabName.LISTS:
           dispatch(setCurrentTab(tab));
-          router.push('/list');
+          router.push(TabName.LISTS);
           break;
         case TabName.SETTINGS:
           dispatch(setCurrentTab(tab));
-          router.push('/settings');
+          router.push(TabName.SETTINGS);
           break;
         default:
           router.push('/');
