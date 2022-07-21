@@ -8,7 +8,7 @@ import {
   TbTool,
   TbTrash,
 } from 'react-icons/tb';
-import { datStringYYYYMMDDtoMMDDYYYYwithSlashes } from 'utils/dateUtils';
+import { dateStringYYYYMMDDtoMMDDYYYYwithSlashes } from 'utils/dateUtils';
 
 export interface ItemProps {
   item: ItemSafe;
@@ -17,9 +17,11 @@ export interface ItemProps {
 export default function Item(props: ItemProps) {
   const { item } = props;
   const date_tz_insensitive = item.date_tz_insensitive ?? undefined;
+  const date_tz_insensitive_end = item.date_tz_insensitive_end ?? undefined;
   const date_tz_sensitive = item.date_tz_sensitive
     ? new Date(item.date_tz_sensitive)
     : undefined;
+  const date_tz_sensitive_end = item.date_tz_sensitive_end ?? undefined;
   const date_tz_sensitive_month = date_tz_sensitive
     ? date_tz_sensitive.getMonth()
     : undefined;
@@ -37,6 +39,7 @@ export default function Item(props: ItemProps) {
       ? `0${new Date(date_tz_sensitive).getMinutes()}`
       : new Date(date_tz_sensitive).getMinutes()
     : undefined;
+  const date_range_flag = item.date_range_flag;
   const [itemMode, setItemMode] = useState(ItemMode.VIEW);
 
   return (
@@ -77,35 +80,59 @@ export default function Item(props: ItemProps) {
               <span className="flex flex-row items-center space-x-2">
                 <TbCalendarEvent></TbCalendarEvent>
                 <span className="text-sm">
-                  {datStringYYYYMMDDtoMMDDYYYYwithSlashes(date_tz_insensitive)}
+                  {dateStringYYYYMMDDtoMMDDYYYYwithSlashes(date_tz_insensitive)}
                 </span>
+                {date_range_flag && date_tz_insensitive_end && (
+                  <span className="flex flex-row space-x-2">
+                    <span className="text-sm">to</span>
+                    <span className="text-sm">
+                      {dateStringYYYYMMDDtoMMDDYYYYwithSlashes(
+                        date_tz_insensitive_end
+                      )}
+                    </span>
+                  </span>
+                )}
               </span>
             )}
             {date_tz_sensitive && (
-              <span className="flex flex-col space-y-1">
-                <span className="flex flex-row items-center space-x-2">
-                  <TbCalendarEvent></TbCalendarEvent>
-                  <span className="text-sm">
-                    {date_tz_sensitive_month}/{date_tz_sensitive_day}/
-                    {date_tz_sensitive_year}
+              <span className="flex flex-row space-x-2 items-center">
+                <span className="flex flex-col space-y-1">
+                  <span className="flex flex-row items-center space-x-2">
+                    <TbCalendarEvent></TbCalendarEvent>
+                    <span className="text-sm">
+                      {date_tz_sensitive_month}/{date_tz_sensitive_day}/
+                      {date_tz_sensitive_year}
+                    </span>
+                  </span>
+                  <span className="flex flex-row items-center space-x-2">
+                    <TbClock></TbClock>
+                    <span className="text-sm">
+                      {date_tz_sensitive_hour}:{date_tz_sensitive_minute}
+                    </span>
                   </span>
                 </span>
-                <span className="flex flex-row items-center space-x-2">
-                  <TbClock></TbClock>
-                  <span className="text-sm">
-                    {date_tz_sensitive_hour}:{date_tz_sensitive_minute}
+                {date_range_flag && date_tz_sensitive_end && (
+                  <span className="flex flex-row space-x-2">
+                    <span className="text-sm">to</span>
+                    <span className="flex flex-col space-y-1">
+                      <span className="flex flex-row items-center space-x-2">
+                        <TbCalendarEvent></TbCalendarEvent>
+                        <span className="text-sm">
+                          {date_tz_sensitive_month}/{date_tz_sensitive_day}/
+                          {date_tz_sensitive_year}
+                        </span>
+                      </span>
+                      <span className="flex flex-row items-center space-x-2">
+                        <TbClock></TbClock>
+                        <span className="text-sm">
+                          {date_tz_sensitive_hour}:{date_tz_sensitive_minute}
+                        </span>
+                      </span>
+                    </span>
                   </span>
-                </span>
+                )}
               </span>
             )}
-          </div>
-          <div className="flex flex-row items-center">
-            <span className="text-sm mx-1 pl-1">
-              {item.date_tz_insensitive_end}
-            </span>
-            <span className="text-sm mx-1 pl-1">
-              {item?.date_tz_sensitive_end?.toString()}
-            </span>
           </div>
         </div>
       )}

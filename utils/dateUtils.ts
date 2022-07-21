@@ -19,7 +19,7 @@ export function dateToYYYYMMDD(date: Date): string {
   return `${dateInParts[2]}-${dateInParts[0]}-${dateInParts[1]}`;
 }
 
-export function datStringYYYYMMDDtoMMDDYYYYwithSlashes(date: string): string {
+export function dateStringYYYYMMDDtoMMDDYYYYwithSlashes(date: string): string {
   const dateInParts = date.split('-');
   return `${dateInParts[1]}/${dateInParts[2]}/${dateInParts[0]}`;
 }
