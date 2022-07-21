@@ -17,7 +17,7 @@ interface NewListProps {
 export default function NewList(props: NewListProps) {
   const { setCreateNewTypeMode } = props;
   const dispatch = useDispatch();
-  const [selection, setSelection] = useState('join_list');
+  const [selection, setSelection] = useState('create_list');
 
   const initialJoinFormValuesState: ListJoinClient = {
     list_id: '',
