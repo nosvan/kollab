@@ -18,13 +18,27 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
           created_at: true
         },
         where: {
-          owner_id: {
-            equals: req.session.userSession.id
-          },
-        }})
-        res.json(result)
+          OR: [
+            {
+              owner_id: {
+                equals: req.session.userSession.id
+              }
+            },
+            {
+              list_permissions: {
+                some: {
+                  user_id: {
+                    equals: req.session.userSession.id
+                  }
+                }
+              }
+            }
+          ]
+        }
+      })
+      return res.json(result)
     } catch (error) {
-      res.json(error)
+      return res.json(error)
     }
   } 
 }

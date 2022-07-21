@@ -34,7 +34,7 @@ export type ListSafe = {
   name: string
   description?: string
   owner_id: number
-  created_at: Date
+  created_at?: Date
 }
 
 // type for redux state

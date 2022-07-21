@@ -17,16 +17,16 @@ import {
 import { RootState } from 'state/redux/store';
 import { setOwnItems } from 'state/redux/ownSlice';
 import Item from 'components/item/item';
-import { setUserState } from 'state/redux/userSlice';
+import { setCurrentTab, setUserState } from 'state/redux/userSlice';
 import axios from 'axios';
 import { TabName } from 'lib/types/ui';
 import { animated, useSpring } from '@react-spring/web';
 import { ItemSafe } from 'lib/types/item';
-import { time } from 'console';
 
 export default function Own({ user }: { user: UserSafe }) {
   const dispatch = useDispatch();
   const router = useRouter();
+  const userState = useSelector((state: RootState) => state.user_store);
 
   useEffect(() => {
     if (!user.isLoggedIn) {

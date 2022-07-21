@@ -4,7 +4,7 @@ import { sessionOptions } from 'lib/iron_session';
 import { UserSafe } from 'lib/types/user';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUserState } from 'state/redux/userSlice';
+import { setCurrentTab, setUserState } from 'state/redux/userSlice';
 import axios from 'axios';
 import { RootState } from 'state/redux/store';
 import { useRouter } from 'next/router';

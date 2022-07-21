@@ -1,10 +1,12 @@
 import { useSpring, animated } from '@react-spring/web';
 import axios from 'axios';
 import { ApiRoutes } from 'lib/api/api_routes';
+import { TabName } from 'lib/types/ui';
 import { UserCredentials } from 'lib/types/user';
+import { useRouter } from 'next/router';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { setUserState } from 'state/redux/userSlice';
+import { setCurrentTab, setUserState } from 'state/redux/userSlice';
 import {
   matchYupErrorStateWithCompErrorState,
   trimStringsInObjectShallow,
@@ -17,6 +19,7 @@ interface LoginProps {
 
 export default function Login(props: LoginProps) {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const yupValidationSchema = Yup.object({
     email: Yup.string().email('invalid email').required('email is required'),
@@ -139,6 +142,8 @@ export default function Login(props: LoginProps) {
         },
       }).then((res) => {
         dispatch(setUserState(res.data));
+        dispatch(setCurrentTab(TabName.HOME));
+        router.push('/');
       });
     } catch (error) {
       console.log(error);

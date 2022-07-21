@@ -6,8 +6,10 @@ import { useRouter } from 'next/router';
 import { Dispatch, SetStateAction } from 'react';
 import { TbLogin, TbLogout, TbPlus, TbUserPlus } from 'react-icons/tb';
 import { useDispatch, useSelector } from 'react-redux';
+import { resetListState } from 'state/redux/listSlice';
+import { resetOwnState } from 'state/redux/ownSlice';
 import { RootState } from 'state/redux/store';
-import { setUserState } from 'state/redux/userSlice';
+import { resetUserState, setUserState } from 'state/redux/userSlice';
 
 interface HeaderProps {
   createNewTypeMode: boolean;
@@ -16,6 +18,8 @@ interface HeaderProps {
 
 export default function Header(props: HeaderProps) {
   const userState = useSelector((state: RootState) => state.user_store);
+  const listState = useSelector((state: RootState) => state.list_store);
+  const ownState = useSelector((state: RootState) => state.own_store);
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -85,7 +89,11 @@ export default function Header(props: HeaderProps) {
         method: 'POST',
         url: ApiRoutes.LOGOUT,
       }).then((res) => {
-        dispatch(setUserState(res.data));
+        // dispatch(setUserState(res.data));
+        dispatch(resetUserState());
+        dispatch(resetListState());
+        dispatch(resetOwnState());
+        router.push('/');
       });
     } catch (error) {
       console.log(error);

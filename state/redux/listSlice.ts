@@ -8,7 +8,7 @@ const initialState: ListSliceState = {
     name: '',
     description: '',
     owner_id: -999,
-    created_at: new Date()
+    created_at: undefined
   },
   lists: [],
   item: {
@@ -17,8 +17,8 @@ const initialState: ListSliceState = {
     category: Category.LIST,
     category_id: -999,
     item_type: ItemType.GENERAL,
-    date_tz_sensitive: new Date(),
-    date_tz_sensitive_end: new Date(),
+    date_tz_sensitive: undefined,
+    date_tz_sensitive_end: undefined,
     time_sensitive_flag: false,
     date_range_flag: false,
     date_tz_insensitive: undefined,
@@ -59,11 +59,18 @@ export const listSlice = createSlice({
     },
     setViewListItemMode: (state, action) => {
       state.viewListItemMode = action.payload
+    },
+    resetListState: (state) => {
+      state.list = {...initialState.list};
+      state.lists = [];
+      state.item = {...initialState.item};
+      state.items = [];
+      state.viewListItemMode = false;
     }
   },
 });
 
-export const { setCurrentList, setLists, setCurrentListAndLists, setCurrentListItem, setListItems, setAdditionalListItems, setViewListItemMode } =
+export const { setCurrentList, setLists, setCurrentListAndLists, setCurrentListItem, setListItems, setAdditionalListItems, setViewListItemMode, resetListState } =
 listSlice.actions;
 
 export default listSlice.reducer;

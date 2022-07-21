@@ -10,8 +10,8 @@ const initialState: OwnSliceState = {
     category: undefined,
     category_id: undefined,
     item_type: ItemType.GENERAL,
-    date_tz_sensitive: new Date(),
-    date_tz_sensitive_end: new Date(),
+    date_tz_sensitive: undefined,
+    date_tz_sensitive_end: undefined,
     time_sensitive_flag: false,
     date_range_flag: false,
     date_tz_insensitive: undefined,
@@ -38,11 +38,16 @@ export const ownSlice = createSlice({
     },
     setViewOwnItemMode: (state, action) => {
       state.viewOwnItemMode = action.payload
+    },
+    resetOwnState: (state) => {
+      state.item = {...initialState.item};
+      state.items = [];
+      state.viewOwnItemMode = false;
     }
   },
 });
 
-export const { setCurrentOwnItem, setOwnItems, setAdditionalOwnItems, setViewOwnItemMode} =
+export const { setCurrentOwnItem, setOwnItems, setAdditionalOwnItems, setViewOwnItemMode, resetOwnState} =
 ownSlice.actions;
 
 export default ownSlice.reducer;

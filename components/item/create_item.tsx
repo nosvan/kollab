@@ -260,40 +260,42 @@ export default function NewItem(props: NewItemProps) {
               ))}
             </span>
           </div>
-          <div className="flex flex-col space-y-1">
-            <span className="flex flex-row items-center space-x-1">
-              <label className="text-white px-1">control visibility</label>
-              <ToggleSwitch
-                isChecked={visibilityControlCheck}
-                setIsChecked={setVisibilityControlCheck}
-              ></ToggleSwitch>
-            </span>
-            <div className="flex flex-row space-x-1">
-              {visibilityControlCheck && (
-                <animated.span style={selectorSpring}>
-                  <select
-                    className="text-white bg-stone-800 hover:bg-stone-700 py-1 rounded-xl"
-                    value={formValues.permission_level}
-                    onChange={(event) =>
-                      setFormValues({
-                        ...formValues,
-                        permission_level:
-                          VisibilityLevel[
-                            event.target.value as keyof typeof VisibilityLevel
-                          ],
-                      })
-                    }
-                  >
-                    {Object.keys(VisibilityLevel).map((key) => (
-                      <option key={key} value={key}>
-                        {key}
-                      </option>
-                    ))}
-                  </select>
-                </animated.span>
-              )}
+          {itemCategory && (
+            <div className="flex flex-col space-y-1">
+              <span className="flex flex-row items-center space-x-1">
+                <label className="text-white px-1">control visibility</label>
+                <ToggleSwitch
+                  isChecked={visibilityControlCheck}
+                  setIsChecked={setVisibilityControlCheck}
+                ></ToggleSwitch>
+              </span>
+              <div className="flex flex-row space-x-1">
+                {visibilityControlCheck && (
+                  <animated.span style={selectorSpring}>
+                    <select
+                      className="text-white bg-stone-800 hover:bg-stone-700 py-1 rounded-xl"
+                      value={formValues.permission_level}
+                      onChange={(event) =>
+                        setFormValues({
+                          ...formValues,
+                          permission_level:
+                            VisibilityLevel[
+                              event.target.value as keyof typeof VisibilityLevel
+                            ],
+                        })
+                      }
+                    >
+                      {Object.keys(VisibilityLevel).map((key) => (
+                        <option key={key} value={key}>
+                          {key}
+                        </option>
+                      ))}
+                    </select>
+                  </animated.span>
+                )}
+              </div>
             </div>
-          </div>
+          )}
           <div className="flex flex-col">
             <label className="text-white px-1">name</label>
             <input

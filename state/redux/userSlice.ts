@@ -32,11 +32,16 @@ export const userSlice = createSlice({
     },
     setCreateNewItemMode: (state, action) => {
       state.createNewItemMode = action.payload;
-    } 
+    },
+    resetUserState: (state) => {
+      state.user = {...initialState.user};
+      state.createNewItemMode = false;
+      state.createNewTypeMode = false;
+    }
   },
 });
 
-export const { setUserState, setLoggedInStatus, setCurrentTab, setCreateNewTypeMode, setCreateNewItemMode} =
+export const { setUserState, setLoggedInStatus, setCurrentTab, setCreateNewTypeMode, setCreateNewItemMode, resetUserState} =
   userSlice.actions;
 
 export default userSlice.reducer;

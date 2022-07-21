@@ -16,13 +16,13 @@ import NewList from 'components/list/create_list';
 export default function Index({ user }: { user: UserSafe }) {
   const dispatch = useDispatch();
   const router = useRouter();
+
   useEffect(() => {
     if (!user.isLoggedIn) {
       router.push('/');
       return;
     }
     dispatch(setUserState({ ...user, currentTab: TabName.HOME }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [createNewTypeMode, setCreateNewTypeMode] = useState(false);

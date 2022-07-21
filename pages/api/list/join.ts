@@ -22,7 +22,15 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
           },
           passcode: newListData.passcode,
         }})
-      res.json(listResult);
+      if(listResult){
+        await prisma.list_permission.create({
+          data: {
+            list_id: listResult.id,
+            user_id: req.session.userSession.id,
+          }
+        })
+      }
+      return res.json(listResult);
     } catch (error) {
       console.log(error)
       res.json(error)
