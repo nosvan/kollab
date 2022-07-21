@@ -43,9 +43,15 @@ export const listSlice = createSlice({
     setCurrentListAndLists: (state, action) => {
       if(action.payload.length > 0) {
         state.lists = action.payload
-        state.list = action.payload[0]
+        const currentListExistsInLists = state.lists.find(list => list.id === state.list.id)
+        if(currentListExistsInLists) {
+          state.list = currentListExistsInLists
+        } else {
+          state.list = state.lists[0]
+        }
       } else {
         state.list = initialState.list
+        state.lists = initialState.lists
       }
     },
     setCurrentListItem: (state, action) => {
