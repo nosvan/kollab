@@ -317,9 +317,9 @@ export default function NewItem(props: NewItemProps) {
             )}
           </div>
           <div className="flex flex-col">
-            <label className="text-white px-1">description</label>
+            <label className="text-white px-1">info</label>
             <textarea
-              className="text-white resize-none bg-stone-800 hover:bg-stone-700 px-1 rounded-xl"
+              className="text-white resize-y bg-stone-800 hover:bg-stone-700 px-1 rounded-xl"
               onChange={(event) =>
                 setFormValues({
                   ...formValues,
@@ -415,17 +415,17 @@ export default function NewItem(props: NewItemProps) {
   function itemTypeStyling(itemType: string) {
     switch (itemType) {
       case 'ASSIGNMENT':
-        return 'bg-emerald-400';
+        return 'bg-emerald-500';
       case 'NOTE':
-        return 'bg-cyan-400';
+        return 'bg-cyan-500';
       case 'PROJECT':
-        return 'bg-purple-400';
+        return 'bg-purple-500';
       case 'REMINDER':
-        return 'bg-indigo-400';
+        return 'bg-indigo-500';
       case 'MEETING':
-        return 'bg-rose-400';
+        return 'bg-rose-500';
       case 'TEST':
-        return 'bg-blue-400';
+        return 'bg-blue-500';
       default:
         return 'bg-stone-100';
     }

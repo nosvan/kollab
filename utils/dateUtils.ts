@@ -18,6 +18,11 @@ export function dateToYYYYMMDD(date: Date): string {
   const dateInParts = new Date(date).toLocaleDateString('locale', { year: 'numeric', month: '2-digit', day: '2-digit' }).split('/');
   return `${dateInParts[2]}-${dateInParts[0]}-${dateInParts[1]}`;
 }
+
+export function datStringYYYYMMDDtoMMDDYYYYwithSlashes(date: string): string {
+  const dateInParts = date.split('-');
+  return `${dateInParts[1]}/${dateInParts[2]}/${dateInParts[0]}`;
+}
 export function getTimeCeiling(date: Date, interval: number, addOn: number = 0) {
   const ms = 1000 * 60 * interval;
   const time = new Date(

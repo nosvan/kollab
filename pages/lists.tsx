@@ -42,7 +42,7 @@ export default function Lists({ user }: { user: UserSafe }) {
         method: 'get',
         url: '/api/list/list',
       }).then((res) => {
-        if (res.data.length > 0) dispatch(setCurrentListAndLists(res.data));
+        dispatch(setCurrentListAndLists(res.data));
       });
     }
     getUserLists();

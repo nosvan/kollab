@@ -4,3 +4,8 @@ export enum TabName {
   HOME = 'home',
   SETTINGS = 'settings',
 }
+
+export enum ItemMode {
+  VIEW = 'VIEW',
+  EDIT = 'EDIT'
+}
