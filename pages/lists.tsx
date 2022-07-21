@@ -26,6 +26,7 @@ import {
   setListItems,
 } from 'state/redux/listSlice';
 import { ListSafe, ListSliceState } from 'lib/types/list';
+import NewList from 'components/list/create_list';
 
 export default function Lists({ user }: { user: UserSafe }) {
   const dispatch = useDispatch();
@@ -95,6 +96,8 @@ export default function Lists({ user }: { user: UserSafe }) {
     setDays(getDays(dayLayout, selectedDate));
   }, [dayLayout, selectedDate]);
 
+  const [createNewTypeMode, setCreateNewTypeMode] = useState(false);
+
   const listSpring = useSpring({
     from: { opacity: 0 },
     to: { opacity: 1 },
@@ -108,6 +111,17 @@ export default function Lists({ user }: { user: UserSafe }) {
           style={listSpring}
           className="bg-black rounded-3xl p-5 text-white mt-2"
         >
+          {listState.lists.length == 0 && (
+            <div className="flex flex-row">
+              <span
+                onClick={() => setCreateNewTypeMode(true)}
+                className="flex flex-row items-center space-x-1 text-sm bg-stone-900 hover:bg-stone-800 rounded-2xl p-2 cursor-pointer"
+              >
+                <span>Create/Join a List</span>
+                <TbArrowBigRight></TbArrowBigRight>
+              </span>
+            </div>
+          )}
           {listState.lists && listState.lists.length > 0 && (
             <div className="mb-1">
               <span className="items-center text-xl mx-1 pl-1">
@@ -187,6 +201,16 @@ export default function Lists({ user }: { user: UserSafe }) {
               itemsTimeInsensitive={timeInsensitiveItems}
               setViewItemMode={setViewItemMode}
             />
+          )}
+          {createNewTypeMode && (
+            <ModalPopup
+              modalId="create_join_list_modal"
+              modalOpen={setCreateNewTypeMode}
+            >
+              {createNewTypeMode && (
+                <NewList setCreateNewTypeMode={setCreateNewTypeMode}></NewList>
+              )}
+            </ModalPopup>
           )}
           {viewItemMode && (
             <ModalPopup

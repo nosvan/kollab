@@ -1,6 +1,6 @@
 import { TabName } from 'lib/types/ui';
 import { useRouter } from 'next/router';
-import { FaStackExchange } from 'react-icons/fa';
+import { FaLayerGroup } from 'react-icons/fa';
 import { TbHome2, TbUser, TbUsers } from 'react-icons/tb';
 import { useSelector } from 'react-redux';
 import { RootState } from 'state/redux/store';
@@ -13,7 +13,7 @@ export default function Footer() {
       className="flex flex-row justify-between fixed bottom-0
   px-20 w-full sm:hidden text-white bg-black py-2"
     >
-      <FaStackExchange
+      <FaLayerGroup
         onClick={() => {
           handleActiveTab(TabName.HOME);
         }}

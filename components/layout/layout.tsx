@@ -1,4 +1,4 @@
-import { FaStackExchange } from 'react-icons/fa';
+import { FaLayerGroup } from 'react-icons/fa';
 import { BsGithub } from 'react-icons/bs';
 import { FcGoogle } from 'react-icons/fc';
 import { useState } from 'react';
@@ -34,7 +34,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
           >
             <div>
               <div className="flex flex-col items-center my-5 space-y-3 text-blue-700">
-                <FaStackExchange size={100}></FaStackExchange>
+                <FaLayerGroup size={100}></FaLayerGroup>
               </div>
               {selection === '' && (
                 <animated.div

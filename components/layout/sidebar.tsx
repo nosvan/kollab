@@ -1,7 +1,7 @@
 import { TabName } from 'lib/types/ui';
 import { useRouter } from 'next/router';
-import { FaStackExchange } from 'react-icons/fa';
-import { TbBook2, TbHome2, TbSettings, TbUser, TbUsers } from 'react-icons/tb';
+import { FaLayerGroup } from 'react-icons/fa';
+import { TbHome2, TbSettings, TbUser, TbUsers } from 'react-icons/tb';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'state/redux/store';
 import { setCurrentTab } from 'state/redux/userSlice';
@@ -18,7 +18,7 @@ export default function SideBar() {
         className="flex flex-row items-center font-semibold
     text-blue-700 text-2xl cursor-pointer p-1"
       >
-        <FaStackExchange size={32} />
+        <FaLayerGroup size={32} />
         <div className="hidden md:block">kollab</div>
       </div>
       {/* home */}
