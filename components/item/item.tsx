@@ -208,6 +208,8 @@ export default function Item(props: ItemProps) {
         return 'border-indigo-500';
       case 'MEETING':
         return 'border-rose-500';
+      case 'TEST':
+        return 'border-blue-500';
       default:
         return 'border-stone-100';
     }
