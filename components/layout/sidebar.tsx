@@ -64,19 +64,21 @@ export default function SideBar() {
         <TbUsers size={32} strokeWidth={'1'} />
         <div className="hidden md:block">{TabName.LISTS}</div>
       </div>
-      <div
-        onClick={() => {
-          handleActiveTab(TabName.SETTINGS);
-        }}
-        className={`${
-          user.currentTab == TabName.SETTINGS
-            ? 'text-white font-light'
-            : 'text-gray-400 font-extralight'
-        } flex flex-row items-center text-lg cursor-pointer p-1 hover:text-white  rounded-3xl hover:bg-stone-800`}
-      >
-        <TbSettings size={32} strokeWidth={'1'} />
-        <div className="hidden md:block">{TabName.SETTINGS}</div>
-      </div>
+      {false && (
+        <div
+          onClick={() => {
+            handleActiveTab(TabName.SETTINGS);
+          }}
+          className={`${
+            user.currentTab == TabName.SETTINGS
+              ? 'text-white font-light'
+              : 'text-gray-400 font-extralight'
+          } flex flex-row items-center text-lg cursor-pointer p-1 hover:text-white  rounded-3xl hover:bg-stone-800`}
+        >
+          <TbSettings size={32} strokeWidth={'1'} />
+          <div className="hidden md:block">{TabName.SETTINGS}</div>
+        </div>
+      )}
     </div>
   );
 
