@@ -21,7 +21,9 @@ export default function Item(props: ItemProps) {
   const date_tz_sensitive = item.date_tz_sensitive
     ? new Date(item.date_tz_sensitive)
     : undefined;
-  const date_tz_sensitive_end = item.date_tz_sensitive_end ?? undefined;
+  const date_tz_sensitive_end = item.date_tz_sensitive_end
+    ? new Date(item.date_tz_sensitive_end)
+    : undefined;
   const date_tz_sensitive_month = date_tz_sensitive
     ? date_tz_sensitive.getMonth()
     : undefined;
@@ -32,12 +34,39 @@ export default function Item(props: ItemProps) {
     ? date_tz_sensitive.getFullYear()
     : undefined;
   const date_tz_sensitive_hour = date_tz_sensitive
-    ? date_tz_sensitive.getHours()
+    ? date_tz_sensitive.getHours() % 12 || 12
     : undefined;
   const date_tz_sensitive_minute = date_tz_sensitive
     ? date_tz_sensitive.getMinutes() < 10
-      ? `0${new Date(date_tz_sensitive).getMinutes()}`
-      : new Date(date_tz_sensitive).getMinutes()
+      ? `0${date_tz_sensitive.getMinutes()}`
+      : date_tz_sensitive.getMinutes()
+    : undefined;
+  const date_tz_sensitive_end_month = date_tz_sensitive_end
+    ? date_tz_sensitive_end.getMonth()
+    : undefined;
+  const date_tz_sensitive_end_day = date_tz_sensitive_end
+    ? date_tz_sensitive_end.getDate()
+    : undefined;
+  const date_tz_sensitive_end_year = date_tz_sensitive_end
+    ? date_tz_sensitive_end.getFullYear()
+    : undefined;
+  const date_tz_sensitive_end_hour = date_tz_sensitive_end
+    ? date_tz_sensitive_end.getHours() % 12 || 12
+    : undefined;
+  const date_tz_sensitive_end_minute = date_tz_sensitive_end
+    ? date_tz_sensitive_end.getMinutes() < 10
+      ? `0${date_tz_sensitive_end.getMinutes()}`
+      : date_tz_sensitive_end.getMinutes()
+    : undefined;
+  const date_time_am_pm = date_tz_sensitive
+    ? date_tz_sensitive.getHours() < 12
+      ? 'AM'
+      : 'PM'
+    : undefined;
+  const date_time_end_am_pm = date_tz_sensitive_end
+    ? date_tz_sensitive_end.getHours() < 12
+      ? 'AM'
+      : 'PM'
     : undefined;
   const date_range_flag = item.date_range_flag;
   const [itemMode, setItemMode] = useState(ItemMode.VIEW);
@@ -107,7 +136,8 @@ export default function Item(props: ItemProps) {
                   <span className="flex flex-row items-center space-x-2">
                     <TbClock></TbClock>
                     <span className="text-sm">
-                      {date_tz_sensitive_hour}:{date_tz_sensitive_minute}
+                      {date_tz_sensitive_hour}:{date_tz_sensitive_minute}{' '}
+                      {date_time_am_pm}
                     </span>
                   </span>
                 </span>
@@ -118,14 +148,16 @@ export default function Item(props: ItemProps) {
                       <span className="flex flex-row items-center space-x-2">
                         <TbCalendarEvent></TbCalendarEvent>
                         <span className="text-sm">
-                          {date_tz_sensitive_month}/{date_tz_sensitive_day}/
-                          {date_tz_sensitive_year}
+                          {date_tz_sensitive_end_month}/
+                          {date_tz_sensitive_end_day}/
+                          {date_tz_sensitive_end_year}
                         </span>
                       </span>
                       <span className="flex flex-row items-center space-x-2">
                         <TbClock></TbClock>
                         <span className="text-sm">
-                          {date_tz_sensitive_hour}:{date_tz_sensitive_minute}
+                          {date_tz_sensitive_end_hour}:
+                          {date_tz_sensitive_end_minute} {date_time_end_am_pm}
                         </span>
                       </span>
                     </span>
