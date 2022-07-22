@@ -12,7 +12,7 @@ import { setCurrentOwnItem } from 'state/redux/ownSlice';
 import { animated, useSpring } from '@react-spring/web';
 import NewItem2 from 'components/item/create_item';
 import { setCurrentListItem } from 'state/redux/listSlice';
-import { BiTask, BiCalendarCheck, BiCalendarStar } from 'react-icons/bi';
+import { BiCalendarStar } from 'react-icons/bi';
 import { TbClock } from 'react-icons/tb';
 import { MdDateRange } from 'react-icons/md';
 

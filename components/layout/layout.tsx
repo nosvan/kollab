@@ -26,6 +26,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
   });
   return (
     <div>
+      <div className="flex flex-col fixed left-2 bottom-2 text-stone-800">
+        <span>contacts:</span>
+        <span>son van nguyen</span>
+        <span>sonvnguy@gmail.com</span>
+      </div>
       {!userState.user.isLoggedIn && (
         <div className="flex justify-center items-center h-screen">
           <div
