@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { ItemApiRoutes } from 'lib/api/api_routes';
-import { ItemSafe } from 'lib/types/item';
+import { Category, ItemSafe } from 'lib/types/item';
 import { ItemMode } from 'lib/types/ui';
 import { Dispatch, SetStateAction, useState } from 'react';
 import {
@@ -11,8 +11,9 @@ import {
   TbTrash,
 } from 'react-icons/tb';
 import { dateStringYYYYMMDDtoMMDDYYYYwithSlashes } from 'utils/dateUtils';
-import { removeItem } from 'state/redux/ownSlice';
 import { useDispatch } from 'react-redux';
+import { removeOwnItem } from 'state/redux/ownSlice';
+import { removeListItem } from 'state/redux/listSlice';
 
 export interface ItemProps {
   item: ItemSafe;
@@ -197,7 +198,14 @@ export default function Item(props: ItemProps) {
         data: JSON.stringify(body),
         headers: { 'Content-Type': 'application/json' },
       }).then((res) => {
-        dispatch(removeItem(item.id));
+        switch (item.category) {
+          case Category.LIST:
+            dispatch(removeListItem(item.id));
+            break;
+          default:
+            dispatch(removeOwnItem(item.id));
+            break;
+        }
         modalOpen(false);
       });
     } catch (error) {

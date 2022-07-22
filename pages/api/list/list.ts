@@ -36,6 +36,7 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
           ]
         }
       })
+      console.log(result)
       return res.json(result)
     } catch (error) {
       return res.json(error)

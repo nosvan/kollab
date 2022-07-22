@@ -71,11 +71,19 @@ export const listSlice = createSlice({
       state.lists = [];
       state.item = {...initialState.item};
       state.items = [];
-    }
+    },
+    removeListItem: (state, action) => {
+      state.items = [...state.items.filter(item => item.id !== action.payload)]
+      if(state.items.length) state.item = {...state.items[0]}
+      else {
+        state.item = {...initialState.item }
+        state.items = []
+      }
+    },
   },
 });
 
-export const { setCurrentList, setLists, setCurrentListAndLists, setCurrentListItem, setListItems, setAdditionalListItems, setViewListItemMode, resetListState } =
+export const { setCurrentList, setLists, setCurrentListAndLists, setCurrentListItem, setListItems, setAdditionalListItems, setViewListItemMode, resetListState, removeListItem } =
 listSlice.actions;
 
 export default listSlice.reducer;
