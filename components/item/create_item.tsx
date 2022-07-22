@@ -74,7 +74,7 @@ export default function NewItem(props: NewItemProps) {
     category: itemCategory ?? undefined,
     category_id: itemCategory ? getCategoryId() : undefined,
     description: undefined,
-    item_type: ItemType.NOTE,
+    item_type: ItemType.GENERAL,
     date_tz_sensitive: selectedDateForNewItem,
     date_tz_sensitive_end: selectedDateForNewItem,
     time_sensitive_flag: timeControlChecked,
