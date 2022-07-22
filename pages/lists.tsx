@@ -85,28 +85,26 @@ export default function Lists({ user }: { user: UserSafe }) {
   >([]);
 
   useEffect(() => {
-    if (listState.items.length > 0) {
-      setTimeInsensitiveItemsTask(
-        listState.items.filter(
-          (item) => !item.time_sensitive_flag && !item.date_range_flag
-        )
-      );
-      setTimeInsensitiveItemsEvent(
-        listState.items.filter(
-          (item) => !item.time_sensitive_flag && item.date_range_flag
-        )
-      );
-      setTimeSensitiveItemsTask(
-        listState.items.filter(
-          (item) => item.time_sensitive_flag && !item.date_range_flag
-        )
-      );
-      setTimeSensitiveItemsEvent(
-        listState.items.filter(
-          (item) => item.time_sensitive_flag && item.date_range_flag
-        )
-      );
-    }
+    setTimeInsensitiveItemsTask(
+      listState.items.filter(
+        (item) => !item.time_sensitive_flag && !item.date_range_flag
+      )
+    );
+    setTimeInsensitiveItemsEvent(
+      listState.items.filter(
+        (item) => !item.time_sensitive_flag && item.date_range_flag
+      )
+    );
+    setTimeSensitiveItemsTask(
+      listState.items.filter(
+        (item) => item.time_sensitive_flag && !item.date_range_flag
+      )
+    );
+    setTimeSensitiveItemsEvent(
+      listState.items.filter(
+        (item) => item.time_sensitive_flag && item.date_range_flag
+      )
+    );
   }, [listState.items]);
 
   const [selectedDate, setSelectedDate] = useState(() => new Date());
@@ -241,7 +239,7 @@ export default function Lists({ user }: { user: UserSafe }) {
               modalId="view_list_item_modal"
               modalOpen={setViewItemMode}
             >
-              <Item item={listState.item}></Item>
+              <Item item={listState.item} modalOpen={setViewItemMode}></Item>
             </ModalPopup>
           )}
         </animated.div>

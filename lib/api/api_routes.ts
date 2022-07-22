@@ -10,3 +10,7 @@ export const ListApiRoutes = {
   JOIN: '/api/list/join',
   REGISTER: '/api/list/new'
 }
+
+export const ItemApiRoutes = {
+  DELETE: '/api/list/item/remove'
+}

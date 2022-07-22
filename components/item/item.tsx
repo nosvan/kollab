@@ -1,6 +1,8 @@
-import { ItemSafe, ItemType } from 'lib/types/item';
+import axios from 'axios';
+import { ItemApiRoutes } from 'lib/api/api_routes';
+import { ItemSafe } from 'lib/types/item';
 import { ItemMode } from 'lib/types/ui';
-import { useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import {
   TbCalendarEvent,
   TbClock,
@@ -9,13 +11,17 @@ import {
   TbTrash,
 } from 'react-icons/tb';
 import { dateStringYYYYMMDDtoMMDDYYYYwithSlashes } from 'utils/dateUtils';
+import { removeItem } from 'state/redux/ownSlice';
+import { useDispatch } from 'react-redux';
 
 export interface ItemProps {
   item: ItemSafe;
+  modalOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function Item(props: ItemProps) {
-  const { item } = props;
+  const { item, modalOpen } = props;
+  const dispatch = useDispatch();
   const date_tz_insensitive = item.date_tz_insensitive ?? undefined;
   const date_tz_insensitive_end = item.date_tz_insensitive_end ?? undefined;
   const date_tz_sensitive = item.date_tz_sensitive
@@ -90,7 +96,10 @@ export default function Item(props: ItemProps) {
             onClick={() => setItemMode(ItemMode.EDIT)}
           ></TbTool>
         )}
-        <TbTrash className="hover:bg-stone-700 hover:text-stone-300 cursor-pointer rounded-xl"></TbTrash>
+        <TbTrash
+          className="hover:bg-stone-700 hover:text-stone-300 cursor-pointer rounded-xl"
+          onClick={handleDelete}
+        ></TbTrash>
       </div>
       <div>
         <div className="flex flex-row items-center font-bold">
@@ -176,6 +185,25 @@ export default function Item(props: ItemProps) {
       )}
     </div>
   );
+
+  async function handleDelete() {
+    const body = {
+      item_id: item.id,
+    };
+    try {
+      await axios({
+        method: 'delete',
+        url: ItemApiRoutes.DELETE,
+        data: JSON.stringify(body),
+        headers: { 'Content-Type': 'application/json' },
+      }).then((res) => {
+        dispatch(removeItem(item.id));
+        modalOpen(false);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   function itemTypeStyling(itemType: string) {
     switch (itemType) {

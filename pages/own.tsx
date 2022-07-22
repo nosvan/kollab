@@ -36,7 +36,10 @@ export default function Own({ user }: { user: UserSafe }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const ownState = useSelector((state: RootState) => state.own_store);
+  const ownStateItems = useSelector(
+    (state: RootState) => state.own_store.items
+  );
+  const ownStateItem = useSelector((state: RootState) => state.own_store.item);
 
   useEffect(() => {
     async function getOwnItems() {
@@ -48,6 +51,7 @@ export default function Own({ user }: { user: UserSafe }) {
       });
     }
     getOwnItems();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [timeInsensitiveItemsTask, setTimeInsensitiveItemsTask] = useState<
@@ -64,29 +68,35 @@ export default function Own({ user }: { user: UserSafe }) {
   >([]);
 
   useEffect(() => {
-    if (ownState.items.length > 0) {
-      setTimeInsensitiveItemsTask(
-        ownState.items.filter(
+    setTimeInsensitiveItemsTask(() => {
+      return [
+        ...ownStateItems.filter(
           (item) => !item.time_sensitive_flag && !item.date_range_flag
-        )
-      );
-      setTimeInsensitiveItemsEvent(
-        ownState.items.filter(
+        ),
+      ];
+    });
+    setTimeInsensitiveItemsEvent(() => {
+      return [
+        ...ownStateItems.filter(
           (item) => !item.time_sensitive_flag && item.date_range_flag
-        )
-      );
-      setTimeSensitiveItemsTask(
-        ownState.items.filter(
+        ),
+      ];
+    });
+    setTimeSensitiveItemsTask(() => {
+      return [
+        ...ownStateItems.filter(
           (item) => item.time_sensitive_flag && !item.date_range_flag
-        )
-      );
-      setTimeSensitiveItemsEvent(
-        ownState.items.filter(
+        ),
+      ];
+    });
+    setTimeSensitiveItemsEvent(() => {
+      return [
+        ...ownStateItems.filter(
           (item) => item.time_sensitive_flag && item.date_range_flag
-        )
-      );
-    }
-  }, [ownState.items]);
+        ),
+      ];
+    });
+  }, [ownStateItems]);
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [dayLayout, setDayLayout] = useState(7);
@@ -180,7 +190,7 @@ export default function Own({ user }: { user: UserSafe }) {
               modalId="view_personal_item_modal"
               modalOpen={setViewItemMode}
             >
-              <Item item={ownState.item}></Item>
+              <Item item={ownStateItem} modalOpen={setViewItemMode}></Item>
             </ModalPopup>
           )}
         </animated.div>

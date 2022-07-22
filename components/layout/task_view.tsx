@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 import {
   dateToDayName,
   dateToMonthName,
@@ -10,7 +10,7 @@ import { Category, ItemSafe } from 'lib/types/item';
 import { useDispatch } from 'react-redux';
 import { setCurrentOwnItem } from 'state/redux/ownSlice';
 import { animated, useSpring } from '@react-spring/web';
-import NewItem2 from 'components/item/create_item';
+import NewItem from 'components/item/create_item';
 import { setCurrentListItem } from 'state/redux/listSlice';
 import { BiCalendarStar } from 'react-icons/bi';
 import { TbClock } from 'react-icons/tb';
@@ -33,17 +33,11 @@ export default function TaskView(props: TaskViewProps) {
   const dispatch = useDispatch();
   const currentDateString = new Date().toDateString();
   const [createNewItemMode, setCreateNewItemMode] = useState(false);
-  const {
-    itemsTimeInsensitiveTasks,
-    itemsTimeSensitiveTasks,
-    itemsTimeInsensitiveEvents,
-    itemsTimeSensitiveEvents,
-  } = props;
 
   const ItemsTimeInsensitiveTaskView = (day: Date, items: ItemSafe[]) => {
     const dayInYYYYMMDD = dateToYYYYMMDD(day);
     return items
-      ?.filter((itemA) => {
+      .filter((itemA) => {
         if (
           itemA.date_tz_insensitive &&
           !itemA.date_range_flag &&
@@ -74,7 +68,7 @@ export default function TaskView(props: TaskViewProps) {
   const ItemsTimeInsensitiveEventView = (day: Date, items: ItemSafe[]) => {
     const dayInYYYYMMDD = dateToYYYYMMDD(day);
     return items
-      ?.filter((itemA) => {
+      .filter((itemA) => {
         if (
           itemA.date_tz_insensitive &&
           itemA.date_range_flag &&
@@ -105,7 +99,7 @@ export default function TaskView(props: TaskViewProps) {
   const ItemsTimeSensitiveTaskView = (day: Date, items: ItemSafe[]) => {
     const dayInYYYYMMDD = dateToYYYYMMDD(day);
     return items
-      ?.filter((itemA) => {
+      .filter((itemA) => {
         if (
           itemA.date_tz_sensitive &&
           !itemA.date_range_flag &&
@@ -137,7 +131,7 @@ export default function TaskView(props: TaskViewProps) {
   const ItemsTimeSensitiveEventView = (day: Date, items: ItemSafe[]) => {
     const dayInYYYYMMDD = dateToYYYYMMDD(day);
     return items
-      ?.filter((itemA) => {
+      .filter((itemA) => {
         if (
           itemA.date_tz_sensitive &&
           itemA.date_range_flag &&
@@ -195,14 +189,16 @@ export default function TaskView(props: TaskViewProps) {
                   {dateToDayName(day)} {dateToMonthName(day)} {day.getDate()}
                 </div>
               </div>
-              {props.itemsTimeInsensitiveEvents?.length > 0 &&
-                ItemsTimeInsensitiveEventView(day, itemsTimeInsensitiveEvents)}
-              {props.itemsTimeInsensitiveTasks?.length > 0 &&
-                ItemsTimeInsensitiveTaskView(day, itemsTimeInsensitiveTasks)}
-              {props.itemsTimeSensitiveEvents?.length > 0 &&
-                ItemsTimeSensitiveEventView(day, itemsTimeSensitiveEvents)}
-              {props.itemsTimeSensitiveTasks?.length > 0 &&
-                ItemsTimeSensitiveTaskView(day, itemsTimeSensitiveTasks)}
+              {ItemsTimeInsensitiveEventView(
+                day,
+                props.itemsTimeInsensitiveEvents
+              )}
+              {ItemsTimeInsensitiveTaskView(
+                day,
+                props.itemsTimeInsensitiveTasks
+              )}
+              {ItemsTimeSensitiveEventView(day, props.itemsTimeSensitiveEvents)}
+              {ItemsTimeSensitiveTaskView(day, props.itemsTimeSensitiveTasks)}
             </div>
           );
         })}
@@ -212,7 +208,7 @@ export default function TaskView(props: TaskViewProps) {
           modalId="create_item_modal"
           modalOpen={setCreateNewItemMode}
         >
-          <NewItem2
+          <NewItem
             selectedDate={props.selectedDate}
             itemCategory={props.category}
             setCreateNewItemMode={setCreateNewItemMode}

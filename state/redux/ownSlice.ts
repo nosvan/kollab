@@ -35,19 +35,27 @@ export const ownSlice = createSlice({
     },
     setAdditionalOwnItems: (state, action) => {
       state.items = [...state.items, ...action.payload]
+      console.log((state.items))
     },
     setViewOwnItemMode: (state, action) => {
       state.viewOwnItemMode = action.payload
     },
+    removeItem: (state, action) => {
+      state.items = [...state.items.filter(item => item.id !== action.payload)]
+      if(state.items.length) state.item = {...state.items[0]}
+      else {
+        state.item = {...initialState.item }
+        state.items = []
+      }
+    },
     resetOwnState: (state) => {
       state.item = {...initialState.item};
       state.items = [];
-      state.viewOwnItemMode = false;
     }
   },
 });
 
-export const { setCurrentOwnItem, setOwnItems, setAdditionalOwnItems, setViewOwnItemMode, resetOwnState} =
+export const { setCurrentOwnItem, setOwnItems, setAdditionalOwnItems, setViewOwnItemMode, resetOwnState, removeItem} =
 ownSlice.actions;
 
 export default ownSlice.reducer;

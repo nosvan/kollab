@@ -26,6 +26,7 @@ model list {
   passcode    String
   created_at  DateTime @default(now())
   list_permissions list_permission[]
+  items       item[]
 }
 
 model list_permission {
@@ -43,6 +44,7 @@ model item {
   name                    String
   description             String?
   category                Category?
+  list                    list? @relation(fields: [category_id], references: [id], onDelete: Cascade)
   category_id             Int?
   item_type               ItemType @default(general)
   date_tz_sensitive       DateTime?

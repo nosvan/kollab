@@ -71,7 +71,6 @@ export const listSlice = createSlice({
       state.lists = [];
       state.item = {...initialState.item};
       state.items = [];
-      state.viewListItemMode = false;
     }
   },
 });

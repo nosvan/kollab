@@ -24,7 +24,6 @@ import { dateRangeValid, dateToYYYYMMDD } from 'utils/dateUtils';
 import { useSpring, animated } from '@react-spring/web';
 import { FooterInputs } from './footer_inputs';
 import { getTimeCeiling } from 'utils/dateUtils';
-import { ListSafe } from 'lib/types/list';
 import { DateInputs } from './date_inputs';
 
 interface NewItemProps {
