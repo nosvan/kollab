@@ -53,7 +53,7 @@ export default function TaskView(props: TaskViewProps) {
           <div
             key={itemB.id}
             onClick={() => handleItemClick(itemB)}
-            className={`flex flex-row items-center space-x-1 rounded-md
+            className={`flex flex-row items-center space-x-0.5 rounded-md
             justify-start text-black ${itemTypeStyling(
               itemB.item_type
             )} cursor-pointer ${styles.mobilePadding}`}
@@ -84,7 +84,7 @@ export default function TaskView(props: TaskViewProps) {
           <div
             key={itemB.id}
             onClick={() => handleItemClick(itemB)}
-            className={`flex flex-row items-center space-x-1 rounded-md
+            className={`flex flex-row items-center space-x-0.5 rounded-md
             justify-start text-black ${itemTypeStyling(
               itemB.item_type
             )} cursor-pointer ${styles.mobilePadding}`}
@@ -115,7 +115,7 @@ export default function TaskView(props: TaskViewProps) {
           <div
             key={itemB.id}
             onClick={() => handleItemClick(itemB)}
-            className={`flex flex-row items-center space-x-1 rounded-md
+            className={`flex flex-row items-center space-x-0.5 rounded-md
             justify-start text-black ${itemTypeStyling(
               itemB.item_type
             )} cursor-pointer ${styles.mobilePadding}`}
@@ -151,7 +151,7 @@ export default function TaskView(props: TaskViewProps) {
           <div
             key={itemB.id}
             onClick={() => handleItemClick(itemB)}
-            className={`flex flex-row items-center space-x-1 rounded-md
+            className={`flex flex-row items-center space-x-0.5 rounded-md
             justify-start text-black ${itemTypeStyling(
               itemB.item_type
             )} cursor-pointer ${styles.mobilePadding}`}
