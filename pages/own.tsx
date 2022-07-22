@@ -99,7 +99,7 @@ export default function Own({ user }: { user: UserSafe }) {
   }, [ownStateItems]);
 
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [dayLayout, setDayLayout] = useState(7);
+  const [dayLayout, setDayLayout] = useState(30);
   const [days, setDays] = useState(() => getDays(dayLayout, selectedDate));
   const [viewItemMode, setViewItemMode] = useState(false);
 

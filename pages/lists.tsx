@@ -108,7 +108,7 @@ export default function Lists({ user }: { user: UserSafe }) {
   }, [listState.items]);
 
   const [selectedDate, setSelectedDate] = useState(() => new Date());
-  const [dayLayout, setDayLayout] = useState(7);
+  const [dayLayout, setDayLayout] = useState(30);
   const [days, setDays] = useState(() => getDays(dayLayout, selectedDate));
   const [viewItemMode, setViewItemMode] = useState(false);
 
