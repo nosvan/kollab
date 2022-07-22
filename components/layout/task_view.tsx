@@ -120,8 +120,12 @@ export default function TaskView(props: TaskViewProps) {
               itemB.item_type
             )} cursor-pointer ${styles.mobilePadding}`}
           >
-            <BiCalendarStar className={`${styles.iconStyle}`}></BiCalendarStar>
-            <TbClock className={`${styles.iconStyle}`}></TbClock>
+            <span className="flex flex-row">
+              <BiCalendarStar
+                className={`${styles.iconStyle}`}
+              ></BiCalendarStar>
+              <TbClock className={`${styles.iconStyle}`}></TbClock>
+            </span>
             <span className="text-xs truncate">{itemB.name}</span>
           </div>
         );
@@ -152,8 +156,12 @@ export default function TaskView(props: TaskViewProps) {
               itemB.item_type
             )} cursor-pointer ${styles.mobilePadding}`}
           >
-            <MdDateRange className={`${styles.iconStyle} pb-0.5`}></MdDateRange>
-            <TbClock className={`${styles.iconStyle}`}></TbClock>
+            <span className="flex flex-row">
+              <MdDateRange
+                className={`${styles.iconStyle} pb-0.5`}
+              ></MdDateRange>
+              <TbClock className={`${styles.iconStyle}`}></TbClock>
+            </span>
             <span className="text-xs truncate">{itemB.name}</span>
           </div>
         );
