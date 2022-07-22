@@ -17,7 +17,7 @@ import {
 import { RootState } from 'state/redux/store';
 import { setOwnItems } from 'state/redux/ownSlice';
 import Item from 'components/item/item';
-import { setCurrentTab, setUserState } from 'state/redux/userSlice';
+import { setUserState } from 'state/redux/userSlice';
 import axios from 'axios';
 import { TabName } from 'lib/types/ui';
 import { animated, useSpring } from '@react-spring/web';
@@ -26,7 +26,6 @@ import { ItemSafe } from 'lib/types/item';
 export default function Own({ user }: { user: UserSafe }) {
   const dispatch = useDispatch();
   const router = useRouter();
-  const userState = useSelector((state: RootState) => state.user_store);
 
   useEffect(() => {
     if (!user.isLoggedIn) {
@@ -51,18 +50,40 @@ export default function Own({ user }: { user: UserSafe }) {
     getOwnItems();
   }, []);
 
-  const [timeInsensitiveItems, setTimeInsensitiveItems] = useState<ItemSafe[]>(
-    []
-  );
-  const [timeSensitiveItems, setTimeSensitiveItems] = useState<ItemSafe[]>([]);
+  const [timeInsensitiveItemsTask, setTimeInsensitiveItemsTask] = useState<
+    ItemSafe[]
+  >([]);
+  const [timeSensitiveItemsTask, setTimeSensitiveItemsTask] = useState<
+    ItemSafe[]
+  >([]);
+  const [timeInsensitiveItemsEvent, setTimeInsensitiveItemsEvent] = useState<
+    ItemSafe[]
+  >([]);
+  const [timeSensitiveItemsEvent, setTimeSensitiveItemsEvent] = useState<
+    ItemSafe[]
+  >([]);
 
   useEffect(() => {
     if (ownState.items.length > 0) {
-      setTimeInsensitiveItems(
-        ownState.items.filter((item) => !item.time_sensitive_flag)
+      setTimeInsensitiveItemsTask(
+        ownState.items.filter(
+          (item) => !item.time_sensitive_flag && !item.date_range_flag
+        )
       );
-      setTimeSensitiveItems(
-        ownState.items.filter((item) => item.time_sensitive_flag)
+      setTimeInsensitiveItemsEvent(
+        ownState.items.filter(
+          (item) => !item.time_sensitive_flag && item.date_range_flag
+        )
+      );
+      setTimeSensitiveItemsTask(
+        ownState.items.filter(
+          (item) => item.time_sensitive_flag && !item.date_range_flag
+        )
+      );
+      setTimeSensitiveItemsEvent(
+        ownState.items.filter(
+          (item) => item.time_sensitive_flag && item.date_range_flag
+        )
       );
     }
   }, [ownState.items]);
@@ -148,8 +169,10 @@ export default function Own({ user }: { user: UserSafe }) {
             days={days}
             selectedDate={selectedDate}
             setSelectedDate={setSelectedDate}
-            itemsTimeSensitive={timeSensitiveItems}
-            itemsTimeInsensitive={timeInsensitiveItems}
+            itemsTimeInsensitiveEvents={timeInsensitiveItemsEvent}
+            itemsTimeSensitiveEvents={timeSensitiveItemsEvent}
+            itemsTimeInsensitiveTasks={timeInsensitiveItemsTask}
+            itemsTimeSensitiveTasks={timeSensitiveItemsTask}
             setViewItemMode={setViewItemMode}
           />
           {viewItemMode && (

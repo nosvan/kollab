@@ -71,18 +71,40 @@ export default function Lists({ user }: { user: UserSafe }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [listState.list]);
 
-  const [timeInsensitiveItems, setTimeInsensitiveItems] = useState<ItemSafe[]>(
-    []
-  );
-  const [timeSensitiveItems, setTimeSensitiveItems] = useState<ItemSafe[]>([]);
+  const [timeInsensitiveItemsTask, setTimeInsensitiveItemsTask] = useState<
+    ItemSafe[]
+  >([]);
+  const [timeSensitiveItemsTask, setTimeSensitiveItemsTask] = useState<
+    ItemSafe[]
+  >([]);
+  const [timeInsensitiveItemsEvent, setTimeInsensitiveItemsEvent] = useState<
+    ItemSafe[]
+  >([]);
+  const [timeSensitiveItemsEvent, setTimeSensitiveItemsEvent] = useState<
+    ItemSafe[]
+  >([]);
 
   useEffect(() => {
     if (listState.items.length > 0) {
-      setTimeInsensitiveItems(
-        listState.items.filter((item) => !item.time_sensitive_flag)
+      setTimeInsensitiveItemsTask(
+        listState.items.filter(
+          (item) => !item.time_sensitive_flag && !item.date_range_flag
+        )
       );
-      setTimeSensitiveItems(
-        listState.items.filter((item) => item.time_sensitive_flag)
+      setTimeInsensitiveItemsEvent(
+        listState.items.filter(
+          (item) => !item.time_sensitive_flag && item.date_range_flag
+        )
+      );
+      setTimeSensitiveItemsTask(
+        listState.items.filter(
+          (item) => item.time_sensitive_flag && !item.date_range_flag
+        )
+      );
+      setTimeSensitiveItemsEvent(
+        listState.items.filter(
+          (item) => item.time_sensitive_flag && item.date_range_flag
+        )
       );
     }
   }, [listState.items]);
@@ -197,8 +219,10 @@ export default function Lists({ user }: { user: UserSafe }) {
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}
               category={Category.LIST}
-              itemsTimeSensitive={timeSensitiveItems}
-              itemsTimeInsensitive={timeInsensitiveItems}
+              itemsTimeInsensitiveEvents={timeInsensitiveItemsEvent}
+              itemsTimeSensitiveEvents={timeSensitiveItemsEvent}
+              itemsTimeInsensitiveTasks={timeInsensitiveItemsTask}
+              itemsTimeSensitiveTasks={timeSensitiveItemsTask}
               setViewItemMode={setViewItemMode}
             />
           )}

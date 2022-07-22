@@ -12,6 +12,9 @@ import { setCurrentOwnItem } from 'state/redux/ownSlice';
 import { animated, useSpring } from '@react-spring/web';
 import NewItem2 from 'components/item/create_item';
 import { setCurrentListItem } from 'state/redux/listSlice';
+import { BiTask, BiCalendarCheck, BiCalendarStar } from 'react-icons/bi';
+import { TbClock } from 'react-icons/tb';
+import { MdDateRange } from 'react-icons/md';
 
 interface TaskViewProps {
   dayLayout: number;
@@ -19,8 +22,10 @@ interface TaskViewProps {
   selectedDate: Date;
   setSelectedDate: Dispatch<SetStateAction<Date>>;
   category?: Category;
-  itemsTimeSensitive: ItemSafe[];
-  itemsTimeInsensitive: ItemSafe[];
+  itemsTimeSensitiveTasks: ItemSafe[];
+  itemsTimeInsensitiveTasks: ItemSafe[];
+  itemsTimeSensitiveEvents: ItemSafe[];
+  itemsTimeInsensitiveEvents: ItemSafe[];
   setViewItemMode: Dispatch<SetStateAction<boolean>>;
 }
 
@@ -28,13 +33,20 @@ export default function TaskView(props: TaskViewProps) {
   const dispatch = useDispatch();
   const currentDateString = new Date().toDateString();
   const [createNewItemMode, setCreateNewItemMode] = useState(false);
+  const {
+    itemsTimeInsensitiveTasks,
+    itemsTimeSensitiveTasks,
+    itemsTimeInsensitiveEvents,
+    itemsTimeSensitiveEvents,
+  } = props;
 
-  const ItemsTimeInsensitiveView = (day: Date, items: ItemSafe[]) => {
+  const ItemsTimeInsensitiveTaskView = (day: Date, items: ItemSafe[]) => {
     const dayInYYYYMMDD = dateToYYYYMMDD(day);
     return items
       ?.filter((itemA) => {
         if (
           itemA.date_tz_insensitive &&
+          !itemA.date_range_flag &&
           itemA.date_tz_insensitive == dayInYYYYMMDD
         ) {
           return true;
@@ -47,23 +59,56 @@ export default function TaskView(props: TaskViewProps) {
           <div
             key={itemB.id}
             onClick={() => handleItemClick(itemB)}
-            className={`text-xs rounded-md
-            text-left text-black truncate px-2 ${itemTypeStyling(
+            className={`flex flex-row items-center rounded-md
+            justify-start text-black ${itemTypeStyling(
               itemB.item_type
             )} cursor-pointer ${styles.mobilePadding}`}
           >
-            {itemB.name}
+            <BiCalendarStar className={`${styles.iconStyle}`}></BiCalendarStar>
+            <span className="text-xs truncate">{itemB.name}</span>
           </div>
         );
       });
   };
 
-  const ItemsTimeSensitiveView = (day: Date, items: ItemSafe[]) => {
+  const ItemsTimeInsensitiveEventView = (day: Date, items: ItemSafe[]) => {
+    const dayInYYYYMMDD = dateToYYYYMMDD(day);
+    return items
+      ?.filter((itemA) => {
+        if (
+          itemA.date_tz_insensitive &&
+          itemA.date_range_flag &&
+          itemA.date_tz_insensitive == dayInYYYYMMDD
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      })
+      .map((itemB) => {
+        return (
+          <div
+            key={itemB.id}
+            onClick={() => handleItemClick(itemB)}
+            className={`flex flex-row items-center rounded-md
+            justify-start text-black ${itemTypeStyling(
+              itemB.item_type
+            )} cursor-pointer ${styles.mobilePadding}`}
+          >
+            <MdDateRange className={`${styles.iconStyle}`}></MdDateRange>
+            <span className="text-xs truncate">{itemB.name}</span>
+          </div>
+        );
+      });
+  };
+
+  const ItemsTimeSensitiveTaskView = (day: Date, items: ItemSafe[]) => {
     const dayInYYYYMMDD = dateToYYYYMMDD(day);
     return items
       ?.filter((itemA) => {
         if (
           itemA.date_tz_sensitive &&
+          !itemA.date_range_flag &&
           dateToYYYYMMDD(itemA.date_tz_sensitive) == dayInYYYYMMDD
         ) {
           return true;
@@ -76,12 +121,46 @@ export default function TaskView(props: TaskViewProps) {
           <div
             key={itemB.id}
             onClick={() => handleItemClick(itemB)}
-            className={`text-xs rounded-md
-            text-left text-black truncate px-2 ${itemTypeStyling(
+            className={`flex flex-row rounded-md
+            justify-start text-black ${itemTypeStyling(
               itemB.item_type
             )} cursor-pointer ${styles.mobilePadding}`}
           >
-            {itemB.name}
+            <BiCalendarStar className={`${styles.iconStyle}`}></BiCalendarStar>
+            <TbClock className={`${styles.iconStyle}`}></TbClock>
+            <span className="text-xs truncate">{itemB.name}</span>
+          </div>
+        );
+      });
+  };
+
+  const ItemsTimeSensitiveEventView = (day: Date, items: ItemSafe[]) => {
+    const dayInYYYYMMDD = dateToYYYYMMDD(day);
+    return items
+      ?.filter((itemA) => {
+        if (
+          itemA.date_tz_sensitive &&
+          itemA.date_range_flag &&
+          dateToYYYYMMDD(itemA.date_tz_sensitive) == dayInYYYYMMDD
+        ) {
+          return true;
+        } else {
+          return false;
+        }
+      })
+      .map((itemB) => {
+        return (
+          <div
+            key={itemB.id}
+            onClick={() => handleItemClick(itemB)}
+            className={`flex flex-row items-center rounded-md
+            justify-start text-black ${itemTypeStyling(
+              itemB.item_type
+            )} cursor-pointer ${styles.mobilePadding}`}
+          >
+            <MdDateRange className={`${styles.iconStyle} pb-0.5`}></MdDateRange>
+            <TbClock className={`${styles.iconStyle}`}></TbClock>
+            <span className="text-xs truncate">{itemB.name}</span>
           </div>
         );
       });
@@ -115,14 +194,15 @@ export default function TaskView(props: TaskViewProps) {
                 <div>
                   {dateToDayName(day)} {dateToMonthName(day)} {day.getDate()}
                 </div>
-                {/* <div>
-                  <TbPlus className="hover:bg-stone-700 cursor-pointer rounded-xl"></TbPlus>
-                </div> */}
               </div>
-              {props.itemsTimeInsensitive?.length > 0 &&
-                ItemsTimeInsensitiveView(day, props.itemsTimeInsensitive)}
-              {props.itemsTimeSensitive?.length > 0 &&
-                ItemsTimeSensitiveView(day, props.itemsTimeSensitive)}
+              {props.itemsTimeInsensitiveEvents?.length > 0 &&
+                ItemsTimeInsensitiveEventView(day, itemsTimeInsensitiveEvents)}
+              {props.itemsTimeInsensitiveTasks?.length > 0 &&
+                ItemsTimeInsensitiveTaskView(day, itemsTimeInsensitiveTasks)}
+              {props.itemsTimeSensitiveEvents?.length > 0 &&
+                ItemsTimeSensitiveEventView(day, itemsTimeSensitiveEvents)}
+              {props.itemsTimeSensitiveTasks?.length > 0 &&
+                ItemsTimeSensitiveTaskView(day, itemsTimeSensitiveTasks)}
             </div>
           );
         })}
