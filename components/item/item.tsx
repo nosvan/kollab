@@ -78,6 +78,99 @@ export default function Item(props: ItemProps) {
   const date_range_flag = item.date_range_flag;
   const [itemMode, setItemMode] = useState(ItemMode.VIEW);
 
+  const ItemView = () => {
+    return (
+      <div>
+        <div className="flex flex-col mx-1 pl-1">
+          <div className="flex flex-row items-center font-bold">
+            <span className="text-lg mx-1">{item.name}</span>
+          </div>
+          <div className="flex flex-row pb-2 items-center">
+            <span className="text-sm mx-1 whitespace-pre-wrap">
+              {item.description}
+            </span>
+          </div>
+          {date_tz_insensitive && (
+            <span className="flex flex-row items-center space-x-2">
+              <TbCalendarEvent></TbCalendarEvent>
+              <span className="text-sm">
+                {dateStringYYYYMMDDtoMMDDYYYYwithSlashes(date_tz_insensitive)}
+              </span>
+              {date_range_flag && date_tz_insensitive_end && (
+                <span className="flex flex-row space-x-2">
+                  <span className="text-sm">to</span>
+                  <span className="text-sm">
+                    {dateStringYYYYMMDDtoMMDDYYYYwithSlashes(
+                      date_tz_insensitive_end
+                    )}
+                  </span>
+                </span>
+              )}
+            </span>
+          )}
+          {date_tz_sensitive && (
+            <span className="flex flex-row space-x-2 items-center">
+              <span className="flex flex-col space-y-1">
+                <span className="flex flex-row items-center space-x-2">
+                  <TbCalendarEvent></TbCalendarEvent>
+                  <span className="text-sm">
+                    {date_tz_sensitive_month}/{date_tz_sensitive_day}/
+                    {date_tz_sensitive_year}
+                  </span>
+                </span>
+                <span className="flex flex-row items-center space-x-2">
+                  <TbClock></TbClock>
+                  <span className="text-sm">
+                    {date_tz_sensitive_hour}:{date_tz_sensitive_minute}{' '}
+                    {date_time_am_pm}
+                  </span>
+                </span>
+              </span>
+              {date_range_flag && date_tz_sensitive_end && (
+                <span className="flex flex-row space-x-2">
+                  <span className="text-sm">to</span>
+                  <span className="flex flex-col space-y-1">
+                    <span className="flex flex-row items-center space-x-2">
+                      <TbCalendarEvent></TbCalendarEvent>
+                      <span className="text-sm">
+                        {date_tz_sensitive_end_month}/
+                        {date_tz_sensitive_end_day}/{date_tz_sensitive_end_year}
+                      </span>
+                    </span>
+                    <span className="flex flex-row items-center space-x-2">
+                      <TbClock></TbClock>
+                      <span className="text-sm">
+                        {date_tz_sensitive_end_hour}:
+                        {date_tz_sensitive_end_minute} {date_time_end_am_pm}
+                      </span>
+                    </span>
+                  </span>
+                </span>
+              )}
+            </span>
+          )}
+        </div>
+      </div>
+    );
+  };
+
+  const ItemEdit = () => {
+    return (
+      <div>
+        <div className="flex flex-col mx-1 pl-1">
+          <div className="flex flex-row items-center font-bold">
+            <span className="text-lg mx-1">{item.name}</span>
+          </div>
+          <div className="flex flex-row pb-2 items-center">
+            <span className="text-sm mx-1 whitespace-pre-wrap">
+              {item.description}
+            </span>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <div
       className={`border-b-2 rounded-xl px-2 py-1 bg-stone-900 ${itemBorder(
@@ -102,88 +195,8 @@ export default function Item(props: ItemProps) {
           onClick={handleDelete}
         ></TbTrash>
       </div>
-      <div>
-        <div className="flex flex-row items-center font-bold">
-          <span className="text-lg mx-1 pl-1">{item.name}</span>
-        </div>
-        <div className="flex flex-row pb-2 items-center">
-          <span className="text-sm mx-1 pl-1 whitespace-pre-wrap">
-            {item.description}
-          </span>
-        </div>
-      </div>
-      {itemMode === ItemMode.VIEW && (
-        <div>
-          <div className="flex flex-col mx-1 pl-1">
-            {date_tz_insensitive && (
-              <span className="flex flex-row items-center space-x-2">
-                <TbCalendarEvent></TbCalendarEvent>
-                <span className="text-sm">
-                  {dateStringYYYYMMDDtoMMDDYYYYwithSlashes(date_tz_insensitive)}
-                </span>
-                {date_range_flag && date_tz_insensitive_end && (
-                  <span className="flex flex-row space-x-2">
-                    <span className="text-sm">to</span>
-                    <span className="text-sm">
-                      {dateStringYYYYMMDDtoMMDDYYYYwithSlashes(
-                        date_tz_insensitive_end
-                      )}
-                    </span>
-                  </span>
-                )}
-              </span>
-            )}
-            {date_tz_sensitive && (
-              <span className="flex flex-row space-x-2 items-center">
-                <span className="flex flex-col space-y-1">
-                  <span className="flex flex-row items-center space-x-2">
-                    <TbCalendarEvent></TbCalendarEvent>
-                    <span className="text-sm">
-                      {date_tz_sensitive_month}/{date_tz_sensitive_day}/
-                      {date_tz_sensitive_year}
-                    </span>
-                  </span>
-                  <span className="flex flex-row items-center space-x-2">
-                    <TbClock></TbClock>
-                    <span className="text-sm">
-                      {date_tz_sensitive_hour}:{date_tz_sensitive_minute}{' '}
-                      {date_time_am_pm}
-                    </span>
-                  </span>
-                </span>
-                {date_range_flag && date_tz_sensitive_end && (
-                  <span className="flex flex-row space-x-2">
-                    <span className="text-sm">to</span>
-                    <span className="flex flex-col space-y-1">
-                      <span className="flex flex-row items-center space-x-2">
-                        <TbCalendarEvent></TbCalendarEvent>
-                        <span className="text-sm">
-                          {date_tz_sensitive_end_month}/
-                          {date_tz_sensitive_end_day}/
-                          {date_tz_sensitive_end_year}
-                        </span>
-                      </span>
-                      <span className="flex flex-row items-center space-x-2">
-                        <TbClock></TbClock>
-                        <span className="text-sm">
-                          {date_tz_sensitive_end_hour}:
-                          {date_tz_sensitive_end_minute} {date_time_end_am_pm}
-                        </span>
-                      </span>
-                    </span>
-                  </span>
-                )}
-              </span>
-            )}
-          </div>
-        </div>
-      )}
-      {itemMode === ItemMode.EDIT && (
-        <div>
-          <div className="flex flex-col mx-1 pl-1"></div>
-          <div className="flex flex-row items-center"></div>
-        </div>
-      )}
+      {itemMode === ItemMode.VIEW && ItemView()}
+      {itemMode === ItemMode.EDIT && ItemEdit()}
     </div>
   );
 
