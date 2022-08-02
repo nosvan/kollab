@@ -3,17 +3,13 @@ import { ItemApiRoutes } from 'lib/api/api_routes';
 import { Category, ItemSafe } from 'lib/types/item';
 import { ItemMode } from 'lib/types/ui';
 import { Dispatch, SetStateAction, useState } from 'react';
-import {
-  TbCalendarEvent,
-  TbClock,
-  TbEye,
-  TbTool,
-  TbTrash,
-} from 'react-icons/tb';
-import { dateStringYYYYMMDDtoMMDDYYYYwithSlashes } from 'utils/dateUtils';
+import { TbEye, TbTool, TbTrash } from 'react-icons/tb';
 import { useDispatch } from 'react-redux';
 import { removeOwnItem } from 'state/redux/ownSlice';
 import { removeListItem } from 'state/redux/listSlice';
+import ItemView from './item_view';
+import ItemEdit from './item_edit';
+import styles from './item.module.css';
 
 export interface ItemProps {
   item: ItemSafe;
@@ -23,180 +19,48 @@ export interface ItemProps {
 export default function Item(props: ItemProps) {
   const { item, modalOpen } = props;
   const dispatch = useDispatch();
-  const date_tz_insensitive = item.date_tz_insensitive ?? undefined;
-  const date_tz_insensitive_end = item.date_tz_insensitive_end ?? undefined;
-  const date_tz_sensitive = item.date_tz_sensitive
-    ? new Date(item.date_tz_sensitive)
-    : undefined;
-  const date_tz_sensitive_end = item.date_tz_sensitive_end
-    ? new Date(item.date_tz_sensitive_end)
-    : undefined;
-  const date_tz_sensitive_month = date_tz_sensitive
-    ? date_tz_sensitive.getMonth()
-    : undefined;
-  const date_tz_sensitive_day = date_tz_sensitive
-    ? date_tz_sensitive.getDate()
-    : undefined;
-  const date_tz_sensitive_year = date_tz_sensitive
-    ? date_tz_sensitive.getFullYear()
-    : undefined;
-  const date_tz_sensitive_hour = date_tz_sensitive
-    ? date_tz_sensitive.getHours() % 12 || 12
-    : undefined;
-  const date_tz_sensitive_minute = date_tz_sensitive
-    ? date_tz_sensitive.getMinutes() < 10
-      ? `0${date_tz_sensitive.getMinutes()}`
-      : date_tz_sensitive.getMinutes()
-    : undefined;
-  const date_tz_sensitive_end_month = date_tz_sensitive_end
-    ? date_tz_sensitive_end.getMonth()
-    : undefined;
-  const date_tz_sensitive_end_day = date_tz_sensitive_end
-    ? date_tz_sensitive_end.getDate()
-    : undefined;
-  const date_tz_sensitive_end_year = date_tz_sensitive_end
-    ? date_tz_sensitive_end.getFullYear()
-    : undefined;
-  const date_tz_sensitive_end_hour = date_tz_sensitive_end
-    ? date_tz_sensitive_end.getHours() % 12 || 12
-    : undefined;
-  const date_tz_sensitive_end_minute = date_tz_sensitive_end
-    ? date_tz_sensitive_end.getMinutes() < 10
-      ? `0${date_tz_sensitive_end.getMinutes()}`
-      : date_tz_sensitive_end.getMinutes()
-    : undefined;
-  const date_time_am_pm = date_tz_sensitive
-    ? date_tz_sensitive.getHours() < 12
-      ? 'AM'
-      : 'PM'
-    : undefined;
-  const date_time_end_am_pm = date_tz_sensitive_end
-    ? date_tz_sensitive_end.getHours() < 12
-      ? 'AM'
-      : 'PM'
-    : undefined;
-  const date_range_flag = item.date_range_flag;
   const [itemMode, setItemMode] = useState(ItemMode.VIEW);
-
-  const ItemView = () => {
-    return (
-      <div>
-        <div className="flex flex-col mx-1 pl-1">
-          <div className="flex flex-row items-center font-bold">
-            <span className="text-lg mx-1">{item.name}</span>
-          </div>
-          <div className="flex flex-row pb-2 items-center">
-            <span className="text-sm mx-1 whitespace-pre-wrap">
-              {item.description}
-            </span>
-          </div>
-          {date_tz_insensitive && (
-            <span className="flex flex-row items-center space-x-2">
-              <TbCalendarEvent></TbCalendarEvent>
-              <span className="text-sm">
-                {dateStringYYYYMMDDtoMMDDYYYYwithSlashes(date_tz_insensitive)}
-              </span>
-              {date_range_flag && date_tz_insensitive_end && (
-                <span className="flex flex-row space-x-2">
-                  <span className="text-sm">to</span>
-                  <span className="text-sm">
-                    {dateStringYYYYMMDDtoMMDDYYYYwithSlashes(
-                      date_tz_insensitive_end
-                    )}
-                  </span>
-                </span>
-              )}
-            </span>
-          )}
-          {date_tz_sensitive && (
-            <span className="flex flex-row space-x-2 items-center">
-              <span className="flex flex-col space-y-1">
-                <span className="flex flex-row items-center space-x-2">
-                  <TbCalendarEvent></TbCalendarEvent>
-                  <span className="text-sm">
-                    {date_tz_sensitive_month}/{date_tz_sensitive_day}/
-                    {date_tz_sensitive_year}
-                  </span>
-                </span>
-                <span className="flex flex-row items-center space-x-2">
-                  <TbClock></TbClock>
-                  <span className="text-sm">
-                    {date_tz_sensitive_hour}:{date_tz_sensitive_minute}{' '}
-                    {date_time_am_pm}
-                  </span>
-                </span>
-              </span>
-              {date_range_flag && date_tz_sensitive_end && (
-                <span className="flex flex-row space-x-2">
-                  <span className="text-sm">to</span>
-                  <span className="flex flex-col space-y-1">
-                    <span className="flex flex-row items-center space-x-2">
-                      <TbCalendarEvent></TbCalendarEvent>
-                      <span className="text-sm">
-                        {date_tz_sensitive_end_month}/
-                        {date_tz_sensitive_end_day}/{date_tz_sensitive_end_year}
-                      </span>
-                    </span>
-                    <span className="flex flex-row items-center space-x-2">
-                      <TbClock></TbClock>
-                      <span className="text-sm">
-                        {date_tz_sensitive_end_hour}:
-                        {date_tz_sensitive_end_minute} {date_time_end_am_pm}
-                      </span>
-                    </span>
-                  </span>
-                </span>
-              )}
-            </span>
-          )}
-        </div>
-      </div>
-    );
-  };
-
-  const ItemEdit = () => {
-    return (
-      <div>
-        <div className="flex flex-col mx-1 pl-1">
-          <div className="flex flex-row items-center font-bold">
-            <span className="text-lg mx-1">{item.name}</span>
-          </div>
-          <div className="flex flex-row pb-2 items-center">
-            <span className="text-sm mx-1 whitespace-pre-wrap">
-              {item.description}
-            </span>
-          </div>
-        </div>
-      </div>
-    );
-  };
 
   return (
     <div
-      className={`border-b-2 rounded-xl px-2 py-1 bg-stone-900 ${itemBorder(
+      className={`flex flex-col text-sm space-y-2 pt-2 pb-5 px-2 bg-stone-900 border-b-2 rounded-xl ${itemBorder(
         item.item_type
       )}`}
     >
       <div className="flex flex-row items-center justify-end space-x-1">
         {itemMode === ItemMode.EDIT && (
           <TbEye
-            className="hover:bg-stone-700 hover:text-stone-300 cursor-pointer rounded-xl"
+            className={`${styles.iconStyle} hover:bg-stone-700 hover:text-stone-300 cursor-pointer rounded-xl`}
             onClick={() => setItemMode(ItemMode.VIEW)}
           ></TbEye>
         )}
         {itemMode === ItemMode.VIEW && (
           <TbTool
-            className="hover:bg-stone-700 hover:text-stone-300 cursor-pointer rounded-xl"
+            className={`${styles.iconStyle} hover:bg-stone-700 hover:text-stone-300 cursor-pointer rounded-xl`}
             onClick={() => setItemMode(ItemMode.EDIT)}
           ></TbTool>
         )}
-        <TbTrash
-          className="hover:bg-stone-700 hover:text-stone-300 cursor-pointer rounded-xl"
-          onClick={handleDelete}
-        ></TbTrash>
+        {itemMode === ItemMode.EDIT && (
+          <TbTrash
+            className={`${styles.iconStyle} hover:bg-stone-700 hover:text-stone-300 cursor-pointer rounded-xl`}
+            onClick={handleDelete}
+          ></TbTrash>
+        )}
       </div>
-      {itemMode === ItemMode.VIEW && ItemView()}
-      {itemMode === ItemMode.EDIT && ItemEdit()}
+      {itemMode === ItemMode.VIEW && (
+        <ItemView
+          item={item}
+          itemTypeStyling={itemTypeStyling}
+          modalOpen={modalOpen}
+        ></ItemView>
+      )}
+      {itemMode === ItemMode.EDIT && (
+        <ItemEdit
+          item={item}
+          itemTypeStyling={itemTypeStyling}
+          modalOpen={modalOpen}
+        ></ItemEdit>
+      )}
     </div>
   );
 

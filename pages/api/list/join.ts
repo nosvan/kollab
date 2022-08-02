@@ -32,8 +32,7 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
       }
       return res.json(listResult);
     } catch (error) {
-      console.log(error)
-      res.json(error)
+      return res.json(error)
     }
   } 
 }

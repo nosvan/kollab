@@ -9,24 +9,22 @@ export default withIronSessionApiRoute(handle, sessionOptions)
 async function handle(req: NextApiRequest,res: NextApiResponse){
   if(req.method === 'GET'){
     try {
-      const result = await prisma.list.findMany({
-        select: {
-          id: true,
-          name: true,
-          description: true,
-          owner_id: true,
-          created_at: true
-        },
+      const result = await prisma.user.findMany({
         where: {
-            list_permissions: {
-              some: {
-                user_id: {
-                  equals: req.session.userSession.id
+          OR: [
+            {
+              list_permissions: {
+                some: {
+                  user_id: {
+                    equals: req.session.userSession.id
+                  }
                 }
               }
             }
+          ]
         }
       })
+      console.log(result)
       return res.json(result)
     } catch (error) {
       return res.json(error)

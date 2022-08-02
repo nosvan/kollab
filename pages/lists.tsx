@@ -85,6 +85,7 @@ export default function Lists({ user }: { user: UserSafe }) {
   >([]);
 
   useEffect(() => {
+    console.log('listState.items :', listState.items);
     setTimeInsensitiveItemsTask(
       listState.items.filter(
         (item) => !item.time_sensitive_flag && !item.date_range_flag
@@ -253,11 +254,9 @@ export default function Lists({ user }: { user: UserSafe }) {
   function handleDecrementDate() {
     setSelectedDate(decrementDate(selectedDate, dayLayout));
   }
-
   function handleSetDayLayout(newDayLayout: number) {
     setDayLayout(newDayLayout);
   }
-
   function handleDropdownSelect(event: {
     preventDefault: () => void;
     currentTarget: { value: any };

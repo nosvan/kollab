@@ -8,7 +8,8 @@ export const ApiRoutes = {
 export const ListApiRoutes = {
   LIST: '/api/list/list',
   JOIN: '/api/list/join',
-  REGISTER: '/api/list/new'
+  REGISTER: '/api/list/new',
+  LIST_USERS: '/api/list/users'
 }
 
 export const ItemApiRoutes = {

@@ -109,3 +109,15 @@ export type ItemYupValidationError = {
   date_tz_insensitive_end: boolean,
   last_modified_by_id: boolean,
 }
+
+export type ItemEditYupValidationError = {
+  name: boolean,
+  item_type: boolean,
+  permission_level: boolean,
+  description: boolean,
+  date_tz_sensitive: boolean,
+  date_tz_sensitive_end: boolean,
+  time_tz_sensitive: boolean,
+  time_tz_sensitive_end: boolean,
+  time_sensitive_flag: boolean
+}

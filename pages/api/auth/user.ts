@@ -17,12 +17,10 @@ async function handle(req: NextApiRequest, res: NextApiResponse) {
     isLoggedIn: false
   }
   if(!t0k3n){
-    console.log('no token');
-    res.status(401).json(user);
+    return res.status(401).json(user);
   }
   try {
-    console.log('verifying session token')
-    const userFromSession: UserSession = await req.session.userSession
+    const userFromSession: UserSession = req.session.userSession
     const result = await prisma.user.findUnique({
       select: {
         id: true,
@@ -43,13 +41,12 @@ async function handle(req: NextApiRequest, res: NextApiResponse) {
         email: result.email,
         isLoggedIn: true
       }
-      console.log('verified session token')
-      res.status(200).json(safeUser);
+      return res.status(200).json(safeUser);
     } else {
-      res.status(200).json(user);
+      return res.status(200).json(user);
     }
   } catch (error) {
     console.log(error)
-    res.status(401).json(user);
+    return res.status(401).json(user);
   }
 }

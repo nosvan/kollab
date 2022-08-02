@@ -40,10 +40,9 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
         }
         resultSafe.push(itemRow)
       })
-      console.log(result)
-      res.json(resultSafe)
+      return res.json(resultSafe)
     } catch (error) {
-      res.json(error)
+      return res.json(error)
     }
   } 
 }

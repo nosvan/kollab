@@ -43,16 +43,16 @@ async function handle(req: NextApiRequest, res: NextApiResponse) {
       try{
         req.session.userSession = user;
         await req.session.save();
-        res.json(safeUser);
+        return res.json(safeUser);
       } catch (error) {
-        res.status(500).json({ message: (error as Error).message });
+       return res.status(500).json({ message: (error as Error).message });
       }
     } else {
       console.log('Invalid credentials: ', email);
-      res.json({ error: 'Invalid credentials' })
+      return res.json({ error: 'Invalid credentials' })
     }
   } else {
     console.log('Invalid credentials: ', email);
-    res.json({ error: 'Invalid credentials' })
+    return res.json({ error: 'Invalid credentials' })
   }
 }

@@ -25,6 +25,7 @@ import { useSpring, animated } from '@react-spring/web';
 import { FooterInputs } from './footer_inputs';
 import { getTimeCeiling } from 'utils/dateUtils';
 import { DateInputs } from './date_inputs';
+import { ListApiRoutes } from 'lib/api/api_routes';
 
 interface NewItemProps {
   selectedDate?: Date;
@@ -91,7 +92,6 @@ export default function NewItem(props: NewItemProps) {
     if (timeControlChecked) {
       const newDate = new Date(`${datePart}T${timePart}`);
       const newDateEnd = new Date(`${datePartEnd}T${timePartEnd}`);
-      console.log(newDate, newDateEnd);
       setFormValues((prevState) => {
         return {
           ...prevState,
@@ -136,6 +136,17 @@ export default function NewItem(props: NewItemProps) {
           permission_level: VisibilityLevel.PUBLIC,
         };
       });
+    }
+    if (visibilityControlCheck) {
+      async function getListUsers() {
+        await axios({
+          method: 'get',
+          url: ListApiRoutes.LIST_USERS,
+        }).then((res) => {
+          console.log(res);
+        });
+      }
+      getListUsers();
     }
   }, [visibilityControlCheck]);
 
@@ -246,7 +257,7 @@ export default function NewItem(props: NewItemProps) {
                       ? `text-black ${itemTypeStyling(formValues.item_type)}`
                       : 'bg-stone-800 hover:bg-stone-700 text-white'
                   }
-                  )} cursor-pointer py-1 px-2 mr-1 mt-1 rounded-xl`}
+                  )} text-sm p-1 my-0.5 mr-0.5 cursor-pointer rounded-xl`}
                   onClick={() =>
                     setFormValues({
                       ...formValues,

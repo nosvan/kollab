@@ -3,6 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { sessionOptions } from 'lib/iron_session';
 import prisma from 'lib/prisma';
 import { ListRegister } from 'lib/types/list';
+import { AccessLevel as PrismaAccessLevel } from '@prisma/client';
 
 
 export default withIronSessionApiRoute(handle, sessionOptions)
@@ -24,7 +25,13 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
           name: newListData.name,
           description: newListData.description,
           owner_id: req.session.userSession.id,
-          passcode: newListData.passcode
+          passcode: newListData.passcode,
+          list_permissions: {
+            create: {
+              user_id: req.session.userSession.id,
+              permission: PrismaAccessLevel.admin
+            }
+          }
       }})
       const safeResult = {
         id: result.id,
@@ -33,9 +40,10 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
         owner_id: result.owner_id,
         created_at: result.created_at
       }
-      res.json(safeResult)
+      return res.json(safeResult)
     } catch (error) {
-      res.json(error)
+      console.log(error)
+      return res.json(error)
     }
   } 
 }

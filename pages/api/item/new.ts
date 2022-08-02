@@ -47,10 +47,9 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
         last_modified_by_id: result.last_modified_by_id,
         created_by_id: result.created_by_id,
       }]
-      res.json(resultSafe)
+      return res.json(resultSafe)
     } catch (error) {
-      console.log(error)
-      res.json(error)
+      return res.json(error)
     }
   } 
 }
