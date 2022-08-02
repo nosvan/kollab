@@ -25,7 +25,7 @@ import { useSpring } from '@react-spring/web';
 import { FooterInputs } from './footer_inputs';
 import { getTimeCeiling } from 'utils/dateUtils';
 import { DateInputs } from './date_inputs';
-import { ListApiRoutes } from 'lib/api/api_routes';
+import { ListApiRoutes, OwnApiRoutes } from 'lib/api/api_routes';
 import SelectorCheckbox from 'components/layout/ui_components/selector_checkbox';
 import { CheckDataItem, UsersWithPermissionForList } from 'lib/types/list';
 
@@ -85,7 +85,9 @@ export default function NewItem(props: NewItemProps) {
     date_tz_insensitive: selectedDateForNewItemFormattedYYYYMMDD,
     date_tz_insensitive_end: selectedDateForNewItemFormattedYYYYMMDD,
     last_modified_by_id: userState.user.id,
-    permission_level: VisibilityLevel.PUBLIC,
+    permission_level: itemCategory
+      ? VisibilityLevel.PUBLIC
+      : VisibilityLevel.PRIVATE,
     items_permissions: undefined,
   };
 
@@ -429,26 +431,42 @@ export default function NewItem(props: NewItemProps) {
   }
 
   async function callCreateNewItemApi(formValues: CreateItem) {
-    console.log('form values', formValues);
-    try {
-      await axios({
-        method: 'post',
-        url: '/api/item/new',
-        data: JSON.stringify(formValues),
-        headers: { 'Content-Type': 'application/json' },
-      }).then((res) => {
-        if (res.data.length > 0 && res.data[0].category) {
-          if (res.data[0].category === Category.LIST) {
-            dispatch(setAdditionalListItems(res.data));
+    if (itemCategory) {
+      try {
+        await axios({
+          method: 'post',
+          url: ListApiRoutes.NEW_ITEM,
+          data: JSON.stringify(formValues),
+          headers: { 'Content-Type': 'application/json' },
+        }).then((res) => {
+          if (res.data.length > 0 && res.data[0].category) {
+            if (res.data[0].category === Category.LIST) {
+              dispatch(setAdditionalListItems(res.data));
+            }
           }
-        } else {
-          dispatch(setAdditionalOwnItems(res.data));
-        }
-      });
-      setFormValues(initialFormState);
-      setCreateNewItemMode(false);
-    } catch (error) {
-      console.log(error);
+        });
+        setFormValues(initialFormState);
+        setCreateNewItemMode(false);
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      try {
+        await axios({
+          method: 'post',
+          url: OwnApiRoutes.NEW_ITEM,
+          data: JSON.stringify(formValues),
+          headers: { 'Content-Type': 'application/json' },
+        }).then((res) => {
+          if (res.data.length > 0) {
+            dispatch(setAdditionalOwnItems(res.data));
+          }
+        });
+        setFormValues(initialFormState);
+        setCreateNewItemMode(false);
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 

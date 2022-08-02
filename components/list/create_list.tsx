@@ -345,7 +345,7 @@ export default function NewList(props: NewListProps) {
     try {
       await axios({
         method: 'post',
-        url: ListApiRoutes.JOIN,
+        url: ListApiRoutes.JOIN_LIST,
         data: JSON.stringify(joinFormValues),
         headers: { 'Content-Type': 'application/json' },
       }).then((res) => {
@@ -376,7 +376,7 @@ export default function NewList(props: NewListProps) {
     try {
       await axios({
         method: 'post',
-        url: ListApiRoutes.REGISTER,
+        url: ListApiRoutes.NEW_LIST,
         data: JSON.stringify(createFormValues),
         headers: { 'Content-Type': 'application/json' },
       }).then((res) => {
@@ -384,7 +384,7 @@ export default function NewList(props: NewListProps) {
       });
       await axios({
         method: 'get',
-        url: ListApiRoutes.LIST,
+        url: ListApiRoutes.GET_LISTS,
       }).then((res) => {
         dispatch(setLists(res.data));
       });

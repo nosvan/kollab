@@ -27,6 +27,7 @@ import {
 } from 'state/redux/listSlice';
 import { ListSafe, ListSliceState } from 'lib/types/list';
 import NewList from 'components/list/create_list';
+import { ListApiRoutes } from 'lib/api/api_routes';
 
 export default function Lists({ user }: { user: UserSafe }) {
   const dispatch = useDispatch();
@@ -41,7 +42,7 @@ export default function Lists({ user }: { user: UserSafe }) {
     async function getUserLists() {
       await axios({
         method: 'get',
-        url: '/api/list/list',
+        url: ListApiRoutes.GET_LISTS,
       }).then((res) => {
         dispatch(setCurrentListAndLists(res.data));
       });
@@ -58,7 +59,7 @@ export default function Lists({ user }: { user: UserSafe }) {
     async function getListItems() {
       await axios({
         method: 'get',
-        url: `/api/item/item`,
+        url: ListApiRoutes.GET_ITEMS,
         params: {
           category: Category.LIST,
           category_id: listState.list.id,

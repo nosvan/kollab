@@ -22,6 +22,7 @@ import axios from 'axios';
 import { TabName } from 'lib/types/ui';
 import { animated, useSpring } from '@react-spring/web';
 import { ItemSafe } from 'lib/types/item';
+import { OwnApiRoutes } from 'lib/api/api_routes';
 
 export default function Own({ user }: { user: UserSafe }) {
   const dispatch = useDispatch();
@@ -45,7 +46,7 @@ export default function Own({ user }: { user: UserSafe }) {
     async function getOwnItems() {
       await axios({
         method: 'get',
-        url: `/api/item/own/item`,
+        url: OwnApiRoutes.GET_ITEMS,
       }).then((res) => {
         dispatch(setOwnItems(res.data));
       });
