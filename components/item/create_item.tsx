@@ -188,9 +188,13 @@ export default function NewItem(props: NewItemProps) {
           item_permissions: undefined,
         };
       });
+    }
+  }, [usersToGrantPermission, visibilityControlCheck]);
+
+  useEffect(() => {
+    if (!visibilityControlCheck) {
       setUsersToGrantPermission([]);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visibilityControlCheck]);
 
   const yupValidationSchema = Yup.object({
