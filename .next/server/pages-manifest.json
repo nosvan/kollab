@@ -2,12 +2,11 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/api/list/users": "pages/api/list/users.js",
-  "/api/list/item/new": "pages/api/list/item/new.js",
-  "/lists": "pages/lists.js",
-  "/api/list/item/item": "pages/api/list/item/item.js",
+  "/api/list/new": "pages/api/list/new.js",
   "/api/list/list": "pages/api/list/list.js",
-  "/": "pages/index.js",
-  "/api/account/logout": "pages/api/account/logout.js",
-  "/api/account/login": "pages/api/account/login.js"
+  "/api/list/item/item": "pages/api/list/item/item.js",
+  "/lists": "pages/lists.js",
+  "/own": "pages/own.js",
+  "/api/item/own/item": "pages/api/item/own/item.js",
+  "/": "pages/index.js"
 }

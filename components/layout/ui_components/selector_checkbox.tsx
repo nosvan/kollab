@@ -1,5 +1,7 @@
 import { CheckDataItem, UsersWithPermissionForList } from 'lib/types/list';
 import { Dispatch, SetStateAction, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from 'state/redux/store';
 
 interface SelectorCheckboxProps {
   data: UsersWithPermissionForList[];
@@ -9,6 +11,7 @@ interface SelectorCheckboxProps {
 
 export default function SelectorCheckbox(props: SelectorCheckboxProps) {
   const { data, selected, setSelected } = props;
+  const userStore = useSelector((state: RootState) => state.user_store);
   useEffect(() => {
     setSelected(() => {
       return data.map((item) => {
@@ -53,7 +56,9 @@ export default function SelectorCheckbox(props: SelectorCheckboxProps) {
               }}
             />
             <label htmlFor={item.user_id.toString()}>
-              {item.first_name} {item.last_name}
+              {userStore.user.id === item.user_id
+                ? 'self'
+                : `${item.first_name} ${item.last_name}`}
             </label>
           </div>
         ))}
