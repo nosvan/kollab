@@ -1,11 +1,8 @@
 {
   "/_app": "pages/_app.js",
-  "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/own": "pages/own.js",
-  "/api/list/list": "pages/api/list/list.js",
+  "/_error": "pages/_error.js",
   "/lists": "pages/lists.js",
-  "/api/item/item": "pages/api/item/item.js",
-  "/api/list/new": "pages/api/list/new.js",
-  "/api/item/own/item": "pages/api/item/own/item.js"
+  "/api/list/list": "pages/api/list/list.js",
+  "/api/item/item": "pages/api/item/item.js"
 }

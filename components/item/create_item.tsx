@@ -21,11 +21,13 @@ import {
   trimStringsInObjectShallow,
 } from 'utils/formValidateUtils';
 import { dateRangeValid, dateToYYYYMMDD } from 'utils/dateUtils';
-import { useSpring, animated } from '@react-spring/web';
+import { useSpring } from '@react-spring/web';
 import { FooterInputs } from './footer_inputs';
 import { getTimeCeiling } from 'utils/dateUtils';
 import { DateInputs } from './date_inputs';
 import { ListApiRoutes } from 'lib/api/api_routes';
+import SelectorCheckbox from 'components/layout/ui_components/selector_checkbox';
+import { CheckDataItem, UsersWithPermissionForList } from 'lib/types/list';
 
 interface NewItemProps {
   selectedDate?: Date;
@@ -84,9 +86,16 @@ export default function NewItem(props: NewItemProps) {
     date_tz_insensitive_end: selectedDateForNewItemFormattedYYYYMMDD,
     last_modified_by_id: userState.user.id,
     permission_level: VisibilityLevel.PUBLIC,
+    items_permissions: undefined,
   };
 
   const [formValues, setFormValues] = useState<CreateItem>(initialFormState);
+  const [usersWithPermission, setUsersWithPermission] = useState<
+    UsersWithPermissionForList[]
+  >([]);
+  const [usersToGrantPermission, setUsersToGrantPermission] = useState<
+    CheckDataItem[]
+  >([]);
 
   useEffect(() => {
     if (timeControlChecked) {
@@ -137,18 +146,50 @@ export default function NewItem(props: NewItemProps) {
         };
       });
     }
+    async function getListUsers() {
+      await axios({
+        method: 'get',
+        url: ListApiRoutes.LIST_USERS,
+        params: {
+          list_id: listState.id,
+        },
+      }).then((res) => {
+        setUsersWithPermission([...res.data]);
+      });
+    }
     if (visibilityControlCheck) {
-      async function getListUsers() {
-        await axios({
-          method: 'get',
-          url: ListApiRoutes.LIST_USERS,
-        }).then((res) => {
-          console.log(res);
-        });
-      }
+      setFormValues((prevState) => {
+        return {
+          ...prevState,
+          permission_level: VisibilityLevel.PRIVATE,
+          item_permissions: [],
+        };
+      });
       getListUsers();
     }
-  }, [visibilityControlCheck]);
+  }, [listState.id, visibilityControlCheck]);
+
+  useEffect(() => {
+    if (visibilityControlCheck) {
+      setFormValues((prevState) => {
+        return {
+          ...prevState,
+          item_permissions: usersToGrantPermission
+            .filter((f) => f.isChecked)
+            .map((e) => {
+              return { user_id: e.user_id };
+            }),
+        };
+      });
+    } else {
+      setFormValues((prevState) => {
+        return {
+          ...prevState,
+          item_permissions: undefined,
+        };
+      });
+    }
+  }, [usersToGrantPermission, visibilityControlCheck]);
 
   const yupValidationSchema = Yup.object({
     name: Yup.string().min(5, 'min length of 5').required('name is required'),
@@ -279,31 +320,13 @@ export default function NewItem(props: NewItemProps) {
                   setIsChecked={setVisibilityControlCheck}
                 ></ToggleSwitch>
               </span>
-              <div className="flex flex-row space-x-1">
-                {visibilityControlCheck && (
-                  <animated.span style={selectorSpring}>
-                    <select
-                      className="text-white bg-stone-800 hover:bg-stone-700 py-1 rounded-xl"
-                      value={formValues.permission_level}
-                      onChange={(event) =>
-                        setFormValues({
-                          ...formValues,
-                          permission_level:
-                            VisibilityLevel[
-                              event.target.value as keyof typeof VisibilityLevel
-                            ],
-                        })
-                      }
-                    >
-                      {Object.keys(VisibilityLevel).map((key) => (
-                        <option key={key} value={key}>
-                          {key}
-                        </option>
-                      ))}
-                    </select>
-                  </animated.span>
-                )}
-              </div>
+              {visibilityControlCheck && (
+                <SelectorCheckbox
+                  data={usersWithPermission}
+                  selected={usersToGrantPermission}
+                  setSelected={setUsersToGrantPermission}
+                ></SelectorCheckbox>
+              )}
             </div>
           )}
           <div className="flex flex-col">
@@ -400,6 +423,7 @@ export default function NewItem(props: NewItemProps) {
   }
 
   async function callCreateNewItemApi(formValues: CreateItem) {
+    console.log('form values', formValues);
     try {
       await axios({
         method: 'post',
@@ -407,7 +431,7 @@ export default function NewItem(props: NewItemProps) {
         data: JSON.stringify(formValues),
         headers: { 'Content-Type': 'application/json' },
       }).then((res) => {
-        if (res.data[0].category) {
+        if (res.data.length > 0 && res.data[0].category) {
           if (res.data[0].category === Category.LIST) {
             dispatch(setAdditionalListItems(res.data));
           }

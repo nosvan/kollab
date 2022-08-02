@@ -41,6 +41,13 @@ export type Item = {
   created_at: Date
 }
 
+export type ItemPermission = {
+  id: number
+  item_id: number
+  user_id: number
+  created_at?: Date
+}
+
 export type CreateItem = {
   name: string
   description?: string
@@ -53,7 +60,8 @@ export type CreateItem = {
   date_range_flag: boolean
   date_tz_insensitive?: string
   date_tz_insensitive_end?: string
-  permission_level: VisibilityLevel
+  permission_level: VisibilityLevel,
+  item_permissions?: {user_id: number}[]
 }
 
 export type ItemSafe = {

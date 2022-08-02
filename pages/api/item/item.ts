@@ -3,7 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { sessionOptions } from 'lib/iron_session';
 import prisma from 'lib/prisma';
 import { Category, ItemSafe, ItemType, VisibilityLevel } from 'lib/types/item';
-import { Category as PrismaCategory} from '@prisma/client';
+import { Category as PrismaCategory, VisibilityLevel as PrismaVisibilityLevel} from '@prisma/client';
 
 export default withIronSessionApiRoute(handle, sessionOptions)
 
@@ -14,6 +14,19 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
         where: {
           category: PrismaCategory[req.query.category.toString().toLowerCase() as keyof typeof PrismaCategory],
           category_id: parseInt(req.query.category_id.toString()),
+          OR: [
+            {
+              permission_level: PrismaVisibilityLevel.public
+            },
+            {
+              permission_level: PrismaVisibilityLevel.private,
+              item_permissions: {
+                some: {
+                  user_id: req.session.userSession.id
+                }
+              }
+            }
+          ]
         },
         orderBy: {
           item_type: 'asc',

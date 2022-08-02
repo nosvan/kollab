@@ -19,7 +19,7 @@ function ModalPopup(props: ModalPopupProps) {
     <animated.div
       style={modalSpring}
       id={props.modalId}
-      className={`fixed bg-black inset-0 bg-opacity-20 backdrop-blur-lg`}
+      className={`fixed z-20 bg-black inset-0 bg-opacity-20 backdrop-blur-lg`}
     >
       <div
         id="innerContainer"

@@ -2,7 +2,7 @@ import { withIronSessionApiRoute } from 'iron-session/next';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { sessionOptions } from 'lib/iron_session';
 import prisma from 'lib/prisma';
-import { Category, CreateItem, ItemSafe, ItemType, VisibilityLevel } from 'lib/types/item';
+import { Category, CreateItem, ItemPermission, ItemSafe, ItemType, VisibilityLevel } from 'lib/types/item';
 import { Category as PrismaCategory, ItemType as PrismaItemType, VisibilityLevel as PrismaVisibilityLevel } from '@prisma/client';
 
 
@@ -13,6 +13,8 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
     try {
       const reqBody: CreateItem = req.body;
       cleanReqBody(reqBody)
+      const usersToHaveAccessToItem: {user_id: number}[] = []
+      if(reqBody.permission_level === VisibilityLevel.PRIVATE) reqBody.item_permissions?.forEach(permission => usersToHaveAccessToItem.push(permission))
       const result = await prisma.item.create({
         data: {
           name: reqBody.name,
@@ -26,9 +28,14 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
           date_range_flag: reqBody.date_range_flag,
           date_tz_insensitive: reqBody.date_tz_insensitive,
           date_tz_insensitive_end: reqBody.date_tz_insensitive_end,
-          permission_level: reqBody.permission_level ? PrismaVisibilityLevel[reqBody.permission_level.toLocaleLowerCase() as keyof typeof PrismaVisibilityLevel] : PrismaVisibilityLevel.public,
+          permission_level: PrismaVisibilityLevel.private,
           created_by_id: req.session.userSession.id,
           last_modified_by_id: req.session.userSession.id,
+          item_permissions: {
+            createMany: {
+              data: usersToHaveAccessToItem
+            }
+          }
         }})
       const resultSafe: ItemSafe[] = [{
         id: result.id,
@@ -47,7 +54,21 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
         last_modified_by_id: result.last_modified_by_id,
         created_by_id: result.created_by_id,
       }]
-      return res.json(resultSafe)
+      if(reqBody.permission_level === VisibilityLevel.PRIVATE){
+        const resultPermissions = await prisma.item_permission.findFirst({
+          where: {
+            item_id: result.id,
+            user_id: req.session.userSession.id
+            }
+          }
+        )
+        if(resultPermissions){
+          return res.json(resultSafe)
+        }
+        return res.json([])
+      } else {
+        return res.json(resultSafe)
+      }
     } catch (error) {
       return res.json(error)
     }

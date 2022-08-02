@@ -3,7 +3,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { sessionOptions } from 'lib/iron_session';
 import prisma from 'lib/prisma';
 
-
 export default withIronSessionApiRoute(handle, sessionOptions)
 
 async function handle(req: NextApiRequest,res: NextApiResponse){

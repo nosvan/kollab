@@ -25,7 +25,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
     config: { duration: 250 },
   });
   return (
-    <div>
+    <div className="min-h-screen">
       <div className="flex flex-col fixed left-2 bottom-2 text-stone-800">
         <span>sonvnguy@gmail.com</span>
       </div>

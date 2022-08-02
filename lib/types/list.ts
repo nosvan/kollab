@@ -45,3 +45,15 @@ export type ListSliceState = {
   items: ItemSafe[]
   viewListItemMode: boolean
 }
+
+export type UsersWithPermissionForList = {
+  user_id: number
+  first_name: string
+  last_name: string
+  email: string
+}
+
+export type CheckDataItem = {
+  user_id: number;
+  isChecked: boolean;
+}
