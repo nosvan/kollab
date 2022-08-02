@@ -188,8 +188,10 @@ export default function NewItem(props: NewItemProps) {
           item_permissions: undefined,
         };
       });
+      setUsersToGrantPermission([]);
     }
-  }, [usersToGrantPermission, visibilityControlCheck]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visibilityControlCheck]);
 
   const yupValidationSchema = Yup.object({
     name: Yup.string().min(5, 'min length of 5').required('name is required'),
