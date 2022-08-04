@@ -55,11 +55,7 @@ export default function Item(props: ItemProps) {
         ></ItemView>
       )}
       {itemMode === ItemMode.EDIT && (
-        <ItemEdit
-          item={item}
-          itemTypeStyling={itemTypeStyling}
-          modalOpen={modalOpen}
-        ></ItemEdit>
+        <ItemEdit item={item} itemTypeStyling={itemTypeStyling}></ItemEdit>
       )}
     </div>
   );

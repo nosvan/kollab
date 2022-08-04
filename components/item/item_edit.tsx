@@ -2,18 +2,32 @@ import axios from 'axios';
 import SelectorCheckbox from 'components/layout/ui_components/selector_checkbox';
 import ToggleSwitch from 'components/layout/ui_components/toggle_switch';
 import { ItemApiRoutes, ListApiRoutes } from 'lib/api/api_routes';
-import { EditItem, ItemSafe, ItemType, VisibilityLevel } from 'lib/types/item';
+import {
+  Category,
+  EditItem,
+  ItemSafe,
+  ItemType,
+  ItemYupValidationError,
+  VisibilityLevel,
+} from 'lib/types/item';
 import { CheckDataItem, UsersWithPermissionForList } from 'lib/types/list';
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import {
+  dateRangeValid,
+  dateToYYYYMMDD,
+  getTimeCeiling,
+  getTimeHourMinuteString,
+} from 'utils/dateUtils';
+import { DateInputs } from './date_inputs';
+import * as Yup from 'yup';
 
 interface ItemEditProps {
   item: ItemSafe;
-  modalOpen: Dispatch<SetStateAction<boolean>>;
   itemTypeStyling: (itemType: ItemType) => string;
 }
 
 export default function ItemEdit(props: ItemEditProps) {
-  const { item, modalOpen, itemTypeStyling } = props;
+  const { item, itemTypeStyling } = props;
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const [visibilityControlCheck, setVisibilityControlCheck] = useState<boolean>(
@@ -22,6 +36,58 @@ export default function ItemEdit(props: ItemEditProps) {
       else return false;
     }
   );
+  const [timeControlChecked, setTimeControlChecked] = useState(() => {
+    if (item.time_sensitive_flag) return true;
+    else return false;
+  });
+  const [dateRangeControlChecked, setDateRangeControlChecked] = useState(() => {
+    if (item.date_range_flag) return true;
+    else return false;
+  });
+
+  const [datePart, setDatePart] = useState(() => {
+    if (item.time_sensitive_flag) {
+      const date = dateToYYYYMMDD(
+        item.date_tz_sensitive ?? new Date(Date.now())
+      );
+      return date;
+    } else {
+      return item.date_tz_insensitive ?? dateToYYYYMMDD(new Date(Date.now()));
+    }
+  });
+  const [timePart, setTimePart] = useState(() => {
+    const time = () => {
+      if (item.date_tz_sensitive) {
+        return getTimeHourMinuteString(item.date_tz_sensitive);
+      } else {
+        return getTimeCeiling(new Date(Date.now()), 30);
+      }
+    };
+    return time();
+  });
+  const [datePartEnd, setDatePartEnd] = useState(() => {
+    if (item.time_sensitive_flag) {
+      const date = dateToYYYYMMDD(
+        item.date_tz_sensitive_end ?? new Date(Date.now())
+      );
+      return date;
+    } else {
+      return (
+        item.date_tz_insensitive_end ?? dateToYYYYMMDD(new Date(Date.now()))
+      );
+    }
+  });
+  const [timePartEnd, setTimePartEnd] = useState(() => {
+    const time = () => {
+      if (item.date_tz_sensitive_end) {
+        return getTimeHourMinuteString(item.date_tz_sensitive_end);
+      } else {
+        return getTimeCeiling(new Date(Date.now()), 30);
+      }
+    };
+    return time();
+  });
+
   const [usersWithPermissionToList, setUsersWithPermissionToList] = useState<
     UsersWithPermissionForList[]
   >([]);
@@ -110,6 +176,73 @@ export default function ItemEdit(props: ItemEditProps) {
     item_permissions: itemPermissions,
   });
 
+  const yupValidationSchema = Yup.object({
+    name: Yup.string().min(5, 'min length of 5').required('name is required'),
+    category: Yup.mixed<Category>().oneOf(Object.values(Category)),
+    category_id: editModeFormValues.category
+      ? Yup.number().required()
+      : Yup.number(),
+    item_type: Yup.mixed<ItemType>()
+      .oneOf(Object.values(ItemType))
+      .default(ItemType.ASSIGNMENT),
+    permission_level: Yup.mixed<VisibilityLevel>()
+      .oneOf(Object.values(VisibilityLevel))
+      .default(VisibilityLevel.PUBLIC),
+    description: Yup.string(),
+    date_tz_sensitive: timeControlChecked ? Yup.date() : Yup.date(),
+    date_tz_sensitive_end: timeControlChecked
+      ? dateRangeControlChecked
+        ? Yup.date()
+            .min(
+              Yup.ref('date_tz_sensitive'),
+              'end date must be after start date'
+            )
+            .required('end date is required')
+        : Yup.date()
+      : Yup.date(),
+    time_sensitive_flag: Yup.boolean().required(),
+    date_range_flag: Yup.boolean().required(),
+    date_tz_insensitive: timeControlChecked
+      ? Yup.string()
+      : Yup.string().required('date is required'),
+    date_tz_insensitive_end: timeControlChecked
+      ? Yup.string()
+      : dateRangeControlChecked
+      ? Yup.string()
+          .test(
+            'compare-dates-no-time',
+            'end date must be after start date',
+            function () {
+              return dateRangeValid(
+                this.parent['date_tz_insensitive'],
+                this.parent['date_tz_insensitive_end']
+              );
+            }
+          )
+          .required('end date is required')
+      : Yup.string(),
+    last_modified_by_id: Yup.number(),
+  });
+
+  const [yupValidationError, setYupValidationError] =
+    useState<ItemYupValidationError>({
+      name: false,
+      category: false,
+      category_id: false,
+      item_type: false,
+      permission_level: false,
+      description: false,
+      date_tz_sensitive: false,
+      date_tz_sensitive_end: false,
+      time_tz_sensitive: false,
+      time_tz_sensitive_end: false,
+      time_sensitive_flag: false,
+      date_range_flag: false,
+      date_tz_insensitive: false,
+      date_tz_insensitive_end: false,
+      last_modified_by_id: false,
+    });
+
   useEffect(() => {
     if (textAreaRef.current) {
       const scrollHeight = textAreaRef.current.scrollHeight;
@@ -121,8 +254,6 @@ export default function ItemEdit(props: ItemEditProps) {
       textAreaRef.current.style.height = `${textAreaRows}px`;
     }
   }, []);
-
-  const [yupValidationError, setYupValidationError] = useState({});
 
   return (
     <div className="flex flex-col space-y-1 mx-1 pl-1">
@@ -194,6 +325,35 @@ export default function ItemEdit(props: ItemEditProps) {
             })
           }
         />
+      </div>
+      <div className="flex flex-col space-y-1">
+        <span className="flex flex-col space-y-1">
+          <span className="flex flex-row space-x-1 ">
+            <label className="text-white px-1">time</label>
+            <ToggleSwitch
+              isChecked={timeControlChecked}
+              setIsChecked={setTimeControlChecked}
+            ></ToggleSwitch>
+          </span>
+        </span>
+        <span>
+          <DateInputs
+            formValues={editModeFormValues}
+            setFormValues={setEditModeFormValues}
+            yupValidationError={yupValidationError}
+            setYupValidationError={setYupValidationError}
+            timeControlChecked={timeControlChecked}
+            dateRangeControlChecked={dateRangeControlChecked}
+            datePart={datePart}
+            setDatePart={setDatePart}
+            datePartEnd={datePartEnd}
+            setDatePartEnd={setDatePartEnd}
+            timePart={timePart}
+            setTimePart={setTimePart}
+            timePartEnd={timePartEnd}
+            setTimePartEnd={setTimePartEnd}
+          ></DateInputs>
+        </span>
       </div>
     </div>
   );

@@ -23,6 +23,7 @@ export function dateStringYYYYMMDDtoMMDDYYYYwithSlashes(date: string): string {
   const dateInParts = date.split('-');
   return `${dateInParts[1]}/${dateInParts[2]}/${dateInParts[0]}`;
 }
+
 export function getTimeCeiling(date: Date, interval: number, addOn: number = 0) {
   const ms = 1000 * 60 * interval;
   const time = new Date(
@@ -33,6 +34,19 @@ export function getTimeCeiling(date: Date, interval: number, addOn: number = 0) 
     hour = `0${hour}`;
   }
   let minute = time.getMinutes().toString();
+  if(minute.length == 1){
+    minute = `0${minute}`;
+  }
+  return `${hour}:${minute}`;
+}
+
+export function getTimeHourMinuteString(date: Date) {
+  const dateLocal = new Date(date);
+  let hour = dateLocal.getHours().toString();
+  if(hour.length == 1){
+    hour = `0${hour}`;
+  }
+  let minute = dateLocal.getMinutes().toString();
   if(minute.length == 1){
     minute = `0${minute}`;
   }
