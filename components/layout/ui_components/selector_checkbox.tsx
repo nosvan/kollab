@@ -12,21 +12,10 @@ interface SelectorCheckboxProps {
 export default function SelectorCheckbox(props: SelectorCheckboxProps) {
   const { data, selected, setSelected } = props;
   const userStore = useSelector((state: RootState) => state.user_store);
-  useEffect(() => {
-    setSelected(() => {
-      return data.map((item) => {
-        return {
-          user_id: item.user_id,
-          isChecked: false,
-        };
-      });
-    });
-  }, [data, setSelected]);
-
   return (
     <div className={`w-full h-fit p-1`}>
       <div className="flex flex-row items-center">
-        {props.data.map((item: UsersWithPermissionForList) => (
+        {data.map((item: UsersWithPermissionForList) => (
           <div
             className="flex flex-row items-center space-x-1 bg-stone-800 cursor-pointer mr-1 px-1 rounded-xl"
             key={item.user_id}
@@ -34,14 +23,16 @@ export default function SelectorCheckbox(props: SelectorCheckboxProps) {
             <input
               type="checkbox"
               className="checkbox checkbox-xs"
-              defaultChecked={
-                selected.find((checkItem) => checkItem.user_id === item.user_id)
-                  ?.isChecked
+              checked={
+                selected.find(
+                  (userCheckedOrNot) =>
+                    userCheckedOrNot.user_id === item.user_id
+                )?.isChecked
                   ? true
                   : false
               }
               id={item.user_id.toString()}
-              onClick={() => {
+              onChange={() => {
                 setSelected([
                   ...selected.map((checkItem) => {
                     if (checkItem.user_id === item.user_id) {

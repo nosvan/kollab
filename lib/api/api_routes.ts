@@ -6,8 +6,8 @@ export const ApiRoutes = {
 }
 
 export const OwnApiRoutes = {
-  NEW_ITEM: '/api/item/own/new',
-  GET_ITEMS: '/api/item/own/item'
+  NEW_ITEM: '/api/own/item/new',
+  GET_ITEMS: '/api/own/item/item'
 }
 
 export const ListApiRoutes = {
@@ -20,5 +20,6 @@ export const ListApiRoutes = {
 }
 
 export const ItemApiRoutes = {
+  GET_ITEM_PERMISSIONS: '/api/item/permissions',
   DELETE: '/api/list/item/remove'
 }

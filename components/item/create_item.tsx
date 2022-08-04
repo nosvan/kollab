@@ -95,7 +95,7 @@ export default function NewItem(props: NewItemProps) {
   const [usersWithPermission, setUsersWithPermission] = useState<
     UsersWithPermissionForList[]
   >([]);
-  const [usersToGrantPermission, setUsersToGrantPermission] = useState<
+  const [usersWithPermissionMapped, setUsersWithPermissionMapped] = useState<
     CheckDataItem[]
   >([]);
 
@@ -156,7 +156,16 @@ export default function NewItem(props: NewItemProps) {
           list_id: listState.id,
         },
       }).then((res) => {
-        setUsersWithPermission([...res.data]);
+        setUsersWithPermission(res.data);
+        const mappedResData = res.data.map(
+          (user: UsersWithPermissionForList) => {
+            return {
+              user_id: user.user_id,
+              isChecked: false,
+            };
+          }
+        );
+        setUsersWithPermissionMapped(mappedResData);
       });
     }
     if (visibilityControlCheck) {
@@ -176,7 +185,7 @@ export default function NewItem(props: NewItemProps) {
       setFormValues((prevState) => {
         return {
           ...prevState,
-          item_permissions: usersToGrantPermission
+          item_permissions: usersWithPermissionMapped
             .filter((f) => f.isChecked)
             .map((e) => {
               return { user_id: e.user_id };
@@ -191,11 +200,11 @@ export default function NewItem(props: NewItemProps) {
         };
       });
     }
-  }, [usersToGrantPermission, visibilityControlCheck]);
+  }, [usersWithPermissionMapped, visibilityControlCheck]);
 
   useEffect(() => {
     if (!visibilityControlCheck) {
-      setUsersToGrantPermission([]);
+      setUsersWithPermissionMapped([]);
     }
   }, [visibilityControlCheck]);
 
@@ -264,11 +273,6 @@ export default function NewItem(props: NewItemProps) {
       last_modified_by_id: false,
     });
 
-  const selectorSpring = useSpring({
-    opacity: visibilityControlCheck ? 1 : 0,
-    config: { duration: 100 },
-  });
-
   return (
     <div>
       <form onSubmit={handleCreateItemFormSubmit}>
@@ -331,8 +335,8 @@ export default function NewItem(props: NewItemProps) {
               {visibilityControlCheck && (
                 <SelectorCheckbox
                   data={usersWithPermission}
-                  selected={usersToGrantPermission}
-                  setSelected={setUsersToGrantPermission}
+                  selected={usersWithPermissionMapped}
+                  setSelected={setUsersWithPermissionMapped}
                 ></SelectorCheckbox>
               )}
             </div>
@@ -432,6 +436,7 @@ export default function NewItem(props: NewItemProps) {
 
   async function callCreateNewItemApi(formValues: CreateItem) {
     if (itemCategory) {
+      console.log(formValues);
       try {
         await axios({
           method: 'post',

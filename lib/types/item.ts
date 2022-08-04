@@ -64,6 +64,22 @@ export type CreateItem = {
   item_permissions?: {user_id: number}[]
 }
 
+export type EditItem = {
+  name: string
+  description?: string
+  category?: Category
+  category_id?: number
+  item_type: ItemType
+  date_tz_sensitive?: Date
+  date_tz_sensitive_end?: Date
+  time_sensitive_flag: boolean
+  date_range_flag: boolean
+  date_tz_insensitive?: string
+  date_tz_insensitive_end?: string
+  permission_level: VisibilityLevel,
+  item_permissions?: {user_id: number}[]
+}
+
 export type ItemSafe = {
   id: number
   name: string

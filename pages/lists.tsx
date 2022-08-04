@@ -69,8 +69,7 @@ export default function Lists({ user }: { user: UserSafe }) {
       });
     }
     if (listState.list.id !== -999) getListItems();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [listState.list]);
+  }, [dispatch, listState.list]);
 
   const [timeInsensitiveItemsTask, setTimeInsensitiveItemsTask] = useState<
     ItemSafe[]
@@ -86,7 +85,6 @@ export default function Lists({ user }: { user: UserSafe }) {
   >([]);
 
   useEffect(() => {
-    console.log('listState.items :', listState.items);
     setTimeInsensitiveItemsTask(
       listState.items.filter(
         (item) => !item.time_sensitive_flag && !item.date_range_flag
