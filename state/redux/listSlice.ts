@@ -35,19 +35,23 @@ export const listSlice = createSlice({
   initialState: initialState,
   reducers: {
     setCurrentList: (state, action) => {
-      state.list = action.payload
+      state.list = {...action.payload}
     },
     setLists: (state, action) => {
-      state.lists = action.payload
+      state.lists = [...action.payload]
     },
     setCurrentListAndLists: (state, action) => {
       if(action.payload.length) {
-        state.lists = action.payload
+        state.lists = [...action.payload]
         const currentListExistsInLists = state.lists.find(list => list.id === state.list.id)
         if(currentListExistsInLists) {
-          state.list = currentListExistsInLists
+          state.list = {...currentListExistsInLists}
         } else {
-          state.list = state.lists[0]
+          if(state.lists.length > 0) {
+            state.list = {...state.lists[0]}
+          } else {
+            state.list = initialState.list
+          }
         }
       } else {
         state.list = initialState.list
@@ -55,10 +59,10 @@ export const listSlice = createSlice({
       }
     },
     setCurrentListItem: (state, action) => {
-      state.item = action.payload
+      state.item = {...action.payload}
     },
     setListItems: (state, action) => {
-      state.items = action.payload
+      state.items = [...action.payload]
     },
     setAdditionalListItems: (state, action) => {
       state.items = [...state.items, ...action.payload]
