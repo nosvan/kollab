@@ -106,6 +106,7 @@ export default function NewItem(props: NewItemProps) {
       setFormValues((prevState) => {
         return {
           ...prevState,
+          time_sensitive_flag: true,
           date_tz_sensitive: newDate,
           date_tz_sensitive_end: newDateEnd,
         };
@@ -114,21 +115,13 @@ export default function NewItem(props: NewItemProps) {
       setFormValues((prevState) => {
         return {
           ...prevState,
+          time_sensitive_flag: false,
           date_tz_insensitive: datePart,
           date_tz_insensitive_end: datePartEnd,
         };
       });
     }
   }, [datePart, datePartEnd, timeControlChecked, timePart, timePartEnd]);
-
-  useEffect(() => {
-    setFormValues((prevState) => {
-      return {
-        ...prevState,
-        time_sensitive_flag: timeControlChecked,
-      };
-    });
-  }, [timeControlChecked]);
 
   useEffect(() => {
     setFormValues((prevState) => {
@@ -423,12 +416,11 @@ export default function NewItem(props: NewItemProps) {
     let yupValidateResult = await yupValidationSchema
       .validate(formValues, { abortEarly: false })
       .catch((err) => {
+        console.log(err.errors);
         matchYupErrorStateWithCompErrorState(err.inner, yupValidationError);
         setYupValidationError({ ...yupValidationError });
       });
-    if (!(JSON.stringify(yupValidateResult) === JSON.stringify(formValues))) {
-      return;
-    }
+    if (!yupValidateResult) return;
     await callCreateNewItemApi(formValues);
   }
 

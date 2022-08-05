@@ -31,6 +31,7 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
           resultSafe.push({user_id: row.user.id})
         })
       }
+      console.log(resultSafe)
       return res.json(resultSafe)
     } catch (error) {
       console.log(error)

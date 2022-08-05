@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { ItemType, VisibilityLevel } from 'lib/types/item';
+import { ItemSafe, ItemType, VisibilityLevel } from 'lib/types/item';
 import { OwnSliceState } from 'lib/types/own';
 
 const initialState: OwnSliceState = {
@@ -28,12 +28,19 @@ export const ownSlice = createSlice({
   initialState: initialState,
   reducers: {
     setCurrentOwnItem: (state, action) => {
+      console.log('set current own item: ',action.payload);
       state.item = action.payload
     },
     setOwnItems: (state, action) => {
       state.items = action.payload
     },
     setAdditionalOwnItems: (state, action) => {
+      state.items = state.items.filter((item: ItemSafe) => {
+        const itemFoundToRemove = action.payload.find((itemToRemove: ItemSafe) => {
+          return item.id === itemToRemove.id
+        })
+        return !itemFoundToRemove
+      })
       state.items = [...state.items, ...action.payload]
     },
     setViewOwnItemMode: (state, action) => {

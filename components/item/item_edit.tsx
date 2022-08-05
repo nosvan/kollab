@@ -25,6 +25,12 @@ import {
 } from 'utils/formValidateUtils';
 import { DateInputsEdit } from './date_inputs_edit';
 import { ItemMode } from 'lib/types/ui';
+import { useDispatch } from 'react-redux';
+import {
+  setAdditionalListItems,
+  setCurrentListItem,
+} from 'state/redux/listSlice';
+import { setAdditionalOwnItems, setCurrentOwnItem } from 'state/redux/ownSlice';
 
 interface ItemEditProps {
   item: ItemSafe;
@@ -34,7 +40,7 @@ interface ItemEditProps {
 
 export default function ItemEdit(props: ItemEditProps) {
   const { item, setItemMode, itemTypeStyling } = props;
-  const [itemEditted, setItemEditted] = useState<boolean>(false);
+  const dispatch = useDispatch();
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const [visibilityControlCheck, setVisibilityControlCheck] = useState<boolean>(
@@ -132,6 +138,7 @@ export default function ItemEdit(props: ItemEditProps) {
           item_id: item.id,
         },
       }).then((res) => {
+        console.log('getitempermissions item_edit: ', res.data);
         const itemPermissionsMappedIsChecked: CheckDataItem[] = res.data.map(
           (user: CheckDataItem) => {
             return {
@@ -141,6 +148,12 @@ export default function ItemEdit(props: ItemEditProps) {
           }
         );
         setItemPermissions(itemPermissionsMappedIsChecked);
+        setEditModeFormValues((prevState) => {
+          return {
+            ...prevState,
+            item_permissions: itemPermissionsMappedIsChecked,
+          };
+        });
       });
     }
     getItemPermissions();
@@ -161,9 +174,6 @@ export default function ItemEdit(props: ItemEditProps) {
           else return user;
         });
         return [...newState];
-      });
-      setEditModeFormValues((prevState) => {
-        return { ...prevState, item_permissions: itemPermissions };
       });
     }
   }, [item.category, itemPermissions]);
@@ -188,21 +198,42 @@ export default function ItemEdit(props: ItemEditProps) {
 
   useEffect(() => {
     if (visibilityControlCheck) {
-      if (editModeFormValues.permission_level !== VisibilityLevel.PRIVATE) {
-        setEditModeFormValues((prevState) => {
-          return { ...prevState, permission_level: VisibilityLevel.PRIVATE };
-        });
-      }
+      setEditModeFormValues((prevState) => {
+        return { ...prevState, permission_level: VisibilityLevel.PRIVATE };
+      });
     } else {
-      if (editModeFormValues.permission_level !== VisibilityLevel.PUBLIC) {
-        setEditModeFormValues((prevState) => {
-          return { ...prevState, permission_level: VisibilityLevel.PUBLIC };
-        });
-      }
+      setEditModeFormValues((prevState) => {
+        return { ...prevState, permission_level: VisibilityLevel.PUBLIC };
+      });
     }
-  }, [visibilityControlCheck, editModeFormValues]);
+  }, [visibilityControlCheck]);
+
+  useEffect(() => {
+    if (timeControlChecked) {
+      const newDate = new Date(`${datePart}T${timePart}`);
+      const newDateEnd = new Date(`${datePartEnd}T${timePartEnd}`);
+      setEditModeFormValues((prevState) => {
+        return {
+          ...prevState,
+          time_sensitive_flag: true,
+          date_tz_sensitive: newDate,
+          date_tz_sensitive_end: newDateEnd,
+        };
+      });
+    } else {
+      setEditModeFormValues((prevState) => {
+        return {
+          ...prevState,
+          time_sensitive_flag: false,
+          date_tz_insensitive: datePart,
+          date_tz_insensitive_end: datePartEnd,
+        };
+      });
+    }
+  }, [datePart, datePartEnd, timeControlChecked, timePart, timePartEnd]);
 
   const yupValidationSchema = Yup.object({
+    id: Yup.number().required(),
     name: Yup.string().min(5, 'min length of 5').required('name is required'),
     category: Yup.mixed<Category>().oneOf(Object.values(Category)),
     category_id: editModeFormValues.category
@@ -248,6 +279,12 @@ export default function ItemEdit(props: ItemEditProps) {
           .required('end date is required')
       : Yup.string(),
     last_modified_by_id: Yup.number(),
+    item_permissions: Yup.array().of(
+      Yup.object({
+        user_id: Yup.number().required(),
+        isChecked: Yup.boolean().required(),
+      })
+    ),
   });
 
   const [yupValidationError, setYupValidationError] =
@@ -378,14 +415,12 @@ export default function ItemEdit(props: ItemEditProps) {
         >
           Cancel
         </div>
-        {itemEditted && (
-          <button
-            onClick={() => handleCreateItemFormSubmit()}
-            className="bg-blue-700 hover:bg-blue-600 border-2 border-blue-700 hover:border-blue-600 px-3 rounded-xl text-white"
-          >
-            Save
-          </button>
-        )}
+        <button
+          onClick={handleCreateItemFormSubmit}
+          className="bg-blue-700 hover:bg-blue-600 border-2 border-blue-700 hover:border-blue-600 px-3 rounded-xl text-white"
+        >
+          Save
+        </button>
       </div>
     </div>
   );
@@ -395,22 +430,17 @@ export default function ItemEdit(props: ItemEditProps) {
     let yupValidateResult = await yupValidationSchema
       .validate(editModeFormValues, { abortEarly: false })
       .catch((err) => {
+        console.log(err.errors);
+        console.log(editModeFormValues);
         matchYupErrorStateWithCompErrorState(err.inner, yupValidationError);
         setYupValidationError({ ...yupValidationError });
       });
-    if (
-      !(
-        JSON.stringify(yupValidateResult) === JSON.stringify(editModeFormValues)
-      )
-    ) {
-      return;
-    }
+    if (!yupValidateResult) return;
     await callCreateNewItemApi(editModeFormValues);
   }
 
   async function callCreateNewItemApi(formValues: EditItem) {
     if (item.category) {
-      console.log(formValues);
       try {
         await axios({
           method: 'POST',
@@ -418,9 +448,9 @@ export default function ItemEdit(props: ItemEditProps) {
           data: JSON.stringify(formValues),
           headers: { 'Content-Type': 'application/json' },
         }).then((res) => {
-          if (res.data.length > 0 && res.data[0].category) {
-            if (res.data[0].category === Category.LIST) {
-            }
+          if (res.data.length > 0 && res.data[0]?.category === Category.LIST) {
+            dispatch(setAdditionalListItems(res.data));
+            dispatch(setCurrentListItem(res.data[0]));
           }
         });
       } catch (error) {
@@ -435,12 +465,14 @@ export default function ItemEdit(props: ItemEditProps) {
           headers: { 'Content-Type': 'application/json' },
         }).then((res) => {
           if (res.data.length > 0) {
-            console.log(res.data);
+            dispatch(setAdditionalOwnItems(res.data));
+            dispatch(setCurrentOwnItem(res.data[0]));
           }
         });
       } catch (error) {
         console.log(error);
       }
     }
+    setItemMode(ItemMode.VIEW);
   }
 }

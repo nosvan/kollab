@@ -28,7 +28,7 @@ export default function Item(props: ItemProps) {
       )}`}
     >
       <div className="flex flex-row items-center justify-end space-x-1">
-        {itemMode === ItemMode.VIEW && (
+        {!item.category && itemMode === ItemMode.VIEW && (
           <TbTool
             className={`${styles.iconStyle} hover:bg-stone-700 hover:text-stone-300 cursor-pointer rounded-xl`}
             onClick={() => setItemMode(ItemMode.EDIT)}

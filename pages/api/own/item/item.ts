@@ -41,7 +41,7 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
           date_range_flag: row.date_range_flag,
           date_tz_insensitive: row.date_tz_insensitive ?? undefined,
           date_tz_insensitive_end: row.date_tz_insensitive_end ?? undefined,
-          permission_level: VisibilityLevel[row.permission_level as keyof typeof VisibilityLevel],
+          permission_level: VisibilityLevel[row.permission_level.toUpperCase() as keyof typeof VisibilityLevel],
           created_by_id: row.created_by_id,
           last_modified_by_id: row.last_modified_by_id,
         }

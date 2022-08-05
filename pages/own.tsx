@@ -34,13 +34,9 @@ export default function Own({ user }: { user: UserSafe }) {
       return;
     }
     dispatch(setUserState({ ...user, currentTab: TabName.OWN }));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const ownStateItems = useSelector(
-    (state: RootState) => state.own_store.items
-  );
-  const ownStateItem = useSelector((state: RootState) => state.own_store.item);
+  const ownState = useSelector((state: RootState) => state.own_store);
 
   useEffect(() => {
     async function getOwnItems() {
@@ -52,7 +48,6 @@ export default function Own({ user }: { user: UserSafe }) {
       });
     }
     getOwnItems();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [timeInsensitiveItemsTask, setTimeInsensitiveItemsTask] = useState<
@@ -71,33 +66,33 @@ export default function Own({ user }: { user: UserSafe }) {
   useEffect(() => {
     setTimeInsensitiveItemsTask(() => {
       return [
-        ...ownStateItems.filter(
+        ...ownState.items.filter(
           (item) => !item.time_sensitive_flag && !item.date_range_flag
         ),
       ];
     });
     setTimeInsensitiveItemsEvent(() => {
       return [
-        ...ownStateItems.filter(
+        ...ownState.items.filter(
           (item) => !item.time_sensitive_flag && item.date_range_flag
         ),
       ];
     });
     setTimeSensitiveItemsTask(() => {
       return [
-        ...ownStateItems.filter(
+        ...ownState.items.filter(
           (item) => item.time_sensitive_flag && !item.date_range_flag
         ),
       ];
     });
     setTimeSensitiveItemsEvent(() => {
       return [
-        ...ownStateItems.filter(
+        ...ownState.items.filter(
           (item) => item.time_sensitive_flag && item.date_range_flag
         ),
       ];
     });
-  }, [ownStateItems]);
+  }, [ownState.items]);
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [dayLayout, setDayLayout] = useState(30);
@@ -191,7 +186,7 @@ export default function Own({ user }: { user: UserSafe }) {
               modalId="view_personal_item_modal"
               modalOpen={setViewItemMode}
             >
-              <Item item={ownStateItem} modalOpen={setViewItemMode}></Item>
+              <Item item={ownState.item} modalOpen={setViewItemMode}></Item>
             </ModalPopup>
           )}
         </animated.div>
