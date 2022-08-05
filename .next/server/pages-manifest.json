@@ -1,9 +1,5 @@
 {
-  "/_app": "pages/_app.js",
   "/_document": "pages/_document.js",
-  "/_error": "pages/_error.js",
-  "/api/list/users": "pages/api/list/users.js",
-  "/own": "pages/own.js",
-  "/api/item/permissions": "pages/api/item/permissions.js",
-  "/api/own/item/item": "pages/api/own/item/item.js"
+  "/_app": "pages/_app.js",
+  "/_error": "pages/_error.js"
 }

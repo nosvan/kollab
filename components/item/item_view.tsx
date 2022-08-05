@@ -20,7 +20,7 @@ export default function ItemView(props: ItemViewProps) {
     ? new Date(item.date_tz_sensitive_end)
     : undefined;
   const date_tz_sensitive_month = date_tz_sensitive
-    ? date_tz_sensitive.getMonth()
+    ? date_tz_sensitive.getMonth() + 1
     : undefined;
   const date_tz_sensitive_day = date_tz_sensitive
     ? date_tz_sensitive.getDate()
@@ -37,7 +37,7 @@ export default function ItemView(props: ItemViewProps) {
       : date_tz_sensitive.getMinutes()
     : undefined;
   const date_tz_sensitive_end_month = date_tz_sensitive_end
-    ? date_tz_sensitive_end.getMonth()
+    ? date_tz_sensitive_end.getMonth() + 1
     : undefined;
   const date_tz_sensitive_end_day = date_tz_sensitive_end
     ? date_tz_sensitive_end.getDate()
