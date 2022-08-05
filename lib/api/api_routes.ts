@@ -7,13 +7,15 @@ export const ApiRoutes = {
 
 export const OwnApiRoutes = {
   NEW_ITEM: '/api/own/item/new',
-  GET_ITEMS: '/api/own/item/item'
+  GET_ITEMS: '/api/own/item/item',
+  EDIT_ITEM: '/api/own/item/edit'
 }
 
 export const ListApiRoutes = {
   GET_LISTS: '/api/list/list',
   GET_ITEMS: '/api/list/item/item',
   NEW_ITEM: '/api/list/item/new',
+  EDIT_ITEM: '/api/list/item/edit',
   JOIN_LIST: '/api/list/join',
   NEW_LIST: '/api/list/new',
   LIST_USERS: '/api/list/users'

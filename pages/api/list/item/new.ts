@@ -14,7 +14,7 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
       const reqBody: CreateItem = req.body;
       cleanReqBody(reqBody)
       const usersToHaveAccessToItem: {user_id: number}[] = []
-      if(reqBody.permission_level === VisibilityLevel.PRIVATE) reqBody.item_permissions?.forEach(permission => usersToHaveAccessToItem.push(permission))
+      if(reqBody.permission_level === VisibilityLevel.PRIVATE) reqBody.item_permissions?.forEach(permission => usersToHaveAccessToItem.push({user_id: permission.user_id}))
       const result = await prisma.item.create({
         data: {
           name: reqBody.name,

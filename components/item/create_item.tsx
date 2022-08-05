@@ -185,11 +185,9 @@ export default function NewItem(props: NewItemProps) {
       setFormValues((prevState) => {
         return {
           ...prevState,
-          item_permissions: usersWithPermissionMapped
-            .filter((f) => f.isChecked)
-            .map((e) => {
-              return { user_id: e.user_id };
-            }),
+          item_permissions: usersWithPermissionMapped.filter(
+            (f) => f.isChecked
+          ),
         };
       });
     } else {
@@ -276,7 +274,7 @@ export default function NewItem(props: NewItemProps) {
   return (
     <div>
       <form onSubmit={handleCreateItemFormSubmit}>
-        <div className="flex flex-col text-sm space-y-2 pt-2 px-2 bg-stone-900 border-b-2 rounded-xl border-blue-700">
+        <div className="flex flex-col text-sm space-y-2 p-2 bg-stone-900 border-b-2 rounded-xl border-blue-700">
           <div className="py-2 text-3xl">
             Create {formValues.date_range_flag ? 'an Event' : 'a Task'}
           </div>

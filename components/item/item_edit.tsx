@@ -1,33 +1,40 @@
 import axios from 'axios';
 import SelectorCheckbox from 'components/layout/ui_components/selector_checkbox';
 import ToggleSwitch from 'components/layout/ui_components/toggle_switch';
-import { ItemApiRoutes, ListApiRoutes } from 'lib/api/api_routes';
+import { ItemApiRoutes, ListApiRoutes, OwnApiRoutes } from 'lib/api/api_routes';
 import {
   Category,
   EditItem,
+  ItemEditYupValidationError,
   ItemSafe,
   ItemType,
-  ItemYupValidationError,
   VisibilityLevel,
 } from 'lib/types/item';
 import { CheckDataItem, UsersWithPermissionForList } from 'lib/types/list';
-import { useEffect, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import {
   dateRangeValid,
   dateToYYYYMMDD,
   getTimeCeiling,
   getTimeHourMinuteString,
 } from 'utils/dateUtils';
-import { DateInputs } from './date_inputs';
 import * as Yup from 'yup';
+import {
+  matchYupErrorStateWithCompErrorState,
+  trimStringsInObjectShallow,
+} from 'utils/formValidateUtils';
+import { DateInputsEdit } from './date_inputs_edit';
+import { ItemMode } from 'lib/types/ui';
 
 interface ItemEditProps {
   item: ItemSafe;
+  setItemMode: Dispatch<SetStateAction<ItemMode>>;
   itemTypeStyling: (itemType: ItemType) => string;
 }
 
 export default function ItemEdit(props: ItemEditProps) {
-  const { item, itemTypeStyling } = props;
+  const { item, setItemMode, itemTypeStyling } = props;
+  const [itemEditted, setItemEditted] = useState<boolean>(false);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
 
   const [visibilityControlCheck, setVisibilityControlCheck] = useState<boolean>(
@@ -93,9 +100,7 @@ export default function ItemEdit(props: ItemEditProps) {
   >([]);
   const [usersWithPermissionToListMapped, setUsersWithPermissionToListMapped] =
     useState<CheckDataItem[]>([]);
-  const [itemPermissions, setItemPermissions] = useState<{ user_id: number }[]>(
-    []
-  );
+  const [itemPermissions, setItemPermissions] = useState<CheckDataItem[]>([]);
 
   useEffect(() => {
     async function getListUsers() {
@@ -118,7 +123,7 @@ export default function ItemEdit(props: ItemEditProps) {
         setUsersWithPermissionToListMapped(resDataMapped);
       });
     }
-    getListUsers();
+    if (item.category) getListUsers();
     async function getItemPermissions() {
       await axios({
         method: 'get',
@@ -127,12 +132,14 @@ export default function ItemEdit(props: ItemEditProps) {
           item_id: item.id,
         },
       }).then((res) => {
-        const itemPermissionsMappedIsChecked: { user_id: number }[] =
-          res.data.map((user: CheckDataItem) => {
+        const itemPermissionsMappedIsChecked: CheckDataItem[] = res.data.map(
+          (user: CheckDataItem) => {
             return {
               user_id: user.user_id,
+              isChecked: true,
             };
-          });
+          }
+        );
         setItemPermissions(itemPermissionsMappedIsChecked);
       });
     }
@@ -140,26 +147,29 @@ export default function ItemEdit(props: ItemEditProps) {
   }, [item]);
 
   useEffect(() => {
-    setUsersWithPermissionToListMapped((prevState) => {
-      const newState = prevState.map((user) => {
-        const userFound = itemPermissions.find(
-          (item) => item.user_id === user.user_id
-        );
-        if (userFound) {
-          return {
-            user_id: user.user_id,
-            isChecked: true,
-          };
-        } else return user;
+    if (item.category) {
+      setUsersWithPermissionToListMapped((prevState) => {
+        const newState = prevState.map((user) => {
+          const userFound = itemPermissions.find(
+            (item) => item.user_id === user.user_id
+          );
+          if (userFound)
+            return {
+              user_id: user.user_id,
+              isChecked: true,
+            };
+          else return user;
+        });
+        return [...newState];
       });
-      return [...newState];
-    });
-    setEditModeFormValues((prevState) => {
-      return { ...prevState, item_permissions: itemPermissions };
-    });
-  }, [itemPermissions]);
+      setEditModeFormValues((prevState) => {
+        return { ...prevState, item_permissions: itemPermissions };
+      });
+    }
+  }, [item.category, itemPermissions]);
 
   const [editModeFormValues, setEditModeFormValues] = useState<EditItem>({
+    id: item.id,
     name: item.name,
     description: item.description,
     category: item.category,
@@ -175,6 +185,22 @@ export default function ItemEdit(props: ItemEditProps) {
       VisibilityLevel[item.permission_level as keyof typeof VisibilityLevel],
     item_permissions: itemPermissions,
   });
+
+  useEffect(() => {
+    if (visibilityControlCheck) {
+      if (editModeFormValues.permission_level !== VisibilityLevel.PRIVATE) {
+        setEditModeFormValues((prevState) => {
+          return { ...prevState, permission_level: VisibilityLevel.PRIVATE };
+        });
+      }
+    } else {
+      if (editModeFormValues.permission_level !== VisibilityLevel.PUBLIC) {
+        setEditModeFormValues((prevState) => {
+          return { ...prevState, permission_level: VisibilityLevel.PUBLIC };
+        });
+      }
+    }
+  }, [visibilityControlCheck, editModeFormValues]);
 
   const yupValidationSchema = Yup.object({
     name: Yup.string().min(5, 'min length of 5').required('name is required'),
@@ -225,7 +251,8 @@ export default function ItemEdit(props: ItemEditProps) {
   });
 
   const [yupValidationError, setYupValidationError] =
-    useState<ItemYupValidationError>({
+    useState<ItemEditYupValidationError>({
+      id: false,
       name: false,
       category: false,
       category_id: false,
@@ -242,18 +269,6 @@ export default function ItemEdit(props: ItemEditProps) {
       date_tz_insensitive_end: false,
       last_modified_by_id: false,
     });
-
-  useEffect(() => {
-    if (textAreaRef.current) {
-      const scrollHeight = textAreaRef.current.scrollHeight;
-      const textAreaRows = scrollHeight
-        ? scrollHeight < 5
-          ? 5
-          : scrollHeight
-        : 5;
-      textAreaRef.current.style.height = `${textAreaRows}px`;
-    }
-  }, []);
 
   return (
     <div className="flex flex-col space-y-1 mx-1 pl-1">
@@ -337,7 +352,7 @@ export default function ItemEdit(props: ItemEditProps) {
           </span>
         </span>
         <span>
-          <DateInputs
+          <DateInputsEdit
             formValues={editModeFormValues}
             setFormValues={setEditModeFormValues}
             yupValidationError={yupValidationError}
@@ -352,9 +367,80 @@ export default function ItemEdit(props: ItemEditProps) {
             setTimePart={setTimePart}
             timePartEnd={timePartEnd}
             setTimePartEnd={setTimePartEnd}
-          ></DateInputs>
+          ></DateInputsEdit>
         </span>
+      </div>
+      <div className="flex flex-row justify-start text-center text-sm space-x-2">
+        <div
+          className="bg-stone-900 border-2 border-white hover:bg-stone-800 hover:border-stone-300
+              text-white rounded-xl px-2 cursor-pointer"
+          onClick={() => setItemMode(ItemMode.VIEW)}
+        >
+          Cancel
+        </div>
+        {itemEditted && (
+          <button
+            onClick={() => handleCreateItemFormSubmit()}
+            className="bg-blue-700 hover:bg-blue-600 border-2 border-blue-700 hover:border-blue-600 px-3 rounded-xl text-white"
+          >
+            Save
+          </button>
+        )}
       </div>
     </div>
   );
+
+  async function handleCreateItemFormSubmit() {
+    trimStringsInObjectShallow(editModeFormValues);
+    let yupValidateResult = await yupValidationSchema
+      .validate(editModeFormValues, { abortEarly: false })
+      .catch((err) => {
+        matchYupErrorStateWithCompErrorState(err.inner, yupValidationError);
+        setYupValidationError({ ...yupValidationError });
+      });
+    if (
+      !(
+        JSON.stringify(yupValidateResult) === JSON.stringify(editModeFormValues)
+      )
+    ) {
+      return;
+    }
+    await callCreateNewItemApi(editModeFormValues);
+  }
+
+  async function callCreateNewItemApi(formValues: EditItem) {
+    if (item.category) {
+      console.log(formValues);
+      try {
+        await axios({
+          method: 'POST',
+          url: ListApiRoutes.EDIT_ITEM,
+          data: JSON.stringify(formValues),
+          headers: { 'Content-Type': 'application/json' },
+        }).then((res) => {
+          if (res.data.length > 0 && res.data[0].category) {
+            if (res.data[0].category === Category.LIST) {
+            }
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    } else {
+      try {
+        await axios({
+          method: 'POST',
+          url: OwnApiRoutes.EDIT_ITEM,
+          data: JSON.stringify(formValues),
+          headers: { 'Content-Type': 'application/json' },
+        }).then((res) => {
+          if (res.data.length > 0) {
+            console.log(res.data);
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
 }

@@ -1,3 +1,5 @@
+import { CheckDataItem } from "./list"
+
 export enum Category {
   LIST = 'list',
 }
@@ -61,10 +63,11 @@ export type CreateItem = {
   date_tz_insensitive?: string
   date_tz_insensitive_end?: string
   permission_level: VisibilityLevel,
-  item_permissions?: {user_id: number}[]
+  item_permissions?: CheckDataItem[]
 }
 
 export type EditItem = {
+  id: number
   name: string
   description?: string
   category?: Category
@@ -77,7 +80,7 @@ export type EditItem = {
   date_tz_insensitive?: string
   date_tz_insensitive_end?: string
   permission_level: VisibilityLevel,
-  item_permissions?: {user_id: number}[]
+  item_permissions?: CheckDataItem[]
 }
 
 export type ItemSafe = {
@@ -135,7 +138,10 @@ export type ItemYupValidationError = {
 }
 
 export type ItemEditYupValidationError = {
+  id: boolean,
   name: boolean,
+  category: boolean,
+  category_id: boolean,
   item_type: boolean,
   permission_level: boolean,
   description: boolean,
@@ -143,5 +149,9 @@ export type ItemEditYupValidationError = {
   date_tz_sensitive_end: boolean,
   time_tz_sensitive: boolean,
   time_tz_sensitive_end: boolean,
-  time_sensitive_flag: boolean
+  time_sensitive_flag: boolean,
+  date_range_flag: boolean
+  date_tz_insensitive: boolean,
+  date_tz_insensitive_end: boolean,
+  last_modified_by_id: boolean,
 }

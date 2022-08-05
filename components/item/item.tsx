@@ -28,12 +28,6 @@ export default function Item(props: ItemProps) {
       )}`}
     >
       <div className="flex flex-row items-center justify-end space-x-1">
-        {itemMode === ItemMode.EDIT && (
-          <TbEye
-            className={`${styles.iconStyle} hover:bg-stone-700 hover:text-stone-300 cursor-pointer rounded-xl`}
-            onClick={() => setItemMode(ItemMode.VIEW)}
-          ></TbEye>
-        )}
         {itemMode === ItemMode.VIEW && (
           <TbTool
             className={`${styles.iconStyle} hover:bg-stone-700 hover:text-stone-300 cursor-pointer rounded-xl`}
@@ -55,7 +49,11 @@ export default function Item(props: ItemProps) {
         ></ItemView>
       )}
       {itemMode === ItemMode.EDIT && (
-        <ItemEdit item={item} itemTypeStyling={itemTypeStyling}></ItemEdit>
+        <ItemEdit
+          item={item}
+          setItemMode={setItemMode}
+          itemTypeStyling={itemTypeStyling}
+        ></ItemEdit>
       )}
     </div>
   );
