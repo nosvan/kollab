@@ -10,7 +10,7 @@ interface ItemViewProps {
 }
 
 export default function ItemView(props: ItemViewProps) {
-  const { item, modalOpen, itemTypeStyling } = props;
+  const { item, itemTypeStyling } = props;
   const date_tz_insensitive = item.date_tz_insensitive ?? undefined;
   const date_tz_insensitive_end = item.date_tz_insensitive_end ?? undefined;
   const date_tz_sensitive = item.date_tz_sensitive
