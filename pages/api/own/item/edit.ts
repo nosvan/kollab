@@ -12,7 +12,6 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
     try {
       const reqBody: EditItem = req.body;
       cleanReqBody(reqBody)
-      console.log(reqBody)
       const result = await prisma.item.update({
         where: {
           id: reqBody.id

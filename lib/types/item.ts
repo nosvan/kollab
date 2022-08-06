@@ -80,7 +80,7 @@ export type EditItem = {
   date_tz_insensitive?: string
   date_tz_insensitive_end?: string
   permission_level: VisibilityLevel,
-  item_permissions?: CheckDataItem[]
+  item_permissions: CheckDataItem[]
 }
 
 export type ItemSafe = {

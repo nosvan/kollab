@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { ListSliceState } from 'lib/types/list';
-import { Category, ItemType, VisibilityLevel } from 'lib/types/item';
+import { Category, ItemSafe, ItemType, VisibilityLevel } from 'lib/types/item';
 
 const initialState: ListSliceState = {
   list: {
@@ -65,6 +65,12 @@ export const listSlice = createSlice({
       state.items = [...action.payload]
     },
     setAdditionalListItems: (state, action) => {
+      state.items = state.items.filter((item: ItemSafe) => {
+        const itemFoundToRemove = action.payload.find((itemToRemove: ItemSafe) => {
+          return item.id === itemToRemove.id
+        })
+        return !itemFoundToRemove
+      })
       state.items = [...state.items, ...action.payload]
     },
     setViewListItemMode: (state, action) => {

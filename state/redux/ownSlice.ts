@@ -28,7 +28,6 @@ export const ownSlice = createSlice({
   initialState: initialState,
   reducers: {
     setCurrentOwnItem: (state, action) => {
-      console.log('set current own item: ',action.payload);
       state.item = action.payload
     },
     setOwnItems: (state, action) => {

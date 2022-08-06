@@ -106,7 +106,26 @@ export default function ItemEdit(props: ItemEditProps) {
   >([]);
   const [usersWithPermissionToListMapped, setUsersWithPermissionToListMapped] =
     useState<CheckDataItem[]>([]);
+
   const [itemPermissions, setItemPermissions] = useState<CheckDataItem[]>([]);
+
+  const [editModeFormValues, setEditModeFormValues] = useState<EditItem>({
+    id: item.id,
+    name: item.name,
+    description: item.description,
+    category: item.category,
+    category_id: item.category_id,
+    item_type: ItemType[item.item_type as keyof typeof ItemType],
+    date_tz_insensitive: item.date_tz_insensitive,
+    date_tz_insensitive_end: item.date_tz_insensitive_end,
+    time_sensitive_flag: item.time_sensitive_flag,
+    date_tz_sensitive: item.date_tz_sensitive,
+    date_tz_sensitive_end: item.date_tz_sensitive_end,
+    date_range_flag: item.date_range_flag,
+    permission_level:
+      VisibilityLevel[item.permission_level as keyof typeof VisibilityLevel],
+    item_permissions: [],
+  });
 
   useEffect(() => {
     async function getListUsers() {
@@ -147,53 +166,35 @@ export default function ItemEdit(props: ItemEditProps) {
           }
         );
         setItemPermissions(itemPermissionsMappedIsChecked);
-        setEditModeFormValues((prevState) => {
-          return {
-            ...prevState,
-            item_permissions: itemPermissionsMappedIsChecked,
-          };
-        });
       });
     }
     getItemPermissions();
   }, [item]);
 
   useEffect(() => {
-    if (item.category) {
-      setUsersWithPermissionToListMapped((prevState) => {
-        const newState = prevState.map((user) => {
-          const userFound = itemPermissions.find(
-            (item) => item.user_id === user.user_id
-          );
-          if (userFound)
-            return {
-              user_id: user.user_id,
-              isChecked: true,
-            };
-          else return user;
-        });
-        return [...newState];
+    setUsersWithPermissionToListMapped((prevState) => {
+      return prevState.map((user) => {
+        if (itemPermissions.find((item) => item.user_id === user.user_id)) {
+          return {
+            user_id: user.user_id,
+            isChecked: true,
+          };
+        }
+        return user;
       });
-    }
-  }, [item.category, itemPermissions]);
+    });
+  }, [itemPermissions]);
 
-  const [editModeFormValues, setEditModeFormValues] = useState<EditItem>({
-    id: item.id,
-    name: item.name,
-    description: item.description,
-    category: item.category,
-    category_id: item.category_id,
-    item_type: ItemType[item.item_type as keyof typeof ItemType],
-    date_tz_insensitive: item.date_tz_insensitive,
-    date_tz_insensitive_end: item.date_tz_insensitive_end,
-    time_sensitive_flag: item.time_sensitive_flag,
-    date_tz_sensitive: item.date_tz_sensitive,
-    date_tz_sensitive_end: item.date_tz_sensitive_end,
-    date_range_flag: item.date_range_flag,
-    permission_level:
-      VisibilityLevel[item.permission_level as keyof typeof VisibilityLevel],
-    item_permissions: itemPermissions,
-  });
+  useEffect(() => {
+    setEditModeFormValues((prevState) => {
+      return {
+        ...prevState,
+        item_permissions: usersWithPermissionToListMapped.filter(
+          (user) => user.isChecked
+        ),
+      };
+    });
+  }, [usersWithPermissionToListMapped]);
 
   useEffect(() => {
     if (visibilityControlCheck) {
@@ -446,7 +447,7 @@ export default function ItemEdit(props: ItemEditProps) {
           data: JSON.stringify(formValues),
           headers: { 'Content-Type': 'application/json' },
         }).then((res) => {
-          if (res.data.length > 0 && res.data[0]?.category === Category.LIST) {
+          if (res.data.length > 0 && res.data[0].category === Category.LIST) {
             dispatch(setAdditionalListItems(res.data));
             dispatch(setCurrentListItem(res.data[0]));
           }

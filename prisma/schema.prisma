@@ -37,6 +37,7 @@ model list_permission {
   user_id    Int
   permission AccessLevel @default(public)
   created_at DateTime @default(now())
+  @@unique([list_id, user_id])
 }
 
 model item {
@@ -67,6 +68,7 @@ model item_permission {
   user         user     @relation(fields: [user_id], references: [id], onDelete: Cascade)
   user_id      Int
   created_at   DateTime @default(now())
+  @@unique([item_id, user_id])
 }
 
 enum ItemType {
