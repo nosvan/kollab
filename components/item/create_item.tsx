@@ -21,7 +21,6 @@ import {
   trimStringsInObjectShallow,
 } from 'utils/formValidateUtils';
 import { dateRangeValid, dateToYYYYMMDD } from 'utils/dateUtils';
-import { useSpring } from '@react-spring/web';
 import { FooterInputs } from './footer_inputs';
 import { getTimeCeiling } from 'utils/dateUtils';
 import { DateInputs } from './date_inputs';
@@ -200,7 +199,7 @@ export default function NewItem(props: NewItemProps) {
   }, [visibilityControlCheck]);
 
   const yupValidationSchema = Yup.object({
-    name: Yup.string().min(5, 'min length of 5').required('name is required'),
+    name: Yup.string().required('name is required'),
     category: Yup.mixed<Category>().oneOf(Object.values(Category)),
     category_id: formValues.category ? Yup.number().required() : Yup.number(),
     item_type: Yup.mixed<ItemType>()
@@ -268,10 +267,10 @@ export default function NewItem(props: NewItemProps) {
     <div>
       <form onSubmit={handleCreateItemFormSubmit}>
         <div className="flex flex-col text-sm space-y-2 p-2 bg-stone-900 border-b-2 rounded-xl border-blue-700">
-          <div className="py-2 text-3xl">
+          <div className="py-1 text-3xl">
             Create {formValues.date_range_flag ? 'an Event' : 'a Task'}
           </div>
-          <span className="flex flex-row items-center space-x-1 pb-2">
+          <span className="flex flex-row items-center space-x-1">
             <span
               onClick={() => setDateRangeControlChecked(false)}
               className={`py-1 px-2 text-lg rounded-xl ${
@@ -289,7 +288,7 @@ export default function NewItem(props: NewItemProps) {
               Event
             </span>
           </span>
-          <div className="space-y-1">
+          <div>
             <span className="px-1">type</span>
             <span className="flex flex-row flex-wrap items-center">
               {Object.keys(ItemType).map((key) => (
@@ -314,26 +313,8 @@ export default function NewItem(props: NewItemProps) {
               ))}
             </span>
           </div>
-          {itemCategory && (
-            <div className="flex flex-col space-y-1">
-              <span className="flex flex-row items-center space-x-1">
-                <label className="text-white px-1">control visibility</label>
-                <ToggleSwitch
-                  isChecked={visibilityControlCheck}
-                  setIsChecked={setVisibilityControlCheck}
-                ></ToggleSwitch>
-              </span>
-              {visibilityControlCheck && (
-                <SelectorCheckbox
-                  data={usersWithPermission}
-                  selected={usersWithPermissionMapped}
-                  setSelected={setUsersWithPermissionMapped}
-                ></SelectorCheckbox>
-              )}
-            </div>
-          )}
           <div className="flex flex-col">
-            <label className="text-white px-1">name</label>
+            <label className="text-white px-1">title</label>
             <input
               className="text-white bg-stone-800 hover:bg-stone-700 p-1 rounded-xl"
               onFocus={() =>
@@ -352,6 +333,24 @@ export default function NewItem(props: NewItemProps) {
               </span>
             )}
           </div>
+          {itemCategory && (
+            <div className="flex flex-col space-y-1">
+              <span className="flex flex-row items-center space-x-1">
+                <label className="text-white px-1">control visibility</label>
+                <ToggleSwitch
+                  isChecked={visibilityControlCheck}
+                  setIsChecked={setVisibilityControlCheck}
+                ></ToggleSwitch>
+              </span>
+              {visibilityControlCheck && (
+                <SelectorCheckbox
+                  data={usersWithPermission}
+                  selected={usersWithPermissionMapped}
+                  setSelected={setUsersWithPermissionMapped}
+                ></SelectorCheckbox>
+              )}
+            </div>
+          )}
           <div className="flex flex-col">
             <label className="text-white px-1">info</label>
             <textarea

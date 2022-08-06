@@ -31,6 +31,7 @@ import {
   setCurrentListItem,
 } from 'state/redux/listSlice';
 import { setAdditionalOwnItems, setCurrentOwnItem } from 'state/redux/ownSlice';
+import styles from './item_edit.module.css';
 
 interface ItemEditProps {
   item: ItemSafe;
@@ -234,7 +235,7 @@ export default function ItemEdit(props: ItemEditProps) {
 
   const yupValidationSchema = Yup.object({
     id: Yup.number().required(),
-    name: Yup.string().min(5, 'min length of 5').required('name is required'),
+    name: Yup.string().required('name is required'),
     category: Yup.mixed<Category>().oneOf(Object.values(Category)),
     category_id: editModeFormValues.category
       ? Yup.number().required()
@@ -324,6 +325,9 @@ export default function ItemEdit(props: ItemEditProps) {
           }
         />
       </span>
+      {yupValidationError.name && (
+        <span className={`${styles['field-error-styling']}`}>required</span>
+      )}
       <div className="flex flex-row flex-wrap items-center">
         {Object.keys(ItemType).map((key) => (
           <span
@@ -345,6 +349,9 @@ export default function ItemEdit(props: ItemEditProps) {
             {key}
           </span>
         ))}
+        {yupValidationError.item_type && (
+          <span className={`${styles['field-error-styling']}`}>required</span>
+        )}
       </div>
       {item.category && (
         <div className="flex flex-col space-y-1">
