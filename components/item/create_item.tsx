@@ -426,7 +426,6 @@ export default function NewItem(props: NewItemProps) {
 
   async function callCreateNewItemApi(formValues: CreateItem) {
     if (itemCategory) {
-      console.log(formValues);
       try {
         await axios({
           method: 'post',

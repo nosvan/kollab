@@ -138,7 +138,6 @@ export default function ItemEdit(props: ItemEditProps) {
           item_id: item.id,
         },
       }).then((res) => {
-        console.log('getitempermissions item_edit: ', res.data);
         const itemPermissionsMappedIsChecked: CheckDataItem[] = res.data.map(
           (user: CheckDataItem) => {
             return {
@@ -431,7 +430,6 @@ export default function ItemEdit(props: ItemEditProps) {
       .validate(editModeFormValues, { abortEarly: false })
       .catch((err) => {
         console.log(err.errors);
-        console.log(editModeFormValues);
         matchYupErrorStateWithCompErrorState(err.inner, yupValidationError);
         setYupValidationError({ ...yupValidationError });
       });

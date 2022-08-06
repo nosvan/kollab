@@ -48,8 +48,9 @@ function ModalPopup(props: ModalPopupProps) {
     </animated.div>
   );
 
-  function handleModalClick(event: any) {
-    if (event.target.id === 'outer-container') {
+  function handleModalClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (target.id === 'outer-container') {
       props.modalOpen(false);
     }
   }
