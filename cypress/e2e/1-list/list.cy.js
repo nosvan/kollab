@@ -23,10 +23,10 @@ describe('own page', () => {
 
   beforeEach(() => {
     login();
-    cy.visit('/own');
+    cy.visit('/lists');
   });
 
   it('should have the correct title', () => {
-    cy.get('#header-title').should('contain', 'own');
+    cy.get('#header-title').should('contain', 'lists');
   });
 });

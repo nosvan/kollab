@@ -125,126 +125,124 @@ export default function Lists({ user }: { user: UserSafe }) {
   });
 
   return (
-    <>
-      <Layout>
-        <animated.div
-          style={listSpring}
-          className="bg-black rounded-3xl p-5 text-white mt-2"
-        >
-          {listState.lists.length == 0 && (
-            <div className="flex flex-row">
-              <span
-                onClick={() => setCreateNewTypeMode(true)}
-                className="flex flex-row items-center space-x-1 text-sm bg-stone-900 hover:bg-stone-800 rounded-2xl p-2 cursor-pointer"
+    <Layout>
+      <animated.div
+        style={listSpring}
+        className="bg-black rounded-3xl p-5 text-white mt-2"
+      >
+        {listState.lists.length == 0 && (
+          <div className="flex flex-row">
+            <span
+              onClick={() => setCreateNewTypeMode(true)}
+              className="flex flex-row items-center space-x-1 text-sm bg-stone-900 hover:bg-stone-800 rounded-2xl p-2 cursor-pointer"
+            >
+              <span>Create/Join a List</span>
+              <TbArrowBigRight></TbArrowBigRight>
+            </span>
+          </div>
+        )}
+        {listState.lists && listState.lists.length > 0 && (
+          <div className="mb-1">
+            <span className="items-center text-xl mx-1 pl-1">
+              {dateToLongMonthName(selectedDate)} {selectedDate.getFullYear()}
+            </span>
+            <div className="flex flex-row flex-wrap items-center justify-between text-sm">
+              <select
+                value={listState.list.id}
+                onChange={handleDropdownSelect}
+                name="lists"
+                id="lists-select"
+                className="flex flex-col rounded-lg items-center text-white bg-stone-800 hover:bg-stone-700 cursor-pointer p-1 text-sm m-1"
               >
-                <span>Create/Join a List</span>
-                <TbArrowBigRight></TbArrowBigRight>
-              </span>
-            </div>
-          )}
-          {listState.lists && listState.lists.length > 0 && (
-            <div className="mb-1">
-              <span className="items-center text-xl mx-1 pl-1">
-                {dateToLongMonthName(selectedDate)} {selectedDate.getFullYear()}
-              </span>
-              <div className="flex flex-row flex-wrap items-center justify-between text-sm">
-                <select
-                  value={listState.list.id}
-                  onChange={handleDropdownSelect}
-                  name="lists"
-                  id="lists-select"
-                  className="flex flex-col rounded-lg items-center text-white bg-stone-800 hover:bg-stone-700 cursor-pointer p-1 text-sm m-1"
+                {listState.lists.map((list: ListSafe) => (
+                  <option key={list.id} value={list.id}>
+                    {list.name} (#{list.id})
+                  </option>
+                ))}
+              </select>
+              <span className="flex flex-row items-center space-x-1 mx-1">
+                <div
+                  onClick={() => setSelectedDate(new Date())}
+                  className="bg-stone-800 hover:bg-stone-700 p-1 rounded-lg cursor-pointer"
                 >
-                  {listState.lists.map((list: ListSafe) => (
-                    <option key={list.id} value={list.id}>
-                      {list.name} (#{list.id})
-                    </option>
-                  ))}
-                </select>
-                <span className="flex flex-row items-center space-x-1 mx-1">
+                  Today
+                </div>
+                <div className="flex flex-row items-center space-x-2 p-1 bg-stone-800 rounded-lg">
                   <div
-                    onClick={() => setSelectedDate(new Date())}
-                    className="bg-stone-800 hover:bg-stone-700 p-1 rounded-lg cursor-pointer"
+                    onClick={() => handleDecrementDate()}
+                    className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg`}
                   >
-                    Today
+                    <TbArrowBigLeft></TbArrowBigLeft>
                   </div>
-                  <div className="flex flex-row items-center space-x-2 p-1 bg-stone-800 rounded-lg">
-                    <div
-                      onClick={() => handleDecrementDate()}
-                      className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg`}
-                    >
-                      <TbArrowBigLeft></TbArrowBigLeft>
-                    </div>
-                    <div
-                      onClick={() => handleSetDayLayout(1)}
-                      className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg ${
-                        dayLayout === 1 ? 'bg-stone-700' : ''
-                      }`}
-                    >
-                      Day
-                    </div>
-                    <div
-                      onClick={() => handleSetDayLayout(7)}
-                      className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg ${
-                        dayLayout === 7 ? 'bg-stone-700' : ''
-                      }`}
-                    >
-                      Week
-                    </div>
-                    <div
-                      onClick={() => handleSetDayLayout(30)}
-                      className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg ${
-                        dayLayout === 30 ? 'bg-stone-700' : ''
-                      }`}
-                    >
-                      Month
-                    </div>
-                    <div
-                      onClick={() => handleIncrementDate()}
-                      className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg`}
-                    >
-                      <TbArrowBigRight></TbArrowBigRight>
-                    </div>
+                  <div
+                    onClick={() => handleSetDayLayout(1)}
+                    className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg ${
+                      dayLayout === 1 ? 'bg-stone-700' : ''
+                    }`}
+                  >
+                    Day
                   </div>
-                </span>
-              </div>
+                  <div
+                    onClick={() => handleSetDayLayout(7)}
+                    className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg ${
+                      dayLayout === 7 ? 'bg-stone-700' : ''
+                    }`}
+                  >
+                    Week
+                  </div>
+                  <div
+                    onClick={() => handleSetDayLayout(30)}
+                    className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg ${
+                      dayLayout === 30 ? 'bg-stone-700' : ''
+                    }`}
+                  >
+                    Month
+                  </div>
+                  <div
+                    onClick={() => handleIncrementDate()}
+                    className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg`}
+                  >
+                    <TbArrowBigRight></TbArrowBigRight>
+                  </div>
+                </div>
+              </span>
             </div>
-          )}
-          {listState.lists.length > 0 && (
-            <TaskView
-              dayLayout={dayLayout}
-              days={days}
-              selectedDate={selectedDate}
-              setSelectedDate={setSelectedDate}
-              category={Category.LIST}
-              itemsTimeInsensitiveEvents={timeInsensitiveItemsEvent}
-              itemsTimeSensitiveEvents={timeSensitiveItemsEvent}
-              itemsTimeInsensitiveTasks={timeInsensitiveItemsTask}
-              itemsTimeSensitiveTasks={timeSensitiveItemsTask}
-              setViewItemMode={setViewItemMode}
-            />
-          )}
-          {createNewTypeMode && (
-            <ModalPopup
-              modalId="create_join_list_modal"
-              modalOpen={setCreateNewTypeMode}
-            >
-              {createNewTypeMode && (
-                <NewList setCreateNewTypeMode={setCreateNewTypeMode}></NewList>
-              )}
-            </ModalPopup>
-          )}
-          {viewItemMode && (
-            <ModalPopup
-              modalId="view_list_item_modal"
-              modalOpen={setViewItemMode}
-            >
-              <Item item={listState.item} modalOpen={setViewItemMode}></Item>
-            </ModalPopup>
-          )}
-        </animated.div>
-      </Layout>
-    </>
+          </div>
+        )}
+        {listState.lists.length > 0 && (
+          <TaskView
+            dayLayout={dayLayout}
+            days={days}
+            selectedDate={selectedDate}
+            setSelectedDate={setSelectedDate}
+            category={Category.LIST}
+            itemsTimeInsensitiveEvents={timeInsensitiveItemsEvent}
+            itemsTimeSensitiveEvents={timeSensitiveItemsEvent}
+            itemsTimeInsensitiveTasks={timeInsensitiveItemsTask}
+            itemsTimeSensitiveTasks={timeSensitiveItemsTask}
+            setViewItemMode={setViewItemMode}
+          />
+        )}
+        {createNewTypeMode && (
+          <ModalPopup
+            modalId="create_join_list_modal"
+            modalOpen={setCreateNewTypeMode}
+          >
+            {createNewTypeMode && (
+              <NewList setCreateNewTypeMode={setCreateNewTypeMode}></NewList>
+            )}
+          </ModalPopup>
+        )}
+        {viewItemMode && (
+          <ModalPopup
+            modalId="view_list_item_modal"
+            modalOpen={setViewItemMode}
+          >
+            <Item item={listState.item} modalOpen={setViewItemMode}></Item>
+          </ModalPopup>
+        )}
+      </animated.div>
+    </Layout>
   );
 
   function handleIncrementDate() {

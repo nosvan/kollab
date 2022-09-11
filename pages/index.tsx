@@ -35,62 +35,60 @@ export default function Index({ user }: { user: UserSafe }) {
   });
 
   return (
-    <>
-      <Layout>
-        <animated.div
-          style={indexSpring}
-          className="bg-black rounded-3xl p-5 text-white mt-2"
-        >
-          <div className="flex flex-col space-y-2">
-            <div className="flex">
-              <span className="bg-blue-700 rounded-2xl px-2 py-1">
-                Quick Actions
-              </span>
-            </div>
-            <div>
-              <div className="flex flex-row">
-                <span
-                  onClick={() => setCreateNewItemMode(true)}
-                  className="flex flex-row items-center space-x-1 text-sm bg-stone-900 hover:bg-stone-800 rounded-2xl p-2 cursor-pointer"
-                >
-                  <span>Add to Personal List</span>
-                  <TbArrowBigRight></TbArrowBigRight>
-                </span>
-              </div>
-            </div>
+    <Layout>
+      <animated.div
+        style={indexSpring}
+        className="bg-black rounded-3xl p-5 text-white mt-2"
+      >
+        <div className="flex flex-col space-y-2">
+          <div className="flex">
+            <span className="bg-blue-700 rounded-2xl px-2 py-1">
+              Quick Actions
+            </span>
+          </div>
+          <div>
             <div className="flex flex-row">
               <span
-                onClick={() => setCreateNewTypeMode(true)}
+                onClick={() => setCreateNewItemMode(true)}
                 className="flex flex-row items-center space-x-1 text-sm bg-stone-900 hover:bg-stone-800 rounded-2xl p-2 cursor-pointer"
               >
-                <span>Create/Join a List</span>
+                <span>Add to Personal List</span>
                 <TbArrowBigRight></TbArrowBigRight>
               </span>
             </div>
           </div>
-        </animated.div>
-        {createNewItemMode && (
-          <ModalPopup
-            modalId="create_personal_item_modal"
-            modalOpen={setCreateNewItemMode}
-          >
-            {createNewItemMode && (
-              <NewItem setCreateNewItemMode={setCreateNewItemMode}></NewItem>
-            )}
-          </ModalPopup>
-        )}
-        {createNewTypeMode && (
-          <ModalPopup
-            modalId="create_join_list_modal"
-            modalOpen={setCreateNewTypeMode}
-          >
-            {createNewTypeMode && (
-              <NewList setCreateNewTypeMode={setCreateNewTypeMode}></NewList>
-            )}
-          </ModalPopup>
-        )}
-      </Layout>
-    </>
+          <div className="flex flex-row">
+            <span
+              onClick={() => setCreateNewTypeMode(true)}
+              className="flex flex-row items-center space-x-1 text-sm bg-stone-900 hover:bg-stone-800 rounded-2xl p-2 cursor-pointer"
+            >
+              <span>Create/Join a List</span>
+              <TbArrowBigRight></TbArrowBigRight>
+            </span>
+          </div>
+        </div>
+      </animated.div>
+      {createNewItemMode && (
+        <ModalPopup
+          modalId="create_personal_item_modal"
+          modalOpen={setCreateNewItemMode}
+        >
+          {createNewItemMode && (
+            <NewItem setCreateNewItemMode={setCreateNewItemMode}></NewItem>
+          )}
+        </ModalPopup>
+      )}
+      {createNewTypeMode && (
+        <ModalPopup
+          modalId="create_join_list_modal"
+          modalOpen={setCreateNewTypeMode}
+        >
+          {createNewTypeMode && (
+            <NewList setCreateNewTypeMode={setCreateNewTypeMode}></NewList>
+          )}
+        </ModalPopup>
+      )}
+    </Layout>
   );
 }
 

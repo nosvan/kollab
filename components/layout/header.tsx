@@ -36,7 +36,7 @@ export default function Header(props: HeaderProps) {
   text-white text-2xl font-bold"
     >
       <div className="flex flex-row items-center space-x-1 pl-1">
-        <div>{userState.user.currentTab}</div>
+        <div id="header-title">{userState.user.currentTab}</div>
         {userState.user.currentTab == TabName.LISTS && (
           <TbPlus
             onClick={() => props.setCreateNewTypeMode(true)}

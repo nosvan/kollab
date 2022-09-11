@@ -43,6 +43,7 @@ async function handle(req: NextApiRequest, res: NextApiResponse) {
       try{
         req.session.userSession = user;
         await req.session.save();
+        console.log(safeUser);
         return res.json(safeUser);
       } catch (error) {
        return res.status(500).json({ message: (error as Error).message });

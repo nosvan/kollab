@@ -110,88 +110,86 @@ export default function Own({ user }: { user: UserSafe }) {
   });
 
   return (
-    <>
-      <Layout>
-        <animated.div
-          style={ownSpring}
-          className="bg-black rounded-3xl p-5 text-white mt-2"
-        >
-          <div className="flex flex-row flex-wrap items-center justify-between text-sm mb-1">
-            <div className="items-center text-xl pl-1 mx-1">
-              {dateToLongMonthName(selectedDate)} {selectedDate.getFullYear()}
+    <Layout>
+      <animated.div
+        style={ownSpring}
+        className="bg-black rounded-3xl p-5 text-white mt-2"
+      >
+        <div className="flex flex-row flex-wrap items-center justify-between text-sm mb-1">
+          <div className="items-center text-xl pl-1 mx-1">
+            {dateToLongMonthName(selectedDate)} {selectedDate.getFullYear()}
+          </div>
+          <div className="flex flex-row items-center">
+            <div
+              onClick={() => setSelectedDate(new Date())}
+              className="bg-stone-800 hover:bg-stone-700 p-1 rounded-lg cursor-pointer"
+            >
+              Today
             </div>
-            <div className="flex flex-row items-center">
+            <div className="flex flex-row items-center space-x-2 p-1 bg-stone-800 rounded-lg mx-1">
               <div
-                onClick={() => setSelectedDate(new Date())}
-                className="bg-stone-800 hover:bg-stone-700 p-1 rounded-lg cursor-pointer"
+                onClick={() => handleDecrementDate()}
+                className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg`}
               >
-                Today
+                <TbArrowBigLeft></TbArrowBigLeft>
               </div>
-              <div className="flex flex-row items-center space-x-2 p-1 bg-stone-800 rounded-lg mx-1">
-                <div
-                  onClick={() => handleDecrementDate()}
-                  className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg`}
-                >
-                  <TbArrowBigLeft></TbArrowBigLeft>
-                </div>
-                <div
-                  id="day-selector-id"
-                  onClick={() => handleSetDayLayout(1)}
-                  className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg ${
-                    dayLayout === 1 ? 'bg-stone-700' : ''
-                  }`}
-                >
-                  Day
-                </div>
-                <div
-                  id="week-selector-id"
-                  onClick={() => handleSetDayLayout(7)}
-                  className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg ${
-                    dayLayout === 7 ? 'bg-stone-700' : ''
-                  }`}
-                >
-                  Week
-                </div>
-                <div
-                  id="month-selector-id"
-                  onClick={() => handleSetDayLayout(30)}
-                  className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg ${
-                    dayLayout === 30 ? 'bg-stone-700' : ''
-                  }`}
-                >
-                  Month
-                </div>
-                <div
-                  onClick={() => handleIncrementDate()}
-                  className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg`}
-                >
-                  <TbArrowBigRight></TbArrowBigRight>
-                </div>
+              <div
+                id="day-selector-id"
+                onClick={() => handleSetDayLayout(1)}
+                className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg ${
+                  dayLayout === 1 ? 'bg-stone-700' : ''
+                }`}
+              >
+                Day
+              </div>
+              <div
+                id="week-selector-id"
+                onClick={() => handleSetDayLayout(7)}
+                className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg ${
+                  dayLayout === 7 ? 'bg-stone-700' : ''
+                }`}
+              >
+                Week
+              </div>
+              <div
+                id="month-selector-id"
+                onClick={() => handleSetDayLayout(30)}
+                className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg ${
+                  dayLayout === 30 ? 'bg-stone-700' : ''
+                }`}
+              >
+                Month
+              </div>
+              <div
+                onClick={() => handleIncrementDate()}
+                className={`hover:bg-stone-700 cursor-pointer px-1 rounded-lg`}
+              >
+                <TbArrowBigRight></TbArrowBigRight>
               </div>
             </div>
           </div>
-          <TaskView
-            dayLayout={dayLayout}
-            days={days}
-            selectedDate={selectedDate}
-            setSelectedDate={setSelectedDate}
-            itemsTimeInsensitiveEvents={timeInsensitiveItemsEvent}
-            itemsTimeSensitiveEvents={timeSensitiveItemsEvent}
-            itemsTimeInsensitiveTasks={timeInsensitiveItemsTask}
-            itemsTimeSensitiveTasks={timeSensitiveItemsTask}
-            setViewItemMode={setViewItemMode}
-          />
-          {viewItemMode && (
-            <ModalPopup
-              modalId="view_personal_item_modal"
-              modalOpen={setViewItemMode}
-            >
-              <Item item={ownState.item} modalOpen={setViewItemMode}></Item>
-            </ModalPopup>
-          )}
-        </animated.div>
-      </Layout>
-    </>
+        </div>
+        <TaskView
+          dayLayout={dayLayout}
+          days={days}
+          selectedDate={selectedDate}
+          setSelectedDate={setSelectedDate}
+          itemsTimeInsensitiveEvents={timeInsensitiveItemsEvent}
+          itemsTimeSensitiveEvents={timeSensitiveItemsEvent}
+          itemsTimeInsensitiveTasks={timeInsensitiveItemsTask}
+          itemsTimeSensitiveTasks={timeSensitiveItemsTask}
+          setViewItemMode={setViewItemMode}
+        />
+        {viewItemMode && (
+          <ModalPopup
+            modalId="view_personal_item_modal"
+            modalOpen={setViewItemMode}
+          >
+            <Item item={ownState.item} modalOpen={setViewItemMode}></Item>
+          </ModalPopup>
+        )}
+      </animated.div>
+    </Layout>
   );
 
   function handleIncrementDate() {

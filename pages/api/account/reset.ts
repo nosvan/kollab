@@ -4,7 +4,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import nodemailer from 'nodemailer'
 import { sealData } from 'iron-session';
 import { sessionOptionsMagicLink } from 'lib/iron_session';
-import os from 'os'
 
 export default withIronSessionApiRoute(handle, sessionOptionsMagicLink)
 
