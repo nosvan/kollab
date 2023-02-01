@@ -3,7 +3,7 @@ import { ItemApiRoutes } from 'lib/api/api_routes';
 import { Category, ItemSafe } from 'lib/types/item';
 import { ItemMode } from 'lib/types/ui';
 import { Dispatch, SetStateAction, useState } from 'react';
-import { TbEye, TbTool, TbTrash } from 'react-icons/tb';
+import { TbSquare, TbSquareCheck, TbTool, TbTrash } from 'react-icons/tb';
 import { useDispatch } from 'react-redux';
 import { removeOwnItem } from 'state/redux/ownSlice';
 import { removeListItem } from 'state/redux/listSlice';
@@ -17,7 +17,8 @@ export interface ItemProps {
 }
 
 export default function Item(props: ItemProps) {
-  const { item, modalOpen } = props;
+  const { modalOpen } = props;
+  const [item, setItem] = useState(props.item);
   const dispatch = useDispatch();
   const [itemMode, setItemMode] = useState(ItemMode.VIEW);
 
@@ -40,6 +41,18 @@ export default function Item(props: ItemProps) {
             onClick={handleDelete}
           ></TbTrash>
         )}
+        {item.active && (
+          <TbSquareCheck
+            className={`${styles.iconStyle} hover:bg-stone-700 hover:text-stone-300 cursor-pointer rounded-xl`}
+            onClick={handleActiveStatus}
+          ></TbSquareCheck>
+        )}
+        {!item.active && (
+          <TbSquare
+            className={`${styles.iconStyle} hover:bg-stone-700 hover:text-stone-300 cursor-pointer rounded-xl`}
+            onClick={handleActiveStatus}
+          ></TbSquare>
+        )}
       </div>
       {itemMode === ItemMode.VIEW && (
         <ItemView
@@ -57,6 +70,25 @@ export default function Item(props: ItemProps) {
       )}
     </div>
   );
+
+  async function handleActiveStatus() {
+    const body = {
+      item_id: item.id,
+      active: item.active,
+    };
+    try {
+      await axios({
+        method: 'POST',
+        url: ItemApiRoutes.UPDATE_ACTIVE_STATUS,
+        data: JSON.stringify(body),
+        headers: { 'Content-Type': 'application/json' },
+      }).then((res) => {
+        setItem(res.data);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   async function handleDelete() {
     const body = {

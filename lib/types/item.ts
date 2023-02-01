@@ -99,6 +99,7 @@ export type ItemSafe = {
   permission_level: VisibilityLevel
   created_by_id: number
   last_modified_by_id: number,
+  active: boolean
 }
 
 export type ItemSafeState = {

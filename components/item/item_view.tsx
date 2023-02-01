@@ -142,6 +142,7 @@ export default function ItemView(props: ItemViewProps) {
             )}
           </span>
         )}
+        <div></div>
       </div>
     </div>
   );

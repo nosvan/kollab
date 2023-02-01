@@ -23,5 +23,6 @@ export const ListApiRoutes = {
 
 export const ItemApiRoutes = {
   GET_ITEM_PERMISSIONS: '/api/item/permissions',
-  DELETE: '/api/list/item/remove'
+  DELETE: '/api/list/item/remove',
+  UPDATE_ACTIVE_STATUS: '/api/item/activestatus'
 }

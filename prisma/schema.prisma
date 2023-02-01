@@ -58,7 +58,8 @@ model item {
   created_by_id           Int
   last_modified_by_id     Int
   created_at              DateTime @default(now())
-  item_permissions        item_permission[]   
+  item_permissions        item_permission[]
+  active                  Boolean @default(true)
 }
 
 model item_permission {

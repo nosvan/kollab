@@ -50,6 +50,7 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
           permission_level: VisibilityLevel[row.permission_level.toUpperCase() as keyof typeof VisibilityLevel],
           last_modified_by_id: row.last_modified_by_id,
           created_by_id: row.created_by_id,
+          active: row.active
         }
         resultSafe.push(itemRow)
       })
