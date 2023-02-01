@@ -53,6 +53,7 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
         permission_level: VisibilityLevel[result.permission_level.toUpperCase() as keyof typeof VisibilityLevel],
         last_modified_by_id: result.last_modified_by_id,
         created_by_id: result.created_by_id,
+        active: result.active
       }]
       if(reqBody.permission_level === VisibilityLevel.PRIVATE){
         const resultPermissions = await prisma.item_permission.findFirst({

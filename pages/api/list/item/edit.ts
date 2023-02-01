@@ -63,6 +63,7 @@ async function handle(req: NextApiRequest,res: NextApiResponse){
           permission_level: VisibilityLevel[result.permission_level.toUpperCase() as keyof typeof VisibilityLevel],
           created_by_id: result.created_by_id,
           last_modified_by_id: result.last_modified_by_id,
+          active: result.active
         }
         resultSafe.push(ItemSafe)
         return res.json(resultSafe)

@@ -18,6 +18,7 @@ const initialState: OwnSliceState = {
     permission_level: VisibilityLevel.PUBLIC,
     created_by_id: -999,
     last_modified_by_id: -999,
+    active: false
   },
   items: [],
   viewOwnItemMode: false,
