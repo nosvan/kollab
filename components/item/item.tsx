@@ -41,13 +41,13 @@ export default function Item(props: ItemProps) {
             onClick={handleDelete}
           ></TbTrash>
         )}
-        {item.active && (
+        {!item.active && (
           <TbSquareCheck
             className={`${styles.iconStyle} hover:bg-stone-700 hover:text-stone-300 cursor-pointer rounded-xl`}
             onClick={handleActiveStatus}
           ></TbSquareCheck>
         )}
-        {!item.active && (
+        {item.active && (
           <TbSquare
             className={`${styles.iconStyle} hover:bg-stone-700 hover:text-stone-300 cursor-pointer rounded-xl`}
             onClick={handleActiveStatus}

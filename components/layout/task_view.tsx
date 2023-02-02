@@ -15,6 +15,8 @@ import { setCurrentListItem } from 'state/redux/listSlice';
 import { BiCalendarStar } from 'react-icons/bi';
 import { TbClock } from 'react-icons/tb';
 import { MdDateRange } from 'react-icons/md';
+import axios from 'axios';
+import { ItemApiRoutes, ListApiRoutes } from 'lib/api/api_routes';
 
 interface TaskViewProps {
   dayLayout: number;
@@ -59,7 +61,13 @@ export default function TaskView(props: TaskViewProps) {
             )} cursor-pointer ${styles.mobilePadding}`}
           >
             <BiCalendarStar className={`${styles.iconStyle}`}></BiCalendarStar>
-            <span className="text-xs truncate">{itemB.name}</span>
+            <span
+              className={`text-xs truncate ${
+                !itemB.active ? 'line-through' : ''
+              }`}
+            >
+              {itemB.name}
+            </span>
           </div>
         );
       });
@@ -90,7 +98,13 @@ export default function TaskView(props: TaskViewProps) {
             )} cursor-pointer ${styles.mobilePadding}`}
           >
             <MdDateRange className={`${styles.iconStyle}`}></MdDateRange>
-            <span className="text-xs truncate">{itemB.name}</span>
+            <span
+              className={`text-xs truncate ${
+                !itemB.active ? 'line-through' : ''
+              }`}
+            >
+              {itemB.name}
+            </span>
           </div>
         );
       });
@@ -126,7 +140,13 @@ export default function TaskView(props: TaskViewProps) {
               ></BiCalendarStar>
               <TbClock className={`${styles.iconStyle}`}></TbClock>
             </span>
-            <span className="text-xs truncate">{itemB.name}</span>
+            <span
+              className={`text-xs truncate ${
+                !itemB.active ? 'line-through' : ''
+              }`}
+            >
+              {itemB.name}
+            </span>
           </div>
         );
       });
@@ -162,7 +182,13 @@ export default function TaskView(props: TaskViewProps) {
               ></MdDateRange>
               <TbClock className={`${styles.iconStyle}`}></TbClock>
             </span>
-            <span className="text-xs truncate">{itemB.name}</span>
+            <span
+              className={`text-xs truncate ${
+                !itemB.active ? 'line-through' : ''
+              }`}
+            >
+              {itemB.name}
+            </span>
           </div>
         );
       });
@@ -226,17 +252,35 @@ export default function TaskView(props: TaskViewProps) {
     </animated.div>
   );
 
-  function handleItemClick(item: ItemSafe) {
+  async function handleItemClick(item: ItemSafe) {
     if (props.category) {
       switch (props.category) {
         case Category.LIST:
-          dispatch(setCurrentListItem(item));
+          const itemRefreshed = await getItem(item);
+          dispatch(setCurrentListItem(itemRefreshed));
           break;
       }
     } else {
-      dispatch(setCurrentOwnItem(item));
+      const itemRefreshed = await getItem(item);
+      dispatch(setCurrentOwnItem(itemRefreshed));
     }
     props.setViewItemMode(true);
+  }
+
+  async function getItem(item: ItemSafe) {
+    try {
+      return axios({
+        method: 'GET',
+        url: ItemApiRoutes.GET_ITEM,
+        params: {
+          item_id: item.id,
+        },
+      }).then((res) => {
+        return res.data;
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   function itemTypeStyling(itemType: string) {

@@ -48,8 +48,7 @@ export default function Lists({ user }: { user: UserSafe }) {
       });
     }
     getUserLists();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dispatch, router, user]);
 
   const listState: ListSliceState = useSelector(
     (state: RootState) => state.list_store
