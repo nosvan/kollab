@@ -21,6 +21,7 @@ async function handle(req: NextApiRequest, res: NextApiResponse) {
           {
             id: result.id,
             email: result.email,
+            date: Date.now()
           },
           {
             password: process.env.JWT_SECRET as string

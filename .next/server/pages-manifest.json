@@ -1,9 +1,6 @@
 {
   "/_app": "pages/_app.js",
-  "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/own": "pages/own.js",
-  "/api/own/item/item": "pages/api/own/item/item.js",
-  "/api/item/item": "pages/api/item/item.js",
-  "/api/item/activestatus": "pages/api/item/activestatus.js"
+  "/_error": "pages/_error.js",
+  "/api/account/magiclink": "pages/api/account/magiclink.js"
 }
