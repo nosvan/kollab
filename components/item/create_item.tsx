@@ -5,8 +5,16 @@ import {
   CreateItem,
   ItemType,
   ItemYupValidationError,
+  ItemSafe,
 } from 'lib/types/item';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  SyntheticEvent,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAdditionalListItems } from 'state/redux/listSlice';
 import { RootState } from 'state/redux/store';
@@ -27,11 +35,51 @@ import { DateInputs } from './date_inputs';
 import { ListApiRoutes, OwnApiRoutes } from 'lib/api/api_routes';
 import SelectorCheckbox from 'components/layout/ui_components/selector_checkbox';
 import { CheckDataItem, UsersWithPermissionForList } from 'lib/types/list';
+import { TbPaperclip } from 'react-icons/tb';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { storage } from 'utils/firebaseConfig';
 
 interface NewItemProps {
   selectedDate?: Date;
   itemCategory?: Category;
   setCreateNewItemMode: Dispatch<SetStateAction<boolean>>;
+}
+
+export async function uploadAttachments(files: FileList, item: ItemSafe) {
+  for (let i = 0; i < files.length; i++) {
+    const file = files.item(i);
+    if (!(file instanceof File)) continue;
+    const storageRef = ref(storage, `item-attachments/${item.id}/${file.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+    uploadTask.on(
+      'state_changed',
+      (snapshot: {
+        bytesTransferred: number;
+        totalBytes: number;
+        state: any;
+      }) => {
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+        switch (snapshot.state) {
+          case 'paused':
+            console.log('Upload is paused');
+            break;
+          case 'running':
+            console.log('Upload is running');
+            break;
+        }
+      },
+      (error: any) => {
+        console.log('error uploading attachment\n', error);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          console.log('File available at', downloadURL);
+        });
+      }
+    );
+  }
 }
 
 export default function NewItem(props: NewItemProps) {
@@ -97,6 +145,23 @@ export default function NewItem(props: NewItemProps) {
   const [usersWithPermissionMapped, setUsersWithPermissionMapped] = useState<
     CheckDataItem[]
   >([]);
+
+  const [fileSelected, setFileSelected] = useState<FileList | null>(null);
+  const fileInput = useRef<HTMLInputElement>(null);
+
+  function focus() {
+    if (fileInput.current) {
+      fileInput.current.click();
+    }
+  }
+
+  function handleFileSelected(e: SyntheticEvent) {
+    e.preventDefault();
+    const target = e.currentTarget as HTMLInputElement;
+    if (target.files) {
+      setFileSelected(target.files);
+    }
+  }
 
   useEffect(() => {
     if (timeControlChecked) {
@@ -392,6 +457,24 @@ export default function NewItem(props: NewItemProps) {
               ></DateInputs>
             </span>
           </div>
+          <div>
+            <input
+              type="file"
+              id="file"
+              accept=".jpg,.jpeg,.png,.pdf,.json"
+              className="hidden"
+              multiple
+              ref={fileInput}
+              onChange={(e) => handleFileSelected(e)}
+            ></input>
+            <div className="flex">
+              <span className="hover:bg-stone-700 rounded-xl p-1">
+                <label onClick={() => focus()}>
+                  <TbPaperclip />
+                </label>
+              </span>
+            </div>
+          </div>
           <FooterInputs
             setCreateNewItemMode={setCreateNewItemMode}
           ></FooterInputs>
@@ -450,9 +533,12 @@ export default function NewItem(props: NewItemProps) {
           url: OwnApiRoutes.NEW_ITEM,
           data: JSON.stringify(formValues),
           headers: { 'Content-Type': 'application/json' },
-        }).then((res) => {
+        }).then(async (res) => {
           if (res.data.length > 0) {
             dispatch(setAdditionalOwnItems(res.data));
+            if (fileSelected) {
+              await uploadAttachments(fileSelected, res.data[0]);
+            }
           }
         });
         setFormValues(initialFormState);

@@ -11,7 +11,14 @@ import {
   VisibilityLevel,
 } from 'lib/types/item';
 import { CheckDataItem, UsersWithPermissionForList } from 'lib/types/list';
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  SyntheticEvent,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import {
   dateRangeValid,
   dateToYYYYMMDD,
@@ -32,6 +39,8 @@ import {
 } from 'state/redux/listSlice';
 import { setAdditionalOwnItems, setCurrentOwnItem } from 'state/redux/ownSlice';
 import styles from './item_edit.module.css';
+import { TbPaperclip } from 'react-icons/tb';
+import { uploadAttachments } from './create_item';
 
 interface ItemEditProps {
   item: ItemSafe;
@@ -43,7 +52,6 @@ export default function ItemEdit(props: ItemEditProps) {
   const { item, setItemMode, itemTypeStyling } = props;
   const dispatch = useDispatch();
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-
   const [visibilityControlCheck, setVisibilityControlCheck] = useState<boolean>(
     () => {
       if (item.permission_level === VisibilityLevel.PRIVATE) return true;
@@ -107,9 +115,7 @@ export default function ItemEdit(props: ItemEditProps) {
   >([]);
   const [usersWithPermissionToListMapped, setUsersWithPermissionToListMapped] =
     useState<CheckDataItem[]>([]);
-
   const [itemPermissions, setItemPermissions] = useState<CheckDataItem[]>([]);
-
   const [editModeFormValues, setEditModeFormValues] = useState<EditItem>({
     id: item.id,
     name: item.name,
@@ -127,6 +133,29 @@ export default function ItemEdit(props: ItemEditProps) {
       VisibilityLevel[item.permission_level as keyof typeof VisibilityLevel],
     item_permissions: [],
   });
+
+  const [fileSelected, setFileSelected] = useState<FileList | null>(null);
+  const fileInput = useRef<HTMLInputElement>(null);
+
+  function focus() {
+    if (fileInput.current) {
+      fileInput.current.click();
+    }
+  }
+
+  function handleFileSelected(e: SyntheticEvent) {
+    e.preventDefault();
+    const target = e.currentTarget as HTMLInputElement;
+    if (target.files) {
+      setFileSelected(target.files);
+    }
+  }
+
+  useEffect(() => {
+    if (fileSelected != null) {
+      uploadAttachments(fileSelected, item);
+    }
+  }, [fileSelected, item]);
 
   useEffect(() => {
     async function getListUsers() {
@@ -413,6 +442,24 @@ export default function ItemEdit(props: ItemEditProps) {
             setTimePartEnd={setTimePartEnd}
           ></DateInputsEdit>
         </span>
+      </div>
+      <div>
+        <input
+          type="file"
+          id="file"
+          accept=".jpg,.jpeg,.png,.pdf,.json"
+          className="hidden"
+          multiple
+          ref={fileInput}
+          onChange={(e) => handleFileSelected(e)}
+        ></input>
+        <div className="flex">
+          <span className="hover:bg-stone-700 rounded-xl p-1">
+            <label onClick={() => focus()}>
+              <TbPaperclip />
+            </label>
+          </span>
+        </div>
       </div>
       <div className="flex flex-row justify-start text-center text-sm space-x-2">
         <div
