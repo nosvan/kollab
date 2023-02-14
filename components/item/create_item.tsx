@@ -474,6 +474,15 @@ export default function NewItem(props: NewItemProps) {
                 </label>
               </span>
             </div>
+            {fileSelected != null && Object.keys(fileSelected).length > 0 && (
+              <ul>
+                {[...fileSelected].map((file, index) => (
+                  <li key={index} className="truncate">
+                    ({index + 1}) {file.name}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
           <FooterInputs
             setCreateNewItemMode={setCreateNewItemMode}
