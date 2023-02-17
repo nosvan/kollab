@@ -35,7 +35,7 @@ import { DateInputs } from './date_inputs';
 import { ListApiRoutes, OwnApiRoutes } from 'lib/api/api_routes';
 import SelectorCheckbox from 'components/layout/ui_components/selector_checkbox';
 import { CheckDataItem, UsersWithPermissionForList } from 'lib/types/list';
-import { TbPaperclip } from 'react-icons/tb';
+import { TbPaperclip, TbX } from 'react-icons/tb';
 import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
 import { storage } from 'utils/firebaseConfig';
 
@@ -157,6 +157,14 @@ export default function NewItem(props: NewItemProps) {
     } else {
       setFileSelected(null);
     }
+  }
+
+  function removeFileFromSelected(fileArgument: File) {
+    if (fileSelected == null) return;
+    const alteredFileSelected = fileSelected.filter(
+      (file) => file.name !== fileArgument.name
+    );
+    setFileSelected([...alteredFileSelected]);
   }
 
   function focus() {
@@ -474,18 +482,27 @@ export default function NewItem(props: NewItemProps) {
               onChange={(e) => handleFileSelected(e)}
             ></input>
             <div className="flex">
-              <span className="hover:bg-stone-700 rounded-xl p-1">
-                <label onClick={() => focus()}>
-                  <TbPaperclip />
-                </label>
+              <span
+                className="hover:bg-stone-700 rounded-xl p-1"
+                onClick={() => focus()}
+              >
+                <TbPaperclip />
               </span>
             </div>
             {fileSelected != null && Object.keys(fileSelected).length > 0 && (
               <ul>
                 {[...fileSelected].map((file, index) => (
-                  <li key={index} className="truncate">
-                    ({index + 1}) {file.name}
-                  </li>
+                  <div key={index} className="flex">
+                    <li className="truncate">
+                      ({index + 1}) {file.name}
+                    </li>
+                    <span
+                      className="hover:bg-stone-700 rounded-xl p-1"
+                      onClick={() => removeFileFromSelected(file)}
+                    >
+                      <TbX />
+                    </span>
+                  </div>
                 ))}
               </ul>
             )}
