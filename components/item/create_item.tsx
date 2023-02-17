@@ -45,9 +45,9 @@ interface NewItemProps {
   setCreateNewItemMode: Dispatch<SetStateAction<boolean>>;
 }
 
-export async function uploadAttachments(files: FileList, item: ItemSafe) {
+export async function uploadAttachments(files: File[], item: ItemSafe) {
   for (let i = 0; i < files.length; i++) {
-    const file = files.item(i);
+    const file = files[i];
     if (!(file instanceof File)) continue;
     const storageRef = ref(storage, `item-attachments/${item.id}/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
@@ -155,7 +155,7 @@ export default function NewItem(props: NewItemProps) {
     if (target.files !== null) {
       setFileSelected([...target.files]);
     } else {
-      setFileSelected(null)
+      setFileSelected(null);
     }
   }
 
@@ -166,8 +166,8 @@ export default function NewItem(props: NewItemProps) {
   }
 
   useEffect(() => {
-    if(fileSelected) console.log('fileSelected altered ', fileSelected);
-  }, [fileSelected])
+    if (fileSelected) console.log('fileSelected altered ', fileSelected);
+  }, [fileSelected]);
 
   useEffect(() => {
     if (timeControlChecked) {

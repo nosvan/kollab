@@ -134,7 +134,7 @@ export default function ItemEdit(props: ItemEditProps) {
     item_permissions: [],
   });
 
-  const [fileSelected, setFileSelected] = useState<FileList | null>(null);
+  const [fileSelected, setFileSelected] = useState<File[] | null>(null);
   const fileInput = useRef<HTMLInputElement>(null);
 
   function focus() {
@@ -146,8 +146,10 @@ export default function ItemEdit(props: ItemEditProps) {
   function handleFileSelected(e: SyntheticEvent) {
     e.preventDefault();
     const target = e.currentTarget as HTMLInputElement;
-    if (target.files) {
-      setFileSelected(target.files);
+    if (target.files !== null) {
+      setFileSelected([...target.files]);
+    } else {
+      setFileSelected(null);
     }
   }
 
