@@ -146,8 +146,18 @@ export default function NewItem(props: NewItemProps) {
     CheckDataItem[]
   >([]);
 
-  const [fileSelected, setFileSelected] = useState<FileList | null>(null);
+  const [fileSelected, setFileSelected] = useState<File[] | null>(null);
   const fileInput = useRef<HTMLInputElement>(null);
+
+  function handleFileSelected(e: SyntheticEvent) {
+    e.preventDefault();
+    const target = e.currentTarget as HTMLInputElement;
+    if (target.files !== null) {
+      setFileSelected([...target.files]);
+    } else {
+      setFileSelected(null)
+    }
+  }
 
   function focus() {
     if (fileInput.current) {
@@ -155,13 +165,9 @@ export default function NewItem(props: NewItemProps) {
     }
   }
 
-  function handleFileSelected(e: SyntheticEvent) {
-    e.preventDefault();
-    const target = e.currentTarget as HTMLInputElement;
-    if (target.files) {
-      setFileSelected(target.files);
-    }
-  }
+  useEffect(() => {
+    if(fileSelected) console.log('fileSelected altered ', fileSelected);
+  }, [fileSelected])
 
   useEffect(() => {
     if (timeControlChecked) {
