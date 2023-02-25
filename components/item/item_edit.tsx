@@ -1,7 +1,7 @@
-import axios from 'axios';
-import SelectorCheckbox from 'components/layout/ui_components/selector_checkbox';
-import ToggleSwitch from 'components/layout/ui_components/toggle_switch';
-import { ItemApiRoutes, ListApiRoutes, OwnApiRoutes } from 'lib/api/api_routes';
+import axios from "axios";
+import SelectorCheckbox from "components/layout/ui_components/selector_checkbox";
+import ToggleSwitch from "components/layout/ui_components/toggle_switch";
+import { ItemApiRoutes, ListApiRoutes, OwnApiRoutes } from "lib/api/api_routes";
 import {
   Category,
   EditItem,
@@ -9,8 +9,8 @@ import {
   ItemSafe,
   ItemType,
   VisibilityLevel,
-} from 'lib/types/item';
-import { CheckDataItem, UsersWithPermissionForList } from 'lib/types/list';
+} from "lib/types/item";
+import { CheckDataItem, UsersWithPermissionForList } from "lib/types/list";
 import {
   Dispatch,
   SetStateAction,
@@ -18,32 +18,33 @@ import {
   useEffect,
   useRef,
   useState,
-} from 'react';
+} from "react";
 import {
   dateRangeValid,
   dateToYYYYMMDD,
   getTimeCeiling,
   getTimeHourMinuteString,
-} from 'utils/dateUtils';
-import * as Yup from 'yup';
+} from "utils/dateUtils";
+import * as Yup from "yup";
 import {
   matchYupErrorStateWithCompErrorState,
   trimStringsInObjectShallow,
-} from 'utils/formValidateUtils';
-import { DateInputsEdit } from './date_inputs_edit';
-import { ItemMode } from 'lib/types/ui';
-import { useDispatch } from 'react-redux';
+} from "utils/formValidateUtils";
+import { DateInputsEdit } from "./date_inputs_edit";
+import { ItemMode } from "lib/types/ui";
+import { useDispatch } from "react-redux";
 import {
   setAdditionalListItems,
   setCurrentListItem,
-} from 'state/redux/listSlice';
-import { setAdditionalOwnItems, setCurrentOwnItem } from 'state/redux/ownSlice';
-import styles from './item_edit.module.css';
-import { TbPaperclip } from 'react-icons/tb';
-import { uploadAttachments } from './create_item';
+} from "state/redux/listSlice";
+import { setAdditionalOwnItems, setCurrentOwnItem } from "state/redux/ownSlice";
+import styles from "./item_edit.module.css";
+import { TbPaperclip } from "react-icons/tb";
+import { uploadAttachments } from "./create_item";
 
 interface ItemEditProps {
   item: ItemSafe;
+  itemAttachmentList?: string[];
   setItemMode: Dispatch<SetStateAction<ItemMode>>;
   itemTypeStyling: (itemType: ItemType) => string;
 }
@@ -162,7 +163,7 @@ export default function ItemEdit(props: ItemEditProps) {
   useEffect(() => {
     async function getListUsers() {
       await axios({
-        method: 'get',
+        method: "get",
         url: ListApiRoutes.LIST_USERS,
         params: {
           list_id: item.category_id,
@@ -183,7 +184,7 @@ export default function ItemEdit(props: ItemEditProps) {
     if (item.category) getListUsers();
     async function getItemPermissions() {
       await axios({
-        method: 'get',
+        method: "get",
         url: ItemApiRoutes.GET_ITEM_PERMISSIONS,
         params: {
           item_id: item.id,
@@ -266,7 +267,7 @@ export default function ItemEdit(props: ItemEditProps) {
 
   const yupValidationSchema = Yup.object({
     id: Yup.number().required(),
-    name: Yup.string().required('name is required'),
+    name: Yup.string().required("name is required"),
     category: Yup.mixed<Category>().oneOf(Object.values(Category)),
     category_id: editModeFormValues.category
       ? Yup.number().required()
@@ -283,32 +284,32 @@ export default function ItemEdit(props: ItemEditProps) {
       ? dateRangeControlChecked
         ? Yup.date()
             .min(
-              Yup.ref('date_tz_sensitive'),
-              'end date must be after start date'
+              Yup.ref("date_tz_sensitive"),
+              "end date must be after start date"
             )
-            .required('end date is required')
+            .required("end date is required")
         : Yup.date()
       : Yup.date(),
     time_sensitive_flag: Yup.boolean().required(),
     date_range_flag: Yup.boolean().required(),
     date_tz_insensitive: timeControlChecked
       ? Yup.string()
-      : Yup.string().required('date is required'),
+      : Yup.string().required("date is required"),
     date_tz_insensitive_end: timeControlChecked
       ? Yup.string()
       : dateRangeControlChecked
       ? Yup.string()
           .test(
-            'compare-dates-no-time',
-            'end date must be after start date',
+            "compare-dates-no-time",
+            "end date must be after start date",
             function () {
               return dateRangeValid(
-                this.parent['date_tz_insensitive'],
-                this.parent['date_tz_insensitive_end']
+                this.parent["date_tz_insensitive"],
+                this.parent["date_tz_insensitive_end"]
               );
             }
           )
-          .required('end date is required')
+          .required("end date is required")
       : Yup.string(),
     last_modified_by_id: Yup.number(),
     item_permissions: Yup.array().of(
@@ -357,7 +358,7 @@ export default function ItemEdit(props: ItemEditProps) {
         />
       </span>
       {yupValidationError.name && (
-        <span className={`${styles['field-error-styling']}`}>required</span>
+        <span className={`${styles["field-error-styling"]}`}>required</span>
       )}
       <div className="flex flex-row flex-wrap items-center">
         {Object.keys(ItemType).map((key) => (
@@ -367,7 +368,7 @@ export default function ItemEdit(props: ItemEditProps) {
               editModeFormValues.item_type ==
               ItemType[key as keyof typeof ItemType]
                 ? `text-black ${itemTypeStyling(editModeFormValues.item_type)}`
-                : 'bg-stone-800 hover:bg-stone-700 text-white'
+                : "bg-stone-800 hover:bg-stone-700 text-white"
             }
             )} text-xs px-2 py-1 cursor-pointer my-0.5 mr-0.5 rounded-xl`}
             onClick={() =>
@@ -381,7 +382,7 @@ export default function ItemEdit(props: ItemEditProps) {
           </span>
         ))}
         {yupValidationError.item_type && (
-          <span className={`${styles['field-error-styling']}`}>required</span>
+          <span className={`${styles["field-error-styling"]}`}>required</span>
         )}
       </div>
       {item.category && (
@@ -449,7 +450,7 @@ export default function ItemEdit(props: ItemEditProps) {
         <input
           type="file"
           id="file"
-          accept=".jpg,.jpeg,.png,.pdf,.json"
+          accept=".jpg,.jpeg,.png,.pdf,.json,.txt"
           className="hidden"
           multiple
           ref={fileInput}
@@ -498,10 +499,10 @@ export default function ItemEdit(props: ItemEditProps) {
     if (item.category) {
       try {
         await axios({
-          method: 'POST',
+          method: "POST",
           url: ListApiRoutes.EDIT_ITEM,
           data: JSON.stringify(formValues),
-          headers: { 'Content-Type': 'application/json' },
+          headers: { "Content-Type": "application/json" },
         }).then((res) => {
           if (res.data.length > 0 && res.data[0].category === Category.LIST) {
             dispatch(setAdditionalListItems(res.data));
@@ -514,10 +515,10 @@ export default function ItemEdit(props: ItemEditProps) {
     } else {
       try {
         await axios({
-          method: 'POST',
+          method: "POST",
           url: OwnApiRoutes.EDIT_ITEM,
           data: JSON.stringify(formValues),
-          headers: { 'Content-Type': 'application/json' },
+          headers: { "Content-Type": "application/json" },
         }).then((res) => {
           if (res.data.length > 0) {
             dispatch(setAdditionalOwnItems(res.data));

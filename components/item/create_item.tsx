@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 import {
   VisibilityLevel,
   Category,
@@ -6,7 +6,7 @@ import {
   ItemType,
   ItemYupValidationError,
   ItemSafe,
-} from 'lib/types/item';
+} from "lib/types/item";
 import {
   Dispatch,
   SetStateAction,
@@ -14,30 +14,30 @@ import {
   useEffect,
   useRef,
   useState,
-} from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { setAdditionalListItems } from 'state/redux/listSlice';
-import { RootState } from 'state/redux/store';
-import 'react-datepicker/dist/react-datepicker.css';
-import { setAdditionalOwnItems } from 'state/redux/ownSlice';
-import ToggleSwitch from 'components/layout/ui_components/toggle_switch';
-import { UserSliceState } from 'lib/types/user';
-import styles from './create_item.module.css';
-import * as Yup from 'yup';
+} from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setAdditionalListItems } from "state/redux/listSlice";
+import { RootState } from "state/redux/store";
+import "react-datepicker/dist/react-datepicker.css";
+import { setAdditionalOwnItems } from "state/redux/ownSlice";
+import ToggleSwitch from "components/layout/ui_components/toggle_switch";
+import { UserSliceState } from "lib/types/user";
+import styles from "./create_item.module.css";
+import * as Yup from "yup";
 import {
   matchYupErrorStateWithCompErrorState,
   trimStringsInObjectShallow,
-} from 'utils/formValidateUtils';
-import { dateRangeValid, dateToYYYYMMDD } from 'utils/dateUtils';
-import { FooterInputs } from './footer_inputs';
-import { getTimeCeiling } from 'utils/dateUtils';
-import { DateInputs } from './date_inputs';
-import { ListApiRoutes, OwnApiRoutes } from 'lib/api/api_routes';
-import SelectorCheckbox from 'components/layout/ui_components/selector_checkbox';
-import { CheckDataItem, UsersWithPermissionForList } from 'lib/types/list';
-import { TbPaperclip, TbX } from 'react-icons/tb';
-import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
-import { storage } from 'utils/firebaseConfig';
+} from "utils/formValidateUtils";
+import { dateRangeValid, dateToYYYYMMDD } from "utils/dateUtils";
+import { FooterInputs } from "./footer_inputs";
+import { getTimeCeiling } from "utils/dateUtils";
+import { DateInputs } from "./date_inputs";
+import { ListApiRoutes, OwnApiRoutes } from "lib/api/api_routes";
+import SelectorCheckbox from "components/layout/ui_components/selector_checkbox";
+import { CheckDataItem, UsersWithPermissionForList } from "lib/types/list";
+import { TbPaperclip, TbX } from "react-icons/tb";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { storage } from "utils/firebaseConfig";
 
 interface NewItemProps {
   selectedDate?: Date;
@@ -52,7 +52,7 @@ export async function uploadAttachments(files: File[], item: ItemSafe) {
     const storageRef = ref(storage, `item-attachments/${item.id}/${file.name}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
     uploadTask.on(
-      'state_changed',
+      "state_changed",
       (snapshot: {
         bytesTransferred: number;
         totalBytes: number;
@@ -60,22 +60,22 @@ export async function uploadAttachments(files: File[], item: ItemSafe) {
       }) => {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log('Upload is ' + progress + '% done');
+        console.log("Upload is " + progress + "% done");
         switch (snapshot.state) {
-          case 'paused':
-            console.log('Upload is paused');
+          case "paused":
+            console.log("Upload is paused");
             break;
-          case 'running':
-            console.log('Upload is running');
+          case "running":
+            console.log("Upload is running");
             break;
         }
       },
       (error: any) => {
-        console.log('error uploading attachment\n', error);
+        console.log("error uploading attachment\n", error);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          console.log('File available at', downloadURL);
+          console.log("File available at", downloadURL);
         });
       }
     );
@@ -120,7 +120,7 @@ export default function NewItem(props: NewItemProps) {
   });
 
   const initialFormState = {
-    name: '',
+    name: "",
     category: itemCategory ?? undefined,
     category_id: itemCategory ? getCategoryId() : undefined,
     description: undefined,
@@ -174,7 +174,7 @@ export default function NewItem(props: NewItemProps) {
   }
 
   useEffect(() => {
-    if (fileSelected) console.log('fileSelected altered ', fileSelected);
+    if (fileSelected) console.log("fileSelected altered ", fileSelected);
   }, [fileSelected]);
 
   useEffect(() => {
@@ -221,7 +221,7 @@ export default function NewItem(props: NewItemProps) {
     }
     async function getListUsers() {
       await axios({
-        method: 'get',
+        method: "get",
         url: ListApiRoutes.LIST_USERS,
         params: {
           list_id: listState.id,
@@ -278,7 +278,7 @@ export default function NewItem(props: NewItemProps) {
   }, [visibilityControlCheck]);
 
   const yupValidationSchema = Yup.object({
-    name: Yup.string().required('name is required'),
+    name: Yup.string().required("name is required"),
     category: Yup.mixed<Category>().oneOf(Object.values(Category)),
     category_id: formValues.category ? Yup.number().required() : Yup.number(),
     item_type: Yup.mixed<ItemType>()
@@ -293,32 +293,32 @@ export default function NewItem(props: NewItemProps) {
       ? dateRangeControlChecked
         ? Yup.date()
             .min(
-              Yup.ref('date_tz_sensitive'),
-              'end date must be after start date'
+              Yup.ref("date_tz_sensitive"),
+              "end date must be after start date"
             )
-            .required('end date is required')
+            .required("end date is required")
         : Yup.date()
       : Yup.date(),
     time_sensitive_flag: Yup.boolean().required(),
     date_range_flag: Yup.boolean().required(),
     date_tz_insensitive: timeControlChecked
       ? Yup.string()
-      : Yup.string().required('date is required'),
+      : Yup.string().required("date is required"),
     date_tz_insensitive_end: timeControlChecked
       ? Yup.string()
       : dateRangeControlChecked
       ? Yup.string()
           .test(
-            'compare-dates-no-time',
-            'end date must be after start date',
+            "compare-dates-no-time",
+            "end date must be after start date",
             function () {
               return dateRangeValid(
-                this.parent['date_tz_insensitive'],
-                this.parent['date_tz_insensitive_end']
+                this.parent["date_tz_insensitive"],
+                this.parent["date_tz_insensitive_end"]
               );
             }
           )
-          .required('end date is required')
+          .required("end date is required")
       : Yup.string(),
     last_modified_by_id: Yup.number(),
   });
@@ -347,13 +347,13 @@ export default function NewItem(props: NewItemProps) {
       <form onSubmit={handleCreateItemFormSubmit}>
         <div className="flex flex-col text-sm space-y-2 p-2 bg-stone-900 border-b-2 rounded-xl border-blue-700">
           <div className="py-1 text-3xl">
-            Create {formValues.date_range_flag ? 'an Event' : 'a Task'}
+            Create {formValues.date_range_flag ? "an Event" : "a Task"}
           </div>
           <span className="flex flex-row items-center space-x-1">
             <span
               onClick={() => setDateRangeControlChecked(false)}
               className={`py-1 px-2 text-lg rounded-xl ${
-                !dateRangeControlChecked ? 'bg-red-600' : 'bg-stone-800'
+                !dateRangeControlChecked ? "bg-red-600" : "bg-stone-800"
               } hover:bg-red-600 cursor-pointer`}
             >
               Task
@@ -361,7 +361,7 @@ export default function NewItem(props: NewItemProps) {
             <span
               onClick={() => setDateRangeControlChecked(true)}
               className={`py-1 px-2 text-lg rounded-xl ${
-                dateRangeControlChecked ? 'bg-blue-600' : 'bg-stone-800'
+                dateRangeControlChecked ? "bg-blue-600" : "bg-stone-800"
               } hover:bg-blue-600 cursor-pointer`}
             >
               Event
@@ -377,7 +377,7 @@ export default function NewItem(props: NewItemProps) {
                     formValues.item_type ==
                     ItemType[key as keyof typeof ItemType]
                       ? `text-black ${itemTypeStyling(formValues.item_type)}`
-                      : 'bg-stone-800 hover:bg-stone-700 text-white'
+                      : "bg-stone-800 hover:bg-stone-700 text-white"
                   }
                   )} text-sm p-1 my-0.5 mr-0.5 cursor-pointer rounded-xl`}
                   onClick={() =>
@@ -407,7 +407,7 @@ export default function NewItem(props: NewItemProps) {
               }
             />
             {yupValidationError.name && (
-              <span className={`${styles['field-error-styling']}`}>
+              <span className={`${styles["field-error-styling"]}`}>
                 required
               </span>
             )}
@@ -475,7 +475,7 @@ export default function NewItem(props: NewItemProps) {
             <input
               type="file"
               id="file"
-              accept=".jpg,.jpeg,.png,.pdf,.json"
+              accept=".jpg,.jpeg,.png,.pdf,.json,.txt"
               className="hidden"
               multiple
               ref={fileInput}
@@ -542,10 +542,10 @@ export default function NewItem(props: NewItemProps) {
     if (itemCategory) {
       try {
         await axios({
-          method: 'post',
+          method: "post",
           url: ListApiRoutes.NEW_ITEM,
           data: JSON.stringify(formValues),
-          headers: { 'Content-Type': 'application/json' },
+          headers: { "Content-Type": "application/json" },
         }).then((res) => {
           if (res.data.length > 0 && res.data[0].category) {
             if (res.data[0].category === Category.LIST) {
@@ -561,10 +561,10 @@ export default function NewItem(props: NewItemProps) {
     } else {
       try {
         await axios({
-          method: 'post',
+          method: "post",
           url: OwnApiRoutes.NEW_ITEM,
           data: JSON.stringify(formValues),
-          headers: { 'Content-Type': 'application/json' },
+          headers: { "Content-Type": "application/json" },
         }).then(async (res) => {
           if (res.data.length > 0) {
             dispatch(setAdditionalOwnItems(res.data));
@@ -583,20 +583,20 @@ export default function NewItem(props: NewItemProps) {
 
   function itemTypeStyling(itemType: string) {
     switch (itemType) {
-      case 'ASSIGNMENT':
-        return 'bg-emerald-500';
-      case 'NOTE':
-        return 'bg-cyan-500';
-      case 'PROJECT':
-        return 'bg-purple-500';
-      case 'REMINDER':
-        return 'bg-indigo-500';
-      case 'MEETING':
-        return 'bg-rose-500';
-      case 'TEST':
-        return 'bg-blue-500';
+      case "ASSIGNMENT":
+        return "bg-emerald-500";
+      case "NOTE":
+        return "bg-cyan-500";
+      case "PROJECT":
+        return "bg-purple-500";
+      case "REMINDER":
+        return "bg-indigo-500";
+      case "MEETING":
+        return "bg-rose-500";
+      case "TEST":
+        return "bg-blue-500";
       default:
-        return 'bg-stone-100';
+        return "bg-stone-100";
     }
   }
 }

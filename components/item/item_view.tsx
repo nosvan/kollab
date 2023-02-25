@@ -1,16 +1,25 @@
-import { ItemSafe, ItemType } from 'lib/types/item';
-import { Dispatch, SetStateAction } from 'react';
-import { TbCalendarEvent, TbClock } from 'react-icons/tb';
-import { dateStringYYYYMMDDtoMMDDYYYYwithSlashes } from 'utils/dateUtils';
+import { ItemSafe, ItemType } from "lib/types/item";
+import { Dispatch, SetStateAction } from "react";
+import {
+  TbArrowBarToDown,
+  TbCalendarEvent,
+  TbClock,
+  TbSelect,
+} from "react-icons/tb";
+import { dateStringYYYYMMDDtoMMDDYYYYwithSlashes } from "utils/dateUtils";
+import { collection, getDocs } from "firebase/firestore";
+import { storage } from "utils/firebaseConfig";
+import { getDownloadURL, ref } from "firebase/storage";
 
 interface ItemViewProps {
   item: ItemSafe;
+  itemAttachmentList?: string[];
   modalOpen: Dispatch<SetStateAction<boolean>>;
   itemTypeStyling: (itemType: ItemType) => string;
 }
 
 export default function ItemView(props: ItemViewProps) {
-  const { item, itemTypeStyling } = props;
+  const { item, itemAttachmentList, itemTypeStyling } = props;
   const date_tz_insensitive = item.date_tz_insensitive ?? undefined;
   const date_tz_insensitive_end = item.date_tz_insensitive_end ?? undefined;
   const date_tz_sensitive = item.date_tz_sensitive
@@ -55,13 +64,13 @@ export default function ItemView(props: ItemViewProps) {
     : undefined;
   const date_time_am_pm = date_tz_sensitive
     ? date_tz_sensitive.getHours() < 12
-      ? 'AM'
-      : 'PM'
+      ? "AM"
+      : "PM"
     : undefined;
   const date_time_end_am_pm = date_tz_sensitive_end
     ? date_tz_sensitive_end.getHours() < 12
-      ? 'AM'
-      : 'PM'
+      ? "AM"
+      : "PM"
     : undefined;
   const date_range_flag = item.date_range_flag;
   return (
@@ -114,7 +123,7 @@ export default function ItemView(props: ItemViewProps) {
               <span className="flex flex-row items-center space-x-2">
                 <TbClock></TbClock>
                 <span className="text-sm">
-                  {date_tz_sensitive_hour}:{date_tz_sensitive_minute}{' '}
+                  {date_tz_sensitive_hour}:{date_tz_sensitive_minute}{" "}
                   {date_time_am_pm}
                 </span>
               </span>
@@ -142,8 +151,42 @@ export default function ItemView(props: ItemViewProps) {
             )}
           </span>
         )}
-        <div></div>
+        {itemAttachmentList != null && itemAttachmentList.length > 0 && (
+          <div>
+            <ul>
+              {[...itemAttachmentList].map((path, index) => (
+                <div key={index} className="flex">
+                  <li className="truncate">
+                    ({index + 1}) {path.split("/")[2]}
+                  </li>
+                  <span
+                    className="hover:bg-stone-700 rounded-xl p-1"
+                    onClick={() => downloadSelectedFile(path)}
+                  >
+                    <TbArrowBarToDown />
+                  </span>
+                </div>
+              ))}
+            </ul>
+          </div>
+        )}
       </div>
     </div>
   );
+
+  async function downloadSelectedFile(path: string) {
+    getDownloadURL(ref(storage, path))
+      .then((url) => {
+        const xhr = new XMLHttpRequest();
+        xhr.responseType = "blob";
+        xhr.onload = (event) => {
+          const blob = xhr.response;
+        };
+        xhr.open("GET", url);
+        xhr.send();
+      })
+      .catch((error) => {
+        console.log("error downloading file from firestore: ", error);
+      });
+  }
 }

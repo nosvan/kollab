@@ -1,15 +1,17 @@
-import axios from 'axios';
-import { ItemApiRoutes } from 'lib/api/api_routes';
-import { Category, ItemSafe } from 'lib/types/item';
-import { ItemMode } from 'lib/types/ui';
-import { Dispatch, SetStateAction, useState } from 'react';
-import { TbSquare, TbSquareCheck, TbTool, TbTrash } from 'react-icons/tb';
-import { useDispatch } from 'react-redux';
-import { removeOwnItem } from 'state/redux/ownSlice';
-import { removeListItem } from 'state/redux/listSlice';
-import ItemView from './item_view';
-import ItemEdit from './item_edit';
-import styles from './item.module.css';
+import axios from "axios";
+import { ItemApiRoutes } from "lib/api/api_routes";
+import { Category, ItemSafe } from "lib/types/item";
+import { ItemMode } from "lib/types/ui";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { TbSquare, TbSquareCheck, TbTool, TbTrash } from "react-icons/tb";
+import { useDispatch } from "react-redux";
+import { removeOwnItem } from "state/redux/ownSlice";
+import { removeListItem } from "state/redux/listSlice";
+import ItemView from "./item_view";
+import ItemEdit from "./item_edit";
+import styles from "./item.module.css";
+import { storage } from "utils/firebaseConfig";
+import { listAll, ref } from "firebase/storage";
 
 export interface ItemProps {
   item: ItemSafe;
@@ -21,6 +23,22 @@ export default function Item(props: ItemProps) {
   const [item, setItem] = useState(props.item);
   const dispatch = useDispatch();
   const [itemMode, setItemMode] = useState(ItemMode.VIEW);
+  const [itemAttachmentsList, setItemAttachmentsList] = useState<string[]>();
+
+  useEffect(() => {
+    const listRef = ref(storage, `item-attachments/${item.id}`);
+    const attachmentNames: string[] = [];
+    listAll(listRef)
+      .then((res) => {
+        res.items.forEach((itemRef) => {
+          attachmentNames.push(itemRef.fullPath);
+        });
+        setItemAttachmentsList(attachmentNames);
+      })
+      .catch((error) => {
+        console.log("error getting attachments list from firestore: ", error);
+      });
+  }, [item]);
 
   return (
     <div
@@ -57,6 +75,7 @@ export default function Item(props: ItemProps) {
       {itemMode === ItemMode.VIEW && (
         <ItemView
           item={item}
+          itemAttachmentList={itemAttachmentsList}
           itemTypeStyling={itemTypeStyling}
           modalOpen={modalOpen}
         ></ItemView>
@@ -64,6 +83,7 @@ export default function Item(props: ItemProps) {
       {itemMode === ItemMode.EDIT && (
         <ItemEdit
           item={item}
+          itemAttachmentList={itemAttachmentsList}
           setItemMode={setItemMode}
           itemTypeStyling={itemTypeStyling}
         ></ItemEdit>
@@ -78,10 +98,10 @@ export default function Item(props: ItemProps) {
     };
     try {
       await axios({
-        method: 'POST',
+        method: "POST",
         url: ItemApiRoutes.UPDATE_ACTIVE_STATUS,
         data: JSON.stringify(body),
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       }).then((res) => {
         setItem(res.data);
       });
@@ -96,10 +116,10 @@ export default function Item(props: ItemProps) {
     };
     try {
       await axios({
-        method: 'delete',
+        method: "delete",
         url: ItemApiRoutes.DELETE,
         data: JSON.stringify(body),
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       }).then((res) => {
         switch (item.category) {
           case Category.LIST:
@@ -118,39 +138,39 @@ export default function Item(props: ItemProps) {
 
   function itemTypeStyling(itemType: string) {
     switch (itemType) {
-      case 'ASSIGNMENT':
-        return 'bg-emerald-500';
-      case 'NOTE':
-        return 'bg-cyan-500';
-      case 'PROJECT':
-        return 'bg-purple-500';
-      case 'REMINDER':
-        return 'bg-indigo-500';
-      case 'MEETING':
-        return 'bg-rose-500';
-      case 'TEST':
-        return 'bg-blue-500';
+      case "ASSIGNMENT":
+        return "bg-emerald-500";
+      case "NOTE":
+        return "bg-cyan-500";
+      case "PROJECT":
+        return "bg-purple-500";
+      case "REMINDER":
+        return "bg-indigo-500";
+      case "MEETING":
+        return "bg-rose-500";
+      case "TEST":
+        return "bg-blue-500";
       default:
-        return 'bg-stone-100';
+        return "bg-stone-100";
     }
   }
 
   function itemBorder(itemType: string) {
     switch (itemType) {
-      case 'ASSIGNMENT':
-        return 'border-emerald-500';
-      case 'NOTE':
-        return 'border-cyan-500';
-      case 'PROJECT':
-        return 'border-purple-500';
-      case 'REMINDER':
-        return 'border-indigo-500';
-      case 'MEETING':
-        return 'border-rose-500';
-      case 'TEST':
-        return 'border-blue-500';
+      case "ASSIGNMENT":
+        return "border-emerald-500";
+      case "NOTE":
+        return "border-cyan-500";
+      case "PROJECT":
+        return "border-purple-500";
+      case "REMINDER":
+        return "border-indigo-500";
+      case "MEETING":
+        return "border-rose-500";
+      case "TEST":
+        return "border-blue-500";
       default:
-        return 'border-stone-100';
+        return "border-stone-100";
     }
   }
 }
