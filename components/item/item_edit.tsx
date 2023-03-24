@@ -1,7 +1,7 @@
-import axios from "axios";
-import SelectorCheckbox from "components/layout/ui_components/selector_checkbox";
-import ToggleSwitch from "components/layout/ui_components/toggle_switch";
-import { ItemApiRoutes, ListApiRoutes, OwnApiRoutes } from "lib/api/api_routes";
+import axios from 'axios';
+import SelectorCheckbox from 'components/layout/ui_components/selector_checkbox';
+import ToggleSwitch from 'components/layout/ui_components/toggle_switch';
+import { ItemApiRoutes, ListApiRoutes, OwnApiRoutes } from 'lib/api/api_routes';
 import {
   Category,
   EditItem,
@@ -9,8 +9,8 @@ import {
   ItemSafe,
   ItemType,
   VisibilityLevel,
-} from "lib/types/item";
-import { CheckDataItem, UsersWithPermissionForList } from "lib/types/list";
+} from 'lib/types/item';
+import { CheckDataItem, UsersWithPermissionForList } from 'lib/types/list';
 import {
   Dispatch,
   SetStateAction,
@@ -18,39 +18,42 @@ import {
   useEffect,
   useRef,
   useState,
-} from "react";
+} from 'react';
 import {
   dateRangeValid,
   dateToYYYYMMDD,
   getTimeCeiling,
   getTimeHourMinuteString,
-} from "utils/dateUtils";
-import * as Yup from "yup";
+} from 'utils/dateUtils';
+import * as Yup from 'yup';
 import {
   matchYupErrorStateWithCompErrorState,
   trimStringsInObjectShallow,
-} from "utils/formValidateUtils";
-import { DateInputsEdit } from "./date_inputs_edit";
-import { ItemMode } from "lib/types/ui";
-import { useDispatch } from "react-redux";
+} from 'utils/formValidateUtils';
+import { DateInputsEdit } from './date_inputs_edit';
+import { ItemMode } from 'lib/types/ui';
+import { useDispatch } from 'react-redux';
 import {
   setAdditionalListItems,
   setCurrentListItem,
-} from "state/redux/listSlice";
-import { setAdditionalOwnItems, setCurrentOwnItem } from "state/redux/ownSlice";
-import styles from "./item_edit.module.css";
-import { TbPaperclip } from "react-icons/tb";
-import { uploadAttachments } from "./create_item";
+} from 'state/redux/listSlice';
+import { setAdditionalOwnItems, setCurrentOwnItem } from 'state/redux/ownSlice';
+import styles from './item_edit.module.css';
+import { TbArrowBarToDown, TbPaperclip } from 'react-icons/tb';
+import { uploadAttachments } from './create_item';
+import { getDownloadURL, listAll, ref } from 'firebase/storage';
+import { storage } from 'utils/firebaseConfig';
 
 interface ItemEditProps {
   item: ItemSafe;
+  activeStatus: boolean;
   itemAttachmentList?: string[];
   setItemMode: Dispatch<SetStateAction<ItemMode>>;
   itemTypeStyling: (itemType: ItemType) => string;
 }
 
 export default function ItemEdit(props: ItemEditProps) {
-  const { item, setItemMode, itemTypeStyling } = props;
+  const { item, setItemMode, itemTypeStyling, activeStatus } = props;
   const dispatch = useDispatch();
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const [visibilityControlCheck, setVisibilityControlCheck] = useState<boolean>(
@@ -117,6 +120,7 @@ export default function ItemEdit(props: ItemEditProps) {
   const [usersWithPermissionToListMapped, setUsersWithPermissionToListMapped] =
     useState<CheckDataItem[]>([]);
   const [itemPermissions, setItemPermissions] = useState<CheckDataItem[]>([]);
+
   const [editModeFormValues, setEditModeFormValues] = useState<EditItem>({
     id: item.id,
     name: item.name,
@@ -133,10 +137,35 @@ export default function ItemEdit(props: ItemEditProps) {
     permission_level:
       VisibilityLevel[item.permission_level as keyof typeof VisibilityLevel],
     item_permissions: [],
+    active: activeStatus,
   });
 
   const [fileSelected, setFileSelected] = useState<File[] | null>(null);
   const fileInput = useRef<HTMLInputElement>(null);
+  const [itemAttachmentsList, setItemAttachmentsList] = useState<string[]>();
+
+  useEffect(() => {
+    setEditModeFormValues((prevState) => {
+      let form = prevState;
+      form.active = activeStatus;
+      return form;
+    });
+  }, [activeStatus]);
+
+  useEffect(() => {
+    const listRef = ref(storage, `item-attachments/${item.id}`);
+    const attachmentNames: string[] = [];
+    listAll(listRef)
+      .then((res) => {
+        res.items.forEach((itemRef) => {
+          attachmentNames.push(itemRef.fullPath);
+        });
+        setItemAttachmentsList(attachmentNames);
+      })
+      .catch((error) => {
+        console.log('error getting attachments list from firestore: ', error);
+      });
+  }, [item]);
 
   function focus() {
     if (fileInput.current) {
@@ -163,7 +192,7 @@ export default function ItemEdit(props: ItemEditProps) {
   useEffect(() => {
     async function getListUsers() {
       await axios({
-        method: "get",
+        method: 'get',
         url: ListApiRoutes.LIST_USERS,
         params: {
           list_id: item.category_id,
@@ -184,7 +213,7 @@ export default function ItemEdit(props: ItemEditProps) {
     if (item.category) getListUsers();
     async function getItemPermissions() {
       await axios({
-        method: "get",
+        method: 'get',
         url: ItemApiRoutes.GET_ITEM_PERMISSIONS,
         params: {
           item_id: item.id,
@@ -267,7 +296,7 @@ export default function ItemEdit(props: ItemEditProps) {
 
   const yupValidationSchema = Yup.object({
     id: Yup.number().required(),
-    name: Yup.string().required("name is required"),
+    name: Yup.string().required('name is required'),
     category: Yup.mixed<Category>().oneOf(Object.values(Category)),
     category_id: editModeFormValues.category
       ? Yup.number().required()
@@ -284,32 +313,32 @@ export default function ItemEdit(props: ItemEditProps) {
       ? dateRangeControlChecked
         ? Yup.date()
             .min(
-              Yup.ref("date_tz_sensitive"),
-              "end date must be after start date"
+              Yup.ref('date_tz_sensitive'),
+              'end date must be after start date'
             )
-            .required("end date is required")
+            .required('end date is required')
         : Yup.date()
       : Yup.date(),
     time_sensitive_flag: Yup.boolean().required(),
     date_range_flag: Yup.boolean().required(),
     date_tz_insensitive: timeControlChecked
       ? Yup.string()
-      : Yup.string().required("date is required"),
+      : Yup.string().required('date is required'),
     date_tz_insensitive_end: timeControlChecked
       ? Yup.string()
       : dateRangeControlChecked
       ? Yup.string()
           .test(
-            "compare-dates-no-time",
-            "end date must be after start date",
+            'compare-dates-no-time',
+            'end date must be after start date',
             function () {
               return dateRangeValid(
-                this.parent["date_tz_insensitive"],
-                this.parent["date_tz_insensitive_end"]
+                this.parent['date_tz_insensitive'],
+                this.parent['date_tz_insensitive_end']
               );
             }
           )
-          .required("end date is required")
+          .required('end date is required')
       : Yup.string(),
     last_modified_by_id: Yup.number(),
     item_permissions: Yup.array().of(
@@ -358,7 +387,7 @@ export default function ItemEdit(props: ItemEditProps) {
         />
       </span>
       {yupValidationError.name && (
-        <span className={`${styles["field-error-styling"]}`}>required</span>
+        <span className={`${styles['field-error-styling']}`}>required</span>
       )}
       <div className="flex flex-row flex-wrap items-center">
         {Object.keys(ItemType).map((key) => (
@@ -368,7 +397,7 @@ export default function ItemEdit(props: ItemEditProps) {
               editModeFormValues.item_type ==
               ItemType[key as keyof typeof ItemType]
                 ? `text-black ${itemTypeStyling(editModeFormValues.item_type)}`
-                : "bg-stone-800 hover:bg-stone-700 text-white"
+                : 'bg-stone-800 hover:bg-stone-700 text-white'
             }
             )} text-xs px-2 py-1 cursor-pointer my-0.5 mr-0.5 rounded-xl`}
             onClick={() =>
@@ -382,8 +411,22 @@ export default function ItemEdit(props: ItemEditProps) {
           </span>
         ))}
         {yupValidationError.item_type && (
-          <span className={`${styles["field-error-styling"]}`}>required</span>
+          <span className={`${styles['field-error-styling']}`}>required</span>
         )}
+      </div>
+      <div className="flex flex-col">
+        <label className="w-full text-white px-1">info</label>
+        <textarea
+          ref={textAreaRef}
+          className="text-white bg-stone-800 hover:bg-stone-700 px-2 rounded-xl"
+          value={editModeFormValues.description}
+          onChange={(event) =>
+            setEditModeFormValues({
+              ...editModeFormValues,
+              description: event.target.value,
+            })
+          }
+        />
       </div>
       {item.category && (
         <div className="flex flex-col space-y-1">
@@ -403,20 +446,6 @@ export default function ItemEdit(props: ItemEditProps) {
           )}
         </div>
       )}
-      <div className="flex flex-col">
-        <label className="w-full text-white px-1">info</label>
-        <textarea
-          ref={textAreaRef}
-          className="text-white bg-stone-800 hover:bg-stone-700 px-2 rounded-xl"
-          value={editModeFormValues.description}
-          onChange={(event) =>
-            setEditModeFormValues({
-              ...editModeFormValues,
-              description: event.target.value,
-            })
-          }
-        />
-      </div>
       <div className="flex flex-col space-y-1">
         <span className="flex flex-col space-y-1">
           <span className="flex flex-row space-x-1 ">
@@ -464,6 +493,25 @@ export default function ItemEdit(props: ItemEditProps) {
           </span>
         </div>
       </div>
+      {itemAttachmentsList != null && itemAttachmentsList.length > 0 && (
+        <div>
+          <ul>
+            {[...itemAttachmentsList].map((path, index) => (
+              <div key={index} className="flex">
+                <li className="truncate">
+                  ({index + 1}) {path.split('/')[2]}
+                </li>
+                <span
+                  className="hover:bg-stone-700 rounded-xl p-1"
+                  onClick={() => downloadSelectedFile(path)}
+                >
+                  <TbArrowBarToDown />
+                </span>
+              </div>
+            ))}
+          </ul>
+        </div>
+      )}
       <div className="flex flex-row justify-start text-center text-sm space-x-2">
         <div
           className="bg-stone-900 border-2 border-white hover:bg-stone-800 hover:border-stone-300
@@ -492,17 +540,17 @@ export default function ItemEdit(props: ItemEditProps) {
         setYupValidationError({ ...yupValidationError });
       });
     if (!yupValidateResult) return;
-    await callCreateNewItemApi(editModeFormValues);
+    await editItemApi(editModeFormValues);
   }
 
-  async function callCreateNewItemApi(formValues: EditItem) {
+  async function editItemApi(formValues: EditItem) {
     if (item.category) {
       try {
         await axios({
-          method: "POST",
+          method: 'POST',
           url: ListApiRoutes.EDIT_ITEM,
           data: JSON.stringify(formValues),
-          headers: { "Content-Type": "application/json" },
+          headers: { 'Content-Type': 'application/json' },
         }).then((res) => {
           if (res.data.length > 0 && res.data[0].category === Category.LIST) {
             dispatch(setAdditionalListItems(res.data));
@@ -515,10 +563,10 @@ export default function ItemEdit(props: ItemEditProps) {
     } else {
       try {
         await axios({
-          method: "POST",
+          method: 'POST',
           url: OwnApiRoutes.EDIT_ITEM,
           data: JSON.stringify(formValues),
-          headers: { "Content-Type": "application/json" },
+          headers: { 'Content-Type': 'application/json' },
         }).then((res) => {
           if (res.data.length > 0) {
             dispatch(setAdditionalOwnItems(res.data));
@@ -530,5 +578,19 @@ export default function ItemEdit(props: ItemEditProps) {
       }
     }
     setItemMode(ItemMode.VIEW);
+  }
+
+  async function downloadSelectedFile(path: string) {
+    getDownloadURL(ref(storage, path))
+      .then((url) => {
+        let alink = document.createElement('a');
+        alink.href = url;
+        alink.target = '_blank';
+        alink.download = path.split('/')[2];
+        alink.click();
+      })
+      .catch((error) => {
+        console.log('error downloading file from firestore: ', error);
+      });
   }
 }
