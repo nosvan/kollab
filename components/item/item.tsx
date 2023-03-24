@@ -13,6 +13,8 @@ import styles from './item.module.css';
 import { storage } from 'utils/firebaseConfig';
 import { listAll, ref } from 'firebase/storage';
 import React from 'react';
+import { ListSliceState } from 'lib/types/list';
+import { OwnSliceState } from 'lib/types/own';
 
 export interface ItemProps {
   item: ItemSafe;
@@ -20,8 +22,7 @@ export interface ItemProps {
 }
 
 export default function Item(props: ItemProps) {
-  const { modalOpen } = props;
-  const [item, setItem] = useState(props.item);
+  const { modalOpen, item } = props;
   const dispatch = useDispatch();
   const [itemMode, setItemMode] = useState(ItemMode.VIEW);
   const [itemAttachmentsList, setItemAttachmentsList] = useState<string[]>();

@@ -15,10 +15,11 @@ const initialState: OwnSliceState = {
     time_sensitive_flag: false,
     date_range_flag: false,
     date_tz_insensitive: undefined,
+    date_tz_insensitive_end: undefined,
     permission_level: VisibilityLevel.PUBLIC,
     created_by_id: -999,
     last_modified_by_id: -999,
-    active: false
+    active: false,
   },
   items: [],
   viewOwnItemMode: false,
@@ -29,40 +30,50 @@ export const ownSlice = createSlice({
   initialState: initialState,
   reducers: {
     setCurrentOwnItem: (state, action) => {
-      console.log('payload from store: ' + action.payload)
-      state.item = action.payload
+      console.log('payload from store: ' + action.payload);
+      state.item = action.payload;
     },
     setOwnItems: (state, action) => {
-      state.items = action.payload
+      state.items = action.payload;
     },
     setAdditionalOwnItems: (state, action) => {
       state.items = state.items.filter((item: ItemSafe) => {
-        const itemFoundToRemove = action.payload.find((itemToRemove: ItemSafe) => {
-          return item.id === itemToRemove.id
-        })
-        return !itemFoundToRemove
-      })
-      state.items = [...state.items, ...action.payload]
+        const itemFoundToRemove = action.payload.find(
+          (itemToRemove: ItemSafe) => {
+            return item.id === itemToRemove.id;
+          }
+        );
+        return !itemFoundToRemove;
+      });
+      state.items = [...state.items, ...action.payload];
     },
     setViewOwnItemMode: (state, action) => {
-      state.viewOwnItemMode = action.payload
+      state.viewOwnItemMode = action.payload;
     },
     removeOwnItem: (state, action) => {
-      state.items = [...state.items.filter(item => item.id !== action.payload)]
-      if(state.items.length) state.item = {...state.items[0]}
+      state.items = [
+        ...state.items.filter((item) => item.id !== action.payload),
+      ];
+      if (state.items.length) state.item = { ...state.items[0] };
       else {
-        state.item = {...initialState.item }
-        state.items = []
+        state.item = { ...initialState.item };
+        state.items = [];
       }
     },
     resetOwnState: (state) => {
-      state.item = {...initialState.item};
+      state.item = { ...initialState.item };
       state.items = [];
-    }
+    },
   },
 });
 
-export const { setCurrentOwnItem, setOwnItems, setAdditionalOwnItems, setViewOwnItemMode, resetOwnState, removeOwnItem} =
-ownSlice.actions;
+export const {
+  setCurrentOwnItem,
+  setOwnItems,
+  setAdditionalOwnItems,
+  setViewOwnItemMode,
+  resetOwnState,
+  removeOwnItem,
+} = ownSlice.actions;
 
 export default ownSlice.reducer;
