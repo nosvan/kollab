@@ -69,9 +69,9 @@ export default function Item(props: ItemProps) {
                 onClick={() => setActiveStatus(!activeStatus)}
               ></TbSquareCheck>
             )}
-            {itemMode !== ItemMode.EDIT && (
+            {/* {itemMode !== ItemMode.EDIT && (
               <TbSquareCheck className={`${styles.iconStyle}`}></TbSquareCheck>
-            )}
+            )} */}
           </React.Fragment>
         )}
         {activeStatus && (
@@ -82,9 +82,9 @@ export default function Item(props: ItemProps) {
                 onClick={() => setActiveStatus(!activeStatus)}
               ></TbSquare>
             )}
-            {itemMode !== ItemMode.EDIT && (
+            {/* {itemMode !== ItemMode.EDIT && (
               <TbSquare className={`${styles.iconStyle}`}></TbSquare>
-            )}
+            )} */}
           </React.Fragment>
         )}
       </div>
